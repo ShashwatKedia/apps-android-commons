@@ -302,20 +302,14 @@ public class NearbyParentFragment extends CommonsDaggerSupportFragment
             }
         });
 
-    private ActivityResultLauncher<String[]> locationPermissionLauncher = registerForActivityResult(
-        new ActivityResultContracts.RequestMultiplePermissions(),
-        new ActivityResultCallback<Map<String, Boolean>>() {
-            @Override
-            public void onActivityResult(Map<String, Boolean> result) {
-                boolean areAllGranted = true;
-                for (final boolean b : result.values()) {
-                    areAllGranted = areAllGranted && b;
-                }
-
-                if (areAllGranted) {
+    private ActivityResultLauncher<String> locationPermissionLauncher = registerForActivityResult(
+        new ActivityResultContracts.RequestPermission(), isGranted ->{
+            if(isGranted)
+            {
                     locationPermissionGranted();
-                } else {
-                    if (shouldShowRequestPermissionRationale(permission.ACCESS_FINE_LOCATION)) {
+            }
+            else {
+                if (shouldShowRequestPermissionRationale(permission.ACCESS_FINE_LOCATION)) {
                         DialogUtil.showAlertDialog(getActivity(),
                             getActivity().getString(R.string.location_permission_title),
                             getActivity().getString(R.string.location_permission_rationale_nearby),
@@ -333,7 +327,6 @@ public class NearbyParentFragment extends CommonsDaggerSupportFragment
                     } else {
                         isPermissionDenied = true;
                     }
-                }
             }
         });
 
@@ -1025,8 +1018,22 @@ public class NearbyParentFragment extends CommonsDaggerSupportFragment
 
     @Override
     public fr.free.nrw.commons.location.LatLng getMapCenter() {
-        fr.free.nrw.commons.location.LatLng latLnge = new fr.free.nrw.commons.location.LatLng(
+        if (applicationKvStore.getString("LastLocation") != null) {
+            final String[] locationLatLng
+                = applicationKvStore.getString("LastLocation").split(",");
+            lastKnownLocation
+                = new fr.free.nrw.commons.location.LatLng(Double.parseDouble(locationLatLng[0]),
+                Double.parseDouble(locationLatLng[1]), 1f);
+        } else {
+            lastKnownLocation = new fr.free.nrw.commons.location.LatLng(51.50550,
+                -0.07520, 1f);
+        }
+        fr.free.nrw.commons.location.LatLng latLnge = lastKnownLocation;
+        if(mapCenter!=null)
+        {
+            latLnge = new fr.free.nrw.commons.location.LatLng(
             mapCenter.getLatitude(), mapCenter.getLongitude(), 100);
+        }
         return latLnge;
     }
 
@@ -1306,7 +1313,7 @@ public class NearbyParentFragment extends CommonsDaggerSupportFragment
     @Override
     public void checkPermissionsAndPerformAction() {
         Timber.d("Checking permission and perfoming action");
-        locationPermissionLauncher.launch(new String[]{permission.ACCESS_FINE_LOCATION});
+        locationPermissionLauncher.launch(permission.ACCESS_FINE_LOCATION);
     }
 
     /**
