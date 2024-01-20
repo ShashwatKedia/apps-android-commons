@@ -5,9 +5,11 @@ import androidx.annotation.NonNull;
 import fr.free.nrw.commons.BuildConfig;
 
 public class BackgroundPoolExceptionHandler implements ExceptionHandler {
+
     /**
      * If an exception occurs on a background thread, this handler will crash for debug builds
      * but fail silently for release builds.
+     *
      * @param t
      */
     @Override

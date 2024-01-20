@@ -11,5 +11,5 @@ public abstract class ContributionsModule {
 
     @Binds
     public abstract ContributionsContract.UserActionListener bindsContibutionsPresenter(
-            ContributionsPresenter presenter);
+        ContributionsPresenter presenter);
 }

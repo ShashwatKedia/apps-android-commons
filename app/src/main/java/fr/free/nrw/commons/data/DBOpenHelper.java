@@ -11,16 +11,16 @@ import fr.free.nrw.commons.category.CategoryDao;
 import fr.free.nrw.commons.explore.recentsearches.RecentSearchesDao;
 import fr.free.nrw.commons.recentlanguages.RecentLanguagesDao;
 
-public class DBOpenHelper  extends SQLiteOpenHelper {
+public class DBOpenHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "commons.db";
     private static final int DATABASE_VERSION = 20;
     public static final String CONTRIBUTIONS_TABLE = "contributions";
-    private final String DROP_TABLE_STATEMENT="DROP TABLE IF EXISTS %s";
+    private final String DROP_TABLE_STATEMENT = "DROP TABLE IF EXISTS %s";
 
     /**
-     * Do not use directly - @Inject an instance where it's needed and let
-     * dependency injection take care of managing this as a singleton.
+     * Do not use directly - @Inject an instance where it's needed and let dependency injection take
+     * care of managing this as a singleton.
      */
     public DBOpenHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -44,11 +44,12 @@ public class DBOpenHelper  extends SQLiteOpenHelper {
         BookmarkItemsDao.Table.onUpdate(sqLiteDatabase, from, to);
         RecentSearchesDao.Table.onUpdate(sqLiteDatabase, from, to);
         RecentLanguagesDao.Table.onUpdate(sqLiteDatabase, from, to);
-        deleteTable(sqLiteDatabase,CONTRIBUTIONS_TABLE);
+        deleteTable(sqLiteDatabase, CONTRIBUTIONS_TABLE);
     }
 
     /**
      * Delete table in the given db
+     *
      * @param db
      * @param tableName
      */

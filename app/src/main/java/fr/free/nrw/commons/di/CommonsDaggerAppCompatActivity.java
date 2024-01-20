@@ -13,7 +13,8 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-public abstract class CommonsDaggerAppCompatActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+public abstract class CommonsDaggerAppCompatActivity extends AppCompatActivity implements
+    HasSupportFragmentInjector {
 
     @Inject
     DispatchingAndroidInjector<Fragment> supportFragmentInjector;
@@ -30,16 +31,18 @@ public abstract class CommonsDaggerAppCompatActivity extends AppCompatActivity i
     }
 
     /**
-     * when this Activity is created it injects an instance of this class inside
-     * activityInjector method of ApplicationlessInjection
+     * when this Activity is created it injects an instance of this class inside activityInjector
+     * method of ApplicationlessInjection
      */
     private void inject() {
-        ApplicationlessInjection injection = ApplicationlessInjection.getInstance(getApplicationContext());
+        ApplicationlessInjection injection = ApplicationlessInjection.getInstance(
+            getApplicationContext());
 
         AndroidInjector<Activity> activityInjector = injection.activityInjector();
 
         if (activityInjector == null) {
-            throw new NullPointerException("ApplicationlessInjection.activityInjector() returned null");
+            throw new NullPointerException(
+                "ApplicationlessInjection.activityInjector() returned null");
         }
 
         activityInjector.inject(this);

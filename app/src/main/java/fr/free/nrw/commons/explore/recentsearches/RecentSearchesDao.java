@@ -29,19 +29,22 @@ public class RecentSearchesDao {
     private final Provider<ContentProviderClient> clientProvider;
 
     @Inject
-    public RecentSearchesDao(@Named("recentsearch") Provider<ContentProviderClient> clientProvider) {
+    public RecentSearchesDao(
+        @Named("recentsearch") Provider<ContentProviderClient> clientProvider) {
         this.clientProvider = clientProvider;
     }
 
     /**
      * This method is called on click of media/ categories for storing them in recent searches
+     *
      * @param recentSearch a recent searches object that is to be added in SqLite DB
      */
     public void save(RecentSearch recentSearch) {
         ContentProviderClient db = clientProvider.get();
         try {
             if (recentSearch.getContentUri() == null) {
-                recentSearch.setContentUri(db.insert(RecentSearchesContentProvider.BASE_URI, toContentValues(recentSearch)));
+                recentSearch.setContentUri(db.insert(RecentSearchesContentProvider.BASE_URI,
+                    toContentValues(recentSearch)));
             } else {
                 db.update(recentSearch.getContentUri(), toContentValues(recentSearch), null, null);
             }
@@ -53,19 +56,19 @@ public class RecentSearchesDao {
     }
 
     /**
-     * This method is called on confirmation of delete recent searches.
-     * It deletes all recent searches from the database
+     * This method is called on confirmation of delete recent searches. It deletes all recent
+     * searches from the database
      */
     public void deleteAll() {
         Cursor cursor = null;
         ContentProviderClient db = clientProvider.get();
         try {
             cursor = db.query(
-                    RecentSearchesContentProvider.BASE_URI,
-                    Table.ALL_FIELDS,
-                    null,
-                    new String[]{},
-                    Table.COLUMN_LAST_USED + " DESC"
+                RecentSearchesContentProvider.BASE_URI,
+                Table.ALL_FIELDS,
+                null,
+                new String[]{},
+                Table.COLUMN_LAST_USED + " DESC"
             );
             while (cursor != null && cursor.moveToNext()) {
                 try {
@@ -115,6 +118,7 @@ public class RecentSearchesDao {
 
     /**
      * Find persisted search query in database, based on its name.
+     *
      * @param name Search query  Ex- "butterfly"
      * @return recently searched query from database, or null if not found
      */
@@ -124,11 +128,11 @@ public class RecentSearchesDao {
         ContentProviderClient db = clientProvider.get();
         try {
             cursor = db.query(
-                    RecentSearchesContentProvider.BASE_URI,
-                    Table.ALL_FIELDS,
-                    Table.COLUMN_NAME + "=?",
-                    new String[]{name},
-                    null);
+                RecentSearchesContentProvider.BASE_URI,
+                Table.ALL_FIELDS,
+                Table.COLUMN_NAME + "=?",
+                new String[]{name},
+                null);
             if (cursor != null && cursor.moveToFirst()) {
                 return fromCursor(cursor);
             }
@@ -146,6 +150,7 @@ public class RecentSearchesDao {
 
     /**
      * Retrieve recently-searched queries, ordered by descending date.
+     *
      * @return a list containing recent searches
      */
     @NonNull
@@ -154,8 +159,8 @@ public class RecentSearchesDao {
         Cursor cursor = null;
         ContentProviderClient db = clientProvider.get();
         try {
-            cursor = db.query( RecentSearchesContentProvider.BASE_URI, Table.ALL_FIELDS,
-                    null, new String[]{}, Table.COLUMN_LAST_USED + " DESC");
+            cursor = db.query(RecentSearchesContentProvider.BASE_URI, Table.ALL_FIELDS,
+                null, new String[]{}, Table.COLUMN_LAST_USED + " DESC");
             // fixme add a limit on the original query instead of falling out of the loop?
             while (cursor != null && cursor.moveToNext() && cursor.getPosition() < limit) {
                 items.add(fromCursor(cursor).getQuery());
@@ -174,6 +179,7 @@ public class RecentSearchesDao {
 
     /**
      * It creates an Recent Searches object from data stored in the SQLite DB by using cursor
+     *
      * @param cursor
      * @return RecentSearch object
      */
@@ -181,15 +187,16 @@ public class RecentSearchesDao {
     RecentSearch fromCursor(Cursor cursor) {
         // Hardcoding column positions!
         return new RecentSearch(
-                RecentSearchesContentProvider.uriForId(cursor.getInt(cursor.getColumnIndex(Table.COLUMN_ID))),
-                cursor.getString(cursor.getColumnIndex(Table.COLUMN_NAME)),
-                new Date(cursor.getLong(cursor.getColumnIndex(Table.COLUMN_LAST_USED)))
+            RecentSearchesContentProvider.uriForId(
+                cursor.getInt(cursor.getColumnIndex(Table.COLUMN_ID))),
+            cursor.getString(cursor.getColumnIndex(Table.COLUMN_NAME)),
+            new Date(cursor.getLong(cursor.getColumnIndex(Table.COLUMN_LAST_USED)))
         );
     }
 
     /**
-     * This class contains the database table architechture for recent searches,
-     * It also contains queries and logic necessary to the create, update, delete this table.
+     * This class contains the database table architechture for recent searches, It also contains
+     * queries and logic necessary to the create, update, delete this table.
      */
     private ContentValues toContentValues(RecentSearch recentSearch) {
         ContentValues cv = new ContentValues();
@@ -199,10 +206,11 @@ public class RecentSearchesDao {
     }
 
     /**
-     * This class contains the database table architechture for recent searches,
-     * It also contains queries and logic necessary to the create, update, delete this table.
+     * This class contains the database table architechture for recent searches, It also contains
+     * queries and logic necessary to the create, update, delete this table.
      */
     public static class Table {
+
         public static final String TABLE_NAME = "recent_searches";
         public static final String COLUMN_ID = "_id";
         static final String COLUMN_NAME = "name";
@@ -210,21 +218,22 @@ public class RecentSearchesDao {
 
         // NOTE! KEEP IN SAME ORDER AS THEY ARE DEFINED UP THERE. HELPS HARD CODE COLUMN INDICES.
         public static final String[] ALL_FIELDS = {
-                COLUMN_ID,
-                COLUMN_NAME,
-                COLUMN_LAST_USED,
+            COLUMN_ID,
+            COLUMN_NAME,
+            COLUMN_LAST_USED,
         };
 
         static final String DROP_TABLE_STATEMENT = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
         static final String CREATE_TABLE_STATEMENT = "CREATE TABLE " + TABLE_NAME + " ("
-                + COLUMN_ID + " INTEGER PRIMARY KEY,"
-                + COLUMN_NAME + " STRING,"
-                + COLUMN_LAST_USED + " INTEGER"
-                + ");";
+            + COLUMN_ID + " INTEGER PRIMARY KEY,"
+            + COLUMN_NAME + " STRING,"
+            + COLUMN_LAST_USED + " INTEGER"
+            + ");";
 
         /**
          * This method creates a RecentSearchesTable in SQLiteDatabase
+         *
          * @param db SQLiteDatabase
          */
         public static void onCreate(SQLiteDatabase db) {
@@ -233,6 +242,7 @@ public class RecentSearchesDao {
 
         /**
          * This method deletes RecentSearchesTable from SQLiteDatabase
+         *
          * @param db SQLiteDatabase
          */
         public static void onDelete(SQLiteDatabase db) {
@@ -242,6 +252,7 @@ public class RecentSearchesDao {
 
         /**
          * This method is called on migrating from a older version to a newer version
+         *
          * @param db SQLiteDatabase
          * @param from Version from which we are migrating
          * @param to Version to which we are migrating

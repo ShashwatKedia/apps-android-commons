@@ -1,4 +1,4 @@
-    package fr.free.nrw.commons.contributions;
+package fr.free.nrw.commons.contributions;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import fr.free.nrw.commons.R;
 import fr.free.nrw.commons.media.MediaClient;
 
-    /**
+/**
  * Represents The View Adapter for the List of Contributions
  */
 public class ContributionsListAdapter extends
@@ -25,18 +25,20 @@ public class ContributionsListAdapter extends
     }
 
     /**
-     * Uses DiffUtil to calculate the changes in the list
-     * It has methods that check ID and the content of the items to determine if its a new item
+     * Uses DiffUtil to calculate the changes in the list It has methods that check ID and the
+     * content of the items to determine if its a new item
      */
     private static final DiffUtil.ItemCallback<Contribution> DIFF_CALLBACK =
         new DiffUtil.ItemCallback<Contribution>() {
             @Override
-            public boolean areItemsTheSame(final Contribution oldContribution, final Contribution newContribution) {
+            public boolean areItemsTheSame(final Contribution oldContribution,
+                final Contribution newContribution) {
                 return oldContribution.getPageId().equals(newContribution.getPageId());
             }
 
             @Override
-            public boolean areContentsTheSame(final Contribution oldContribution, final Contribution newContribution) {
+            public boolean areContentsTheSame(final Contribution oldContribution,
+                final Contribution newContribution) {
                 return oldContribution.equals(newContribution);
             }
         };

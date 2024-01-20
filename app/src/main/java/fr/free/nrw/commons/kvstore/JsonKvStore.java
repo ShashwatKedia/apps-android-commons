@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class JsonKvStore extends BasicKvStore {
+
     private final Gson gson;
 
     public JsonKvStore(Context context, String storeName, Gson gson) {
@@ -24,7 +25,8 @@ public class JsonKvStore extends BasicKvStore {
         this.gson = gson;
     }
 
-    public JsonKvStore(Context context, String storeName, int version, boolean clearAllOnUpgrade, Gson gson) {
+    public JsonKvStore(Context context, String storeName, int version, boolean clearAllOnUpgrade,
+        Gson gson) {
         super(context, storeName, version, clearAllOnUpgrade);
         this.gson = gson;
     }

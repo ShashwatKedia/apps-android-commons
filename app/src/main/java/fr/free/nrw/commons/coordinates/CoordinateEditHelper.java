@@ -51,6 +51,7 @@ public class CoordinateEditHelper {
 
     /**
      * Public interface to edit coordinates
+     *
      * @param context to be added
      * @param media to be added
      * @param Accuracy to be added
@@ -68,6 +69,7 @@ public class CoordinateEditHelper {
 
     /**
      * Replaces new coordinates
+     *
      * @param media to be added
      * @param Latitude to be added
      * @param Longitude to be added
@@ -94,16 +96,17 @@ public class CoordinateEditHelper {
         final String appendText = getFormattedWikiText(wikiText, editedLocation);
 
         return pageEditClient.edit(Objects.requireNonNull(media.getFilename())
-               , appendText, summary);
+            , appendText, summary);
     }
 
     /**
      * Helps to get formatted wikitext with upgraded location
+     *
      * @param wikiText current wikitext
      * @param editedLocation new location
      * @return String
      */
-    private String getFormattedWikiText(final String wikiText, final String editedLocation){
+    private String getFormattedWikiText(final String wikiText, final String editedLocation) {
 
         if (wikiText.contains("filedesc") && wikiText.contains("Location")) {
 
@@ -115,12 +118,12 @@ public class CoordinateEditHelper {
             final int startOfSecondSection = StringUtils.ordinalIndexOf(wikiText,
                 "==", 3);
             final StringBuilder buffer = new StringBuilder();
-            if (wikiText.charAt(wikiText.indexOf("{{Location")-1) == '\n') {
+            if (wikiText.charAt(wikiText.indexOf("{{Location") - 1) == '\n') {
                 buffer.append(editedLocation.substring(1));
             } else {
                 buffer.append(editedLocation);
             }
-            if (startOfSecondSection != -1 && wikiText.charAt(startOfSecondSection-1)!= '\n') {
+            if (startOfSecondSection != -1 && wikiText.charAt(startOfSecondSection - 1) != '\n') {
                 buffer.append("\n");
             }
 
@@ -147,6 +150,7 @@ public class CoordinateEditHelper {
 
     /**
      * Update coordinates and shows notification about coordinates update
+     *
      * @param context to be added
      * @param media to be added
      * @param latitude to be added
@@ -175,7 +179,7 @@ public class CoordinateEditHelper {
                 coordinatesInMessage.toString());
         } else {
             title += ": " + context.getString(R.string.coordinates_edit_helper_show_edit_title);
-            message = context.getString(R.string.coordinates_edit_helper_edit_message_else) ;
+            message = context.getString(R.string.coordinates_edit_helper_edit_message_else);
         }
 
         final String urlForFile = BuildConfig.COMMONS_URL + "/wiki/" + media.getFilename();

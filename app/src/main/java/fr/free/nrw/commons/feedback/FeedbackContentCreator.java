@@ -8,10 +8,10 @@ import fr.free.nrw.commons.utils.LangCodeUtils;
 import java.util.Locale;
 
 /**
- * Creates a wikimedia recognizable format
- * from feedback information
+ * Creates a wikimedia recognizable format from feedback information
  */
 public class FeedbackContentCreator {
+
     private StringBuilder stringBuilder;
     private Feedback feedback;
     private Context context;

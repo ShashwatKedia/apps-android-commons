@@ -45,7 +45,7 @@ public class ExploreFragment extends CommonsDaggerSupportFragment {
     @Named("default_preferences")
     public JsonKvStore applicationKvStore;
 
-    public void setScroll(boolean canScroll){
+    public void setScroll(boolean canScroll) {
         viewPager.setCanScroll(canScroll);
     }
 
@@ -125,7 +125,7 @@ public class ExploreFragment extends CommonsDaggerSupportFragment {
         fragmentList.add(mapRootFragment);
         titleList.add(getString(R.string.explore_tab_title_map).toUpperCase());
 
-        ((MainActivity)getActivity()).showTabs();
+        ((MainActivity) getActivity()).showTabs();
         ((BaseActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         viewPagerAdapter.setTabData(fragmentList, titleList);

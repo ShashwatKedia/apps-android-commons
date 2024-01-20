@@ -25,6 +25,7 @@ import timber.log.Timber;
 public class ExploreMapPresenter
     implements ExploreMapContract.UserActions,
     NearbyBaseMarkerThumbCallback {
+
     BookmarkLocationsDao bookmarkLocationDao;
     private boolean isNearbyLocked;
     private boolean placesLoadedOnce;
@@ -54,7 +55,7 @@ public class ExploreMapPresenter
         );
     private ExploreMapContract.View exploreMapFragmentView = DUMMY;
 
-    public ExploreMapPresenter(BookmarkLocationsDao bookmarkLocationDao){
+    public ExploreMapPresenter(BookmarkLocationsDao bookmarkLocationDao) {
         this.bookmarkLocationDao = bookmarkLocationDao;
     }
 
@@ -93,10 +94,11 @@ public class ExploreMapPresenter
             Timber.d("SEARCH_CUSTOM_AREA");
             lockUnlockNearby(true);
             exploreMapFragmentView.setProgressBarVisibility(true);
-            exploreMapFragmentView.populatePlaces(curLatLng, exploreMapFragmentView.getCameraTarget());
+            exploreMapFragmentView.populatePlaces(curLatLng,
+                exploreMapFragmentView.getCameraTarget());
         } else { // Means location changed slightly, ie user is walking or driving.
             Timber.d("Means location changed slightly");
-            if (exploreMapFragmentView.isCurrentLocationMarkerVisible()){ // Means user wants to see their live location
+            if (exploreMapFragmentView.isCurrentLocationMarkerVisible()) { // Means user wants to see their live location
                 exploreMapFragmentView.recenterMap(curLatLng);
             }
         }
@@ -105,6 +107,7 @@ public class ExploreMapPresenter
     /**
      * Nearby updates takes time, since they are network operations. During update time, we don't
      * want to get any other calls from user. So locking nearby.
+     *
      * @param isNearbyLocked true means lock, false means unlock
      */
     @Override
@@ -149,9 +152,11 @@ public class ExploreMapPresenter
         // If our nearby markers are calculated at least once
         if (exploreMapController.latestSearchLocation != null) {
             double distance = latLng.distanceTo
-                (LocationUtils.commonsLatLngToMapBoxLatLng(exploreMapController.latestSearchLocation));
+                (LocationUtils.commonsLatLngToMapBoxLatLng(
+                    exploreMapController.latestSearchLocation));
             if (exploreMapFragmentView.isNetworkConnectionEstablished()) {
-                if (distance > exploreMapController.latestSearchRadius && exploreMapController.latestSearchRadius != 0) {
+                if (distance > exploreMapController.latestSearchRadius
+                    && exploreMapController.latestSearchRadius != 0) {
                     exploreMapFragmentView.setSearchThisAreaButtonVisibility(true);
                 } else {
                     exploreMapFragmentView.setSearchThisAreaButtonVisibility(false);
@@ -165,7 +170,7 @@ public class ExploreMapPresenter
     public void onMapReady(ExploreMapController exploreMapController) {
         this.exploreMapController = exploreMapController;
         exploreMapFragmentView.addSearchThisAreaButtonAction();
-        if(null != exploreMapFragmentView) {
+        if (null != exploreMapFragmentView) {
             exploreMapFragmentView.addSearchThisAreaButtonAction();
             initializeMapOperations();
         }
@@ -177,26 +182,32 @@ public class ExploreMapPresenter
         exploreMapFragmentView.addSearchThisAreaButtonAction();
     }
 
-    public Observable<ExplorePlacesInfo> loadAttractionsFromLocation(LatLng curLatLng, LatLng searchLatLng, boolean checkingAroundCurrent) {
+    public Observable<ExplorePlacesInfo> loadAttractionsFromLocation(LatLng curLatLng,
+        LatLng searchLatLng, boolean checkingAroundCurrent) {
         return Observable
             .fromCallable(() -> exploreMapController
-                .loadAttractionsFromLocation(curLatLng, searchLatLng,checkingAroundCurrent));
+                .loadAttractionsFromLocation(curLatLng, searchLatLng, checkingAroundCurrent));
     }
 
     /**
      * Populates places for custom location, should be used for finding nearby places around a
      * location where you are not at.
+     *
      * @param explorePlacesInfo This variable has placeToCenter list information and distances.
      */
     public void updateMapMarkers(
-        MapController.ExplorePlacesInfo explorePlacesInfo, Marker selectedMarker, boolean shouldTrackPosition) {
-        exploreMapFragmentView.setMapBoundaries(CameraUpdateFactory.newLatLngBounds(getLatLngBounds(explorePlacesInfo.boundaryCoordinates), 50));
+        MapController.ExplorePlacesInfo explorePlacesInfo, Marker selectedMarker,
+        boolean shouldTrackPosition) {
+        exploreMapFragmentView.setMapBoundaries(CameraUpdateFactory.newLatLngBounds(
+            getLatLngBounds(explorePlacesInfo.boundaryCoordinates), 50));
         prepareNearbyBaseMarkers(explorePlacesInfo, selectedMarker, shouldTrackPosition);
     }
 
-    void prepareNearbyBaseMarkers(MapController.ExplorePlacesInfo explorePlacesInfo, Marker selectedMarker, boolean shouldTrackPosition) {
+    void prepareNearbyBaseMarkers(MapController.ExplorePlacesInfo explorePlacesInfo,
+        Marker selectedMarker, boolean shouldTrackPosition) {
         exploreMapController
-            .loadAttractionsFromLocationToBaseMarkerOptions(explorePlacesInfo.curLatLng, // Curlatlang will be used to calculate distances
+            .loadAttractionsFromLocationToBaseMarkerOptions(explorePlacesInfo.curLatLng,
+                // Curlatlang will be used to calculate distances
                 explorePlacesInfo.explorePlaceList,
                 exploreMapFragmentView.getContext(),
                 this,
@@ -206,11 +217,12 @@ public class ExploreMapPresenter
     }
 
     @Override
-    public void onNearbyBaseMarkerThumbsReady(List<NearbyBaseMarker> baseMarkers, ExplorePlacesInfo explorePlacesInfo, Marker selectedMarker, boolean shouldTrackPosition) {
-        if(null != exploreMapFragmentView) {
+    public void onNearbyBaseMarkerThumbsReady(List<NearbyBaseMarker> baseMarkers,
+        ExplorePlacesInfo explorePlacesInfo, Marker selectedMarker, boolean shouldTrackPosition) {
+        if (null != exploreMapFragmentView) {
             exploreMapFragmentView.addNearbyMarkersToMapBoxMap(baseMarkers, selectedMarker);
             exploreMapFragmentView.addCurrentLocationMarker(explorePlacesInfo.curLatLng);
-            if(shouldTrackPosition){
+            if (shouldTrackPosition) {
                 exploreMapFragmentView.updateMapToTrackPosition(explorePlacesInfo.curLatLng);
             }
             lockUnlockNearby(false); // So that new location updates wont come
@@ -230,8 +242,8 @@ public class ExploreMapPresenter
     }
 
     /**
-     * Some centering task may need to wait for map to be ready, if they are requested before
-     * map is ready. So we will remember it when the map is ready
+     * Some centering task may need to wait for map to be ready, if they are requested before map is
+     * ready. So we will remember it when the map is ready
      */
     private void handleCenteringTaskIfAny() {
         if (!placesLoadedOnce) {
@@ -245,7 +257,7 @@ public class ExploreMapPresenter
             // Lock map operations during search this area operation
             exploreMapFragmentView.setSearchThisAreaButtonVisibility(false);
 
-            if (searchCloseToCurrentLocation()){
+            if (searchCloseToCurrentLocation()) {
                 updateMap(LOCATION_SIGNIFICANTLY_CHANGED);
             } else {
                 updateMap(SEARCH_CUSTOM_AREA);
@@ -254,15 +266,18 @@ public class ExploreMapPresenter
     }
 
     /**
-     * Returns true if search this area button is used around our current location, so that
-     * we can continue following our current location again
+     * Returns true if search this area button is used around our current location, so that we can
+     * continue following our current location again
+     *
      * @return Returns true if search this area button is used around our current location
      */
     public boolean searchCloseToCurrentLocation() {
-        if (null == exploreMapFragmentView.getLastFocusLocation() || exploreMapController.latestSearchRadius == 0) {
+        if (null == exploreMapFragmentView.getLastFocusLocation()
+            || exploreMapController.latestSearchRadius == 0) {
             return true;
         }
-        double distance = LocationUtils.commonsLatLngToMapBoxLatLng(exploreMapFragmentView.getCameraTarget())
+        double distance = LocationUtils.commonsLatLngToMapBoxLatLng(
+                exploreMapFragmentView.getCameraTarget())
             .distanceTo(exploreMapFragmentView.getLastFocusLocation());
         if (distance > exploreMapController.currentLocationSearchRadius * 3 / 4) {
             return false;

@@ -26,26 +26,27 @@ import fr.free.nrw.commons.widget.PicOfDayAppWidget;
 
 
 /**
- * Facilitates Injection from CommonsApplicationModule to all the 
- * classes seeking a dependency to be injected
+ * Facilitates Injection from CommonsApplicationModule to all the classes seeking a dependency to be
+ * injected
  */
 @Singleton
 @Component(modules = {
-        CommonsApplicationModule.class,
-        NetworkingModule.class,
-        AndroidInjectionModule.class,
-        AndroidSupportInjectionModule.class,
-        ActivityBuilderModule.class,
-        FragmentBuilderModule.class,
-        ServiceBuilderModule.class,
-        ContentProviderBuilderModule.class,
-        UploadModule.class,
-        ContributionsModule.class,
-        SearchModule.class,
-        DepictionModule.class,
-        CategoriesModule.class
+    CommonsApplicationModule.class,
+    NetworkingModule.class,
+    AndroidInjectionModule.class,
+    AndroidSupportInjectionModule.class,
+    ActivityBuilderModule.class,
+    FragmentBuilderModule.class,
+    ServiceBuilderModule.class,
+    ContentProviderBuilderModule.class,
+    UploadModule.class,
+    ContributionsModule.class,
+    SearchModule.class,
+    DepictionModule.class,
+    CategoriesModule.class
 })
 public interface CommonsApplicationComponent extends AndroidInjector<ApplicationlessInjection> {
+
     void inject(CommonsApplication application);
 
     void inject(UploadWorker worker);

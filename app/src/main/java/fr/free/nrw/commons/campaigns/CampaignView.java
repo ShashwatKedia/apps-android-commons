@@ -30,6 +30,7 @@ import fr.free.nrw.commons.utils.ViewUtil;
  * A view which represents a single campaign
  */
 public class CampaignView extends SwipableCardView {
+
     Campaign campaign;
     private ViewHolder viewHolder;
 
@@ -66,7 +67,8 @@ public class CampaignView extends SwipableCardView {
         }
     }
 
-    @Override public boolean onSwipe(final View view) {
+    @Override
+    public boolean onSwipe(final View view) {
         view.setVisibility(View.GONE);
         ((BaseActivity) getContext()).defaultKvStore
             .putBoolean(campaignPreference, false);
@@ -81,7 +83,7 @@ public class CampaignView extends SwipableCardView {
         setOnClickListener(view -> {
             if (campaign != null) {
                 if (campaign.isWLMCampaign()) {
-                    ((MainActivity)(getContext())).showNearby();
+                    ((MainActivity) (getContext())).showNearby();
                 } else {
                     Utils.handleWebUrl(getContext(), Uri.parse(campaign.getLink()));
                 }
@@ -93,9 +95,12 @@ public class CampaignView extends SwipableCardView {
 
         @BindView(R.id.iv_campaign)
         ImageView ivCampaign;
-        @BindView(R.id.tv_title) TextView tvTitle;
-        @BindView(R.id.tv_description) TextView tvDescription;
-        @BindView(R.id.tv_dates) TextView tvDates;
+        @BindView(R.id.tv_title)
+        TextView tvTitle;
+        @BindView(R.id.tv_description)
+        TextView tvDescription;
+        @BindView(R.id.tv_dates)
+        TextView tvDates;
 
         public ViewHolder(View itemView) {
             ButterKnife.bind(this, itemView);
@@ -118,8 +123,9 @@ public class CampaignView extends SwipableCardView {
                             .parse(campaign.getStartDate());
                         final Date endDate = CommonsDateUtil.getIso8601DateFormatShort()
                             .parse(campaign.getEndDate());
-                        tvDates.setText(String.format("%1s - %2s", DateUtil.getExtraShortDateString(startDate),
-                            DateUtil.getExtraShortDateString(endDate)));
+                        tvDates.setText(
+                            String.format("%1s - %2s", DateUtil.getExtraShortDateString(startDate),
+                                DateUtil.getExtraShortDateString(endDate)));
                     }
                 } catch (final ParseException e) {
                     e.printStackTrace();

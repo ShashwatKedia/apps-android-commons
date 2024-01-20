@@ -23,7 +23,8 @@ public abstract class CommonsDaggerContentProvider extends ContentProvider {
         AndroidInjector<ContentProvider> serviceInjector = injection.contentProviderInjector();
 
         if (serviceInjector == null) {
-            throw new NullPointerException("ApplicationlessInjection.contentProviderInjector() returned null");
+            throw new NullPointerException(
+                "ApplicationlessInjection.contentProviderInjector() returned null");
         }
 
         serviceInjector.inject(this);

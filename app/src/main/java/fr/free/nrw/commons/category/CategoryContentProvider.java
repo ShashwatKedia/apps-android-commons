@@ -29,7 +29,8 @@ public class CategoryContentProvider extends CommonsDaggerContentProvider {
     private static final int CATEGORIES_ID = 2;
     private static final String BASE_PATH = "categories";
 
-    public static final Uri BASE_URI = Uri.parse("content://" + BuildConfig.CATEGORY_AUTHORITY + "/" + BASE_PATH);
+    public static final Uri BASE_URI = Uri.parse(
+        "content://" + BuildConfig.CATEGORY_AUTHORITY + "/" + BASE_PATH);
 
     private static final UriMatcher uriMatcher = new UriMatcher(NO_MATCH);
 
@@ -42,12 +43,13 @@ public class CategoryContentProvider extends CommonsDaggerContentProvider {
         return Uri.parse(BASE_URI.toString() + "/" + id);
     }
 
-    @Inject DBOpenHelper dbOpenHelper;
+    @Inject
+    DBOpenHelper dbOpenHelper;
 
     @SuppressWarnings("ConstantConditions")
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
-                        String[] selectionArgs, String sortOrder) {
+        String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(TABLE_NAME);
 
@@ -59,16 +61,16 @@ public class CategoryContentProvider extends CommonsDaggerContentProvider {
         switch (uriType) {
             case CATEGORIES:
                 cursor = queryBuilder.query(db, projection, selection, selectionArgs,
-                        null, null, sortOrder);
+                    null, null, sortOrder);
                 break;
             case CATEGORIES_ID:
                 cursor = queryBuilder.query(db,
-                        ALL_FIELDS,
-                        "_id = ?",
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder
+                    ALL_FIELDS,
+                    "_id = ?",
+                    new String[]{uri.getLastPathSegment()},
+                    null,
+                    null,
+                    sortOrder
                 );
                 break;
             default:
@@ -133,7 +135,7 @@ public class CategoryContentProvider extends CommonsDaggerContentProvider {
     @SuppressWarnings("ConstantConditions")
     @Override
     public int update(@NonNull Uri uri, ContentValues contentValues, String selection,
-                      String[] selectionArgs) {
+        String[] selectionArgs) {
         /*
         SQL Injection warnings: First, note that we're not exposing this to the
         outside world (exported="false"). Even then, we should make sure to sanitize
@@ -151,12 +153,12 @@ public class CategoryContentProvider extends CommonsDaggerContentProvider {
                 if (TextUtils.isEmpty(selection)) {
                     int id = Integer.valueOf(uri.getLastPathSegment());
                     rowsUpdated = sqlDB.update(TABLE_NAME,
-                            contentValues,
-                            COLUMN_ID + " = ?",
-                            new String[]{String.valueOf(id)});
+                        contentValues,
+                        COLUMN_ID + " = ?",
+                        new String[]{String.valueOf(id)});
                 } else {
                     throw new IllegalArgumentException(
-                            "Parameter `selection` should be empty when updating an ID");
+                        "Parameter `selection` should be empty when updating an ID");
                 }
                 break;
             default:

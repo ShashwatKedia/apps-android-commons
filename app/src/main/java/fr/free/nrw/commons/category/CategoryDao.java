@@ -30,7 +30,8 @@ public class CategoryDao {
         ContentProviderClient db = clientProvider.get();
         try {
             if (category.getContentUri() == null) {
-                category.setContentUri(db.insert(CategoryContentProvider.BASE_URI, toContentValues(category)));
+                category.setContentUri(
+                    db.insert(CategoryContentProvider.BASE_URI, toContentValues(category)));
             } else {
                 db.update(category.getContentUri(), toContentValues(category), null, null);
             }
@@ -53,11 +54,11 @@ public class CategoryDao {
         ContentProviderClient db = clientProvider.get();
         try {
             cursor = db.query(
-                    CategoryContentProvider.BASE_URI,
-                    Table.ALL_FIELDS,
-                    Table.COLUMN_NAME + "=?",
-                    new String[]{name},
-                    null);
+                CategoryContentProvider.BASE_URI,
+                Table.ALL_FIELDS,
+                Table.COLUMN_NAME + "=?",
+                new String[]{name},
+                null);
             if (cursor != null && cursor.moveToFirst()) {
                 return fromCursor(cursor);
             }
@@ -85,15 +86,15 @@ public class CategoryDao {
         ContentProviderClient db = clientProvider.get();
         try {
             cursor = db.query(
-                    CategoryContentProvider.BASE_URI,
-                    Table.ALL_FIELDS,
-                    null,
-                    new String[]{},
-                    Table.COLUMN_LAST_USED + " DESC");
+                CategoryContentProvider.BASE_URI,
+                Table.ALL_FIELDS,
+                null,
+                new String[]{},
+                Table.COLUMN_LAST_USED + " DESC");
             // fixme add a limit on the original query instead of falling out of the loop?
             while (cursor != null && cursor.moveToNext()
-                    && cursor.getPosition() < limit) {
-                if (fromCursor(cursor).getName() != null ) {
+                && cursor.getPosition() < limit) {
+                if (fromCursor(cursor).getName() != null) {
                     items.add(new CategoryItem(fromCursor(cursor).getName(),
                         fromCursor(cursor).getDescription(), fromCursor(cursor).getThumbnail(),
                         false));
@@ -114,12 +115,12 @@ public class CategoryDao {
     Category fromCursor(Cursor cursor) {
         // Hardcoding column positions!
         return new Category(
-                CategoryContentProvider.uriForId(cursor.getInt(cursor.getColumnIndex(Table.COLUMN_ID))),
-                cursor.getString(cursor.getColumnIndex(Table.COLUMN_NAME)),
-                cursor.getString(cursor.getColumnIndex(Table.COLUMN_DESCRIPTION)),
-                cursor.getString(cursor.getColumnIndex(Table.COLUMN_THUMBNAIL)),
-                new Date(cursor.getLong(cursor.getColumnIndex(Table.COLUMN_LAST_USED))),
-                cursor.getInt(cursor.getColumnIndex(Table.COLUMN_TIMES_USED))
+            CategoryContentProvider.uriForId(cursor.getInt(cursor.getColumnIndex(Table.COLUMN_ID))),
+            cursor.getString(cursor.getColumnIndex(Table.COLUMN_NAME)),
+            cursor.getString(cursor.getColumnIndex(Table.COLUMN_DESCRIPTION)),
+            cursor.getString(cursor.getColumnIndex(Table.COLUMN_THUMBNAIL)),
+            new Date(cursor.getLong(cursor.getColumnIndex(Table.COLUMN_LAST_USED))),
+            cursor.getInt(cursor.getColumnIndex(Table.COLUMN_TIMES_USED))
         );
     }
 
@@ -134,6 +135,7 @@ public class CategoryDao {
     }
 
     public static class Table {
+
         public static final String TABLE_NAME = "categories";
 
         public static final String COLUMN_ID = "_id";
@@ -145,24 +147,24 @@ public class CategoryDao {
 
         // NOTE! KEEP IN SAME ORDER AS THEY ARE DEFINED UP THERE. HELPS HARD CODE COLUMN INDICES.
         public static final String[] ALL_FIELDS = {
-                COLUMN_ID,
-                COLUMN_NAME,
-                COLUMN_DESCRIPTION,
-                COLUMN_THUMBNAIL,
-                COLUMN_LAST_USED,
-                COLUMN_TIMES_USED
+            COLUMN_ID,
+            COLUMN_NAME,
+            COLUMN_DESCRIPTION,
+            COLUMN_THUMBNAIL,
+            COLUMN_LAST_USED,
+            COLUMN_TIMES_USED
         };
 
         static final String DROP_TABLE_STATEMENT = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
         static final String CREATE_TABLE_STATEMENT = "CREATE TABLE " + TABLE_NAME + " ("
-                + COLUMN_ID + " INTEGER PRIMARY KEY,"
-                + COLUMN_NAME + " STRING,"
-                + COLUMN_DESCRIPTION + " STRING,"
-                + COLUMN_THUMBNAIL + " STRING,"
-                + COLUMN_LAST_USED + " INTEGER,"
-                + COLUMN_TIMES_USED + " INTEGER"
-                + ");";
+            + COLUMN_ID + " INTEGER PRIMARY KEY,"
+            + COLUMN_NAME + " STRING,"
+            + COLUMN_DESCRIPTION + " STRING,"
+            + COLUMN_THUMBNAIL + " STRING,"
+            + COLUMN_LAST_USED + " INTEGER,"
+            + COLUMN_TIMES_USED + " INTEGER"
+            + ");";
 
         public static void onCreate(SQLiteDatabase db) {
             db.execSQL(CREATE_TABLE_STATEMENT);

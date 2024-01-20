@@ -1,6 +1,7 @@
 package fr.free.nrw.commons.kvstore;
 
 public interface KeyValueStore {
+
     String getString(String key);
 
     boolean getBoolean(String key);

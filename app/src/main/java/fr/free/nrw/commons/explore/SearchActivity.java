@@ -43,14 +43,20 @@ import timber.log.Timber;
  */
 
 public class SearchActivity extends BaseActivity
-        implements MediaDetailPagerFragment.MediaDetailProvider, CategoryImagesCallback {
+    implements MediaDetailPagerFragment.MediaDetailProvider, CategoryImagesCallback {
 
-    @BindView(R.id.toolbar_search) Toolbar toolbar;
-    @BindView(R.id.searchHistoryContainer) FrameLayout searchHistoryContainer;
-    @BindView(R.id.mediaContainer) FrameLayout mediaContainer;
-    @BindView(R.id.searchBox) SearchView searchView;
-    @BindView(R.id.tab_layout) TabLayout tabLayout;
-    @BindView(R.id.viewPager) ViewPager viewPager;
+    @BindView(R.id.toolbar_search)
+    Toolbar toolbar;
+    @BindView(R.id.searchHistoryContainer)
+    FrameLayout searchHistoryContainer;
+    @BindView(R.id.mediaContainer)
+    FrameLayout mediaContainer;
+    @BindView(R.id.searchBox)
+    SearchView searchView;
+    @BindView(R.id.tab_layout)
+    TabLayout tabLayout;
+    @BindView(R.id.viewPager)
+    ViewPager viewPager;
 
     @Inject
     RecentSearchesDao recentSearchesDao;
@@ -71,7 +77,7 @@ public class SearchActivity extends BaseActivity
         setTitle(getString(R.string.title_activity_search));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        toolbar.setNavigationOnClickListener(v->onBackPressed());
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         supportFragmentManager = getSupportFragmentManager();
         setSearchHistoryFragment();
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
@@ -86,8 +92,8 @@ public class SearchActivity extends BaseActivity
     }
 
     /**
-     * This method sets the search history fragment.
-     * Search history fragment is displayed when query is empty.
+     * This method sets the search history fragment. Search history fragment is displayed when query
+     * is empty.
      */
     private void setSearchHistoryFragment() {
         recentSearchesFragment = new RecentSearchesFragment();
@@ -103,7 +109,7 @@ public class SearchActivity extends BaseActivity
         List<String> titleList = new ArrayList<>();
         searchMediaFragment = new SearchMediaFragment();
         searchDepictionsFragment = new SearchDepictionsFragment();
-        searchCategoryFragment= new SearchCategoryFragment();
+        searchCategoryFragment = new SearchCategoryFragment();
         fragmentList.add(searchMediaFragment);
         titleList.add(getResources().getString(R.string.search_tab_title_media).toUpperCase());
         fragmentList.add(searchCategoryFragment);
@@ -114,11 +120,11 @@ public class SearchActivity extends BaseActivity
         viewPagerAdapter.setTabData(fragmentList, titleList);
         viewPagerAdapter.notifyDataSetChanged();
         compositeDisposable.add(RxSearchView.queryTextChanges(searchView)
-                .takeUntil(RxView.detaches(searchView))
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::handleSearch, Timber::e
-                ));
+            .takeUntil(RxView.detaches(searchView))
+            .debounce(500, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(this::handleSearch, Timber::e
+            ));
     }
 
     private void handleSearch(final CharSequence query) {
@@ -140,8 +146,7 @@ public class SearchActivity extends BaseActivity
                 searchCategoryFragment.onQueryUpdated(query.toString());
             }
 
-         }
-        else {
+        } else {
             //Open RecentSearchesFragment
             recentSearchesFragment.updateRecentSearches();
             viewPager.setVisibility(View.GONE);
@@ -164,6 +169,7 @@ public class SearchActivity extends BaseActivity
 
     /**
      * returns Media Object at position
+     *
      * @param i position of Media in the imagesRecyclerView adapter.
      */
     @Override
@@ -176,7 +182,7 @@ public class SearchActivity extends BaseActivity
      */
     @Override
     public int getTotalMediaCount() {
-       return searchMediaFragment.getTotalMediaCount();
+        return searchMediaFragment.getTotalMediaCount();
     }
 
     @Override
@@ -198,18 +204,19 @@ public class SearchActivity extends BaseActivity
     }
 
     /**
-     * This method is called on success of API call for image Search.
-     * The viewpager will notified that number of items have changed.
+     * This method is called on success of API call for image Search. The viewpager will notified
+     * that number of items have changed.
      */
     @Override
     public void viewPagerNotifyDataSetChanged() {
-        if (mediaDetails!=null){
+        if (mediaDetails != null) {
             mediaDetails.notifyDataSetChanged();
         }
     }
 
     /**
      * Open media detail pager fragment on click of image in search results
+     *
      * @param index item index that should be opened
      */
     @Override
@@ -223,11 +230,12 @@ public class SearchActivity extends BaseActivity
             // set isFeaturedImage true for featured images, to include author field on media detail
             mediaDetails = MediaDetailPagerFragment.newInstance(false, true);
             supportFragmentManager
-                    .beginTransaction()
-                    .hide(supportFragmentManager.getFragments().get(supportFragmentManager.getBackStackEntryCount()))
-                    .add(R.id.mediaContainer, mediaDetails)
-                    .addToBackStack(null)
-                    .commit();
+                .beginTransaction()
+                .hide(supportFragmentManager.getFragments()
+                    .get(supportFragmentManager.getBackStackEntryCount()))
+                .add(R.id.mediaContainer, mediaDetails)
+                .addToBackStack(null)
+                .commit();
             // Reason for using hide, add instead of replace is to maintain scroll position after
             // coming back to the search activity. See https://github.com/commons-app/apps-android-commons/issues/1631
             // https://stackoverflow.com/questions/11353075/how-can-i-maintain-fragment-state-when-added-to-the-back-stack/19022550#19022550
@@ -241,7 +249,7 @@ public class SearchActivity extends BaseActivity
      */
     @Override
     protected void onResume() {
-        if (supportFragmentManager.getBackStackEntryCount()==1){
+        if (supportFragmentManager.getBackStackEntryCount() == 1) {
             //FIXME: Temporary fix for screen rotation inside media details. If we don't call onBackPressed then fragment stack is increasing every time.
             //FIXME: Similar issue like this https://github.com/commons-app/apps-android-commons/issues/894
             // This is called on screen rotation when user is inside media details. Ideally it should show Media Details but since we are not saving the state now. We are throwing the user to search screen otherwise the app was crashing.
@@ -252,8 +260,8 @@ public class SearchActivity extends BaseActivity
     }
 
     /**
-     * This method is called on backPressed of anyFragment in the activity.
-     * If condition is called when mediaDetailFragment is opened.
+     * This method is called on backPressed of anyFragment in the activity. If condition is called
+     * when mediaDetailFragment is opened.
      */
     @Override
     public void onBackPressed() {
@@ -281,6 +289,7 @@ public class SearchActivity extends BaseActivity
 
     /**
      * This method is called on click of a recent search to update query in SearchView.
+     *
      * @param query Recent Search Query
      */
     public void updateText(String query) {
@@ -290,7 +299,8 @@ public class SearchActivity extends BaseActivity
         viewPager.requestFocus();
     }
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         super.onDestroy();
         //Dispose the disposables when the activity is destroyed
         compositeDisposable.dispose();

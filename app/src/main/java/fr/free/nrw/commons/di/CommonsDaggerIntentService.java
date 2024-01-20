@@ -18,12 +18,14 @@ public abstract class CommonsDaggerIntentService extends IntentService {
     }
 
     private void inject() {
-        ApplicationlessInjection injection = ApplicationlessInjection.getInstance(getApplicationContext());
+        ApplicationlessInjection injection = ApplicationlessInjection.getInstance(
+            getApplicationContext());
 
         AndroidInjector<Service> serviceInjector = injection.serviceInjector();
 
         if (serviceInjector == null) {
-            throw new NullPointerException("ApplicationlessInjection.serviceInjector() returned null");
+            throw new NullPointerException(
+                "ApplicationlessInjection.serviceInjector() returned null");
         }
 
         serviceInjector.inject(this);

@@ -7,7 +7,7 @@ import android.content.Intent;
 import dagger.android.AndroidInjector;
 
 /**
- * Receives broadcast then injects it's instance to the broadcastReceiverInjector method of 
+ * Receives broadcast then injects it's instance to the broadcastReceiverInjector method of
  * ApplicationlessInjection class
  */
 public abstract class CommonsDaggerBroadcastReceiver extends BroadcastReceiver {
@@ -22,12 +22,14 @@ public abstract class CommonsDaggerBroadcastReceiver extends BroadcastReceiver {
     }
 
     private void inject(Context context) {
-        ApplicationlessInjection injection = ApplicationlessInjection.getInstance(context.getApplicationContext());
+        ApplicationlessInjection injection = ApplicationlessInjection.getInstance(
+            context.getApplicationContext());
 
         AndroidInjector<BroadcastReceiver> serviceInjector = injection.broadcastReceiverInjector();
 
         if (serviceInjector == null) {
-            throw new NullPointerException("ApplicationlessInjection.broadcastReceiverInjector() returned null");
+            throw new NullPointerException(
+                "ApplicationlessInjection.broadcastReceiverInjector() returned null");
         }
         serviceInjector.inject(this);
     }

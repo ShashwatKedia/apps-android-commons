@@ -45,17 +45,17 @@ import org.wikipedia.AppAdapter;
 
 /**
  * The Dependency Provider class for Commons Android.
- *
- * Provides all sorts of ContentProviderClients used by the app
- * along with the Liscences, AccountUtility, UploadController, Logged User,
- * Location manager etc
+ * <p>
+ * Provides all sorts of ContentProviderClients used by the app along with the Liscences,
+ * AccountUtility, UploadController, Logged User, Location manager etc
  */
 @Module
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class CommonsApplicationModule {
+
     private Context applicationContext;
-    public static final String IO_THREAD="io_thread";
-    public static final String MAIN_THREAD="main_thread";
+    public static final String IO_THREAD = "io_thread";
+    public static final String MAIN_THREAD = "main_thread";
     private AppDatabase appDatabase;
 
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {
@@ -72,6 +72,7 @@ public class CommonsApplicationModule {
 
     /**
      * Provides ImageFileLoader used to fetch device images.
+     *
      * @param context
      * @return
      */
@@ -87,7 +88,8 @@ public class CommonsApplicationModule {
 
     @Provides
     public InputMethodManager provideInputMethodManager() {
-        return (InputMethodManager) applicationContext.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        return (InputMethodManager) applicationContext.getSystemService(
+            Activity.INPUT_METHOD_SERVICE);
     }
 
     @Provides
@@ -110,7 +112,8 @@ public class CommonsApplicationModule {
         byName.put(context.getString(R.string.license_name_cc_by), Prefs.Licenses.CC_BY_3);
         byName.put(context.getString(R.string.license_name_cc_by_sa), Prefs.Licenses.CC_BY_SA_3);
         byName.put(context.getString(R.string.license_name_cc_by_four), Prefs.Licenses.CC_BY_4);
-        byName.put(context.getString(R.string.license_name_cc_by_sa_four), Prefs.Licenses.CC_BY_SA_4);
+        byName.put(context.getString(R.string.license_name_cc_by_sa_four),
+            Prefs.Licenses.CC_BY_SA_4);
         return byName;
     }
 
@@ -120,73 +123,83 @@ public class CommonsApplicationModule {
     }
 
     /**
-     * Provides an instance of CategoryContentProviderClient i.e. the categories
-     * that are there in local storage
+     * Provides an instance of CategoryContentProviderClient i.e. the categories that are there in
+     * local storage
      */
     @Provides
     @Named("category")
     public ContentProviderClient provideCategoryContentProviderClient(Context context) {
-        return context.getContentResolver().acquireContentProviderClient(BuildConfig.CATEGORY_AUTHORITY);
+        return context.getContentResolver()
+            .acquireContentProviderClient(BuildConfig.CATEGORY_AUTHORITY);
     }
 
     /**
-     * This method is used to provide instance of RecentSearchContentProviderClient
-     * which provides content of Recent Searches from database
+     * This method is used to provide instance of RecentSearchContentProviderClient which provides
+     * content of Recent Searches from database
+     *
      * @param context
      * @return returns RecentSearchContentProviderClient
      */
     @Provides
     @Named("recentsearch")
     public ContentProviderClient provideRecentSearchContentProviderClient(Context context) {
-        return context.getContentResolver().acquireContentProviderClient(BuildConfig.RECENT_SEARCH_AUTHORITY);
+        return context.getContentResolver()
+            .acquireContentProviderClient(BuildConfig.RECENT_SEARCH_AUTHORITY);
     }
 
     @Provides
     @Named("contribution")
     public ContentProviderClient provideContributionContentProviderClient(Context context) {
-        return context.getContentResolver().acquireContentProviderClient(BuildConfig.CONTRIBUTION_AUTHORITY);
+        return context.getContentResolver()
+            .acquireContentProviderClient(BuildConfig.CONTRIBUTION_AUTHORITY);
     }
 
     @Provides
     @Named("modification")
     public ContentProviderClient provideModificationContentProviderClient(Context context) {
-        return context.getContentResolver().acquireContentProviderClient(BuildConfig.MODIFICATION_AUTHORITY);
+        return context.getContentResolver()
+            .acquireContentProviderClient(BuildConfig.MODIFICATION_AUTHORITY);
     }
 
     @Provides
     @Named("bookmarks")
     public ContentProviderClient provideBookmarkContentProviderClient(Context context) {
-        return context.getContentResolver().acquireContentProviderClient(BuildConfig.BOOKMARK_AUTHORITY);
+        return context.getContentResolver()
+            .acquireContentProviderClient(BuildConfig.BOOKMARK_AUTHORITY);
     }
 
     @Provides
     @Named("bookmarksLocation")
     public ContentProviderClient provideBookmarkLocationContentProviderClient(Context context) {
-        return context.getContentResolver().acquireContentProviderClient(BuildConfig.BOOKMARK_LOCATIONS_AUTHORITY);
+        return context.getContentResolver()
+            .acquireContentProviderClient(BuildConfig.BOOKMARK_LOCATIONS_AUTHORITY);
     }
 
     @Provides
     @Named("bookmarksItem")
     public ContentProviderClient provideBookmarkItemContentProviderClient(Context context) {
-        return context.getContentResolver().acquireContentProviderClient(BuildConfig.BOOKMARK_ITEMS_AUTHORITY);
+        return context.getContentResolver()
+            .acquireContentProviderClient(BuildConfig.BOOKMARK_ITEMS_AUTHORITY);
     }
 
     /**
-     * This method is used to provide instance of RecentLanguagesContentProvider
-     * which provides content of recent used languages from database
+     * This method is used to provide instance of RecentLanguagesContentProvider which provides
+     * content of recent used languages from database
+     *
      * @param context Context
      * @return returns RecentLanguagesContentProvider
      */
     @Provides
     @Named("recent_languages")
-    public ContentProviderClient provideRecentLanguagesContentProviderClient(final Context context) {
+    public ContentProviderClient provideRecentLanguagesContentProviderClient(
+        final Context context) {
         return context.getContentResolver()
             .acquireContentProviderClient(BuildConfig.RECENT_LANGUAGE_AUTHORITY);
     }
 
     /**
-     * Provides a Json store instance(JsonKvStore) which keeps
-     * the provided Gson in it's instance
+     * Provides a Json store instance(JsonKvStore) which keeps the provided Gson in it's instance
+     *
      * @param gson stored inside the store instance
      */
     @Provides
@@ -198,8 +211,8 @@ public class CommonsApplicationModule {
 
     @Provides
     public UploadController providesUploadController(SessionManager sessionManager,
-                                                     @Named("default_preferences") JsonKvStore kvStore,
-                                                     Context context, ContributionDao contributionDao) {
+        @Named("default_preferences") JsonKvStore kvStore,
+        Context context, ContributionDao contributionDao) {
         return new UploadController(sessionManager, context, kvStore);
     }
 
@@ -230,6 +243,7 @@ public class CommonsApplicationModule {
 
     /**
      * Provides app flavour. Can be used to alter flows in the app
+     *
      * @return
      */
     @Named("isBeta")
@@ -240,12 +254,11 @@ public class CommonsApplicationModule {
     }
 
     /**
-     * Provide JavaRx IO scheduler which manages IO operations
-     * across various Threads
+     * Provide JavaRx IO scheduler which manages IO operations across various Threads
      */
     @Named(IO_THREAD)
     @Provides
-    public Scheduler providesIoThread(){
+    public Scheduler providesIoThread() {
         return Schedulers.io();
     }
 
@@ -304,12 +317,12 @@ public class CommonsApplicationModule {
      * Get the reference of ReviewDao class
      */
     @Provides
-    public ReviewDao providesReviewDao(AppDatabase appDatabase){
+    public ReviewDao providesReviewDao(AppDatabase appDatabase) {
         return appDatabase.ReviewDao();
     }
 
     @Provides
-    public ContentResolver providesContentResolver(Context context){
+    public ContentResolver providesContentResolver(Context context) {
         return context.getContentResolver();
     }
 }

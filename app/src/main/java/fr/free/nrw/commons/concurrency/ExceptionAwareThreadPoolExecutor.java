@@ -11,7 +11,7 @@ class ExceptionAwareThreadPoolExecutor extends ScheduledThreadPoolExecutor {
     private final ExceptionHandler exceptionHandler;
 
     public ExceptionAwareThreadPoolExecutor(int corePoolSize, ThreadFactory threadFactory,
-                                            ExceptionHandler exceptionHandler) {
+        ExceptionHandler exceptionHandler) {
         super(corePoolSize, threadFactory);
         this.exceptionHandler = exceptionHandler;
     }
@@ -22,7 +22,9 @@ class ExceptionAwareThreadPoolExecutor extends ScheduledThreadPoolExecutor {
         if (t == null && r instanceof Future<?>) {
             try {
                 Future<?> future = (Future<?>) r;
-                if (future.isDone()) future.get();
+                if (future.isDone()) {
+                    future.get();
+                }
             } catch (CancellationException | InterruptedException e) {
                 //ignore
             } catch (ExecutionException e) {

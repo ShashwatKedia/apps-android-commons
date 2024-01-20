@@ -20,7 +20,8 @@ import java.util.Map;
 public class Converters {
 
     public static Gson getGson() {
-        return ApplicationlessInjection.getInstance(CommonsApplication.getInstance()).getCommonsApplicationComponent().gson();
+        return ApplicationlessInjection.getInstance(CommonsApplication.getInstance())
+            .getCommonsApplicationComponent().gson();
     }
 
     /**
@@ -36,7 +37,7 @@ public class Converters {
     /**
      * convert string to DepictedItem object
      * output Example -> DepictedItem depictedItem=new DepictedItem ()
-     * input Example -> string 
+     * input Example -> string
      */
     @TypeConverter
     public static DepictedItem stringToDepicts(String objectList) {
@@ -75,23 +76,23 @@ public class Converters {
     }
 
     @TypeConverter
-    public static String mapObjectToString(Map<String,String> objectList) {
+    public static String mapObjectToString(Map<String, String> objectList) {
         return writeObjectToString(objectList);
     }
 
     @TypeConverter
-    public static String mapObjectToString2(Map<String,Boolean> objectList) {
+    public static String mapObjectToString2(Map<String, Boolean> objectList) {
         return writeObjectToString(objectList);
     }
 
     @TypeConverter
-    public static Map<String,String> stringToMap(String objectList) {
-        return readObjectWithTypeToken(objectList, new TypeToken<Map<String,String>>(){});
+    public static Map<String, String> stringToMap(String objectList) {
+        return readObjectWithTypeToken(objectList, new TypeToken<Map<String, String>>() {});
     }
 
     @TypeConverter
-    public static Map<String,Boolean> stringToMap2(String objectList) {
-        return readObjectWithTypeToken(objectList, new TypeToken<Map<String,Boolean>>(){});
+    public static Map<String, Boolean> stringToMap2(String objectList) {
+        return readObjectWithTypeToken(objectList, new TypeToken<Map<String, Boolean>>() {});
     }
 
     @TypeConverter
@@ -101,7 +102,7 @@ public class Converters {
 
     @TypeConverter
     public static LatLng stringToLatLng(String objectList) {
-        return readObjectFromString(objectList,LatLng.class);
+        return readObjectFromString(objectList, LatLng.class);
     }
 
     @TypeConverter
@@ -138,7 +139,7 @@ public class Converters {
         return object == null ? null : getGson().toJson(object);
     }
 
-    private static<T> T readObjectFromString(String objectAsString, Class<T> clazz) {
+    private static <T> T readObjectFromString(String objectAsString, Class<T> clazz) {
         return objectAsString == null ? null : getGson().fromJson(objectAsString, clazz);
     }
 

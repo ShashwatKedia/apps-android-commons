@@ -37,7 +37,8 @@ public class FilePicker implements Constants {
     private static Uri createCameraPictureFile(@NonNull Context context) throws IOException {
         File imagePath = PickedFiles.getCameraPicturesLocation(context);
         Uri uri = PickedFiles.getUriToFile(context, imagePath);
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context)
+            .edit();
         editor.putString(KEY_PHOTO_URI, uri.toString());
         editor.putString(KEY_LAST_CAMERA_PHOTO, imagePath.toString());
         editor.apply();
@@ -45,15 +46,17 @@ public class FilePicker implements Constants {
     }
 
     private static Intent createGalleryIntent(@NonNull Context context, int type,
-                                              boolean openDocumentIntentPreferred) {
+        boolean openDocumentIntentPreferred) {
         // storing picked image type to shared preferences
         storeType(context, type);
         return plainGalleryPickerIntent(openDocumentIntentPreferred)
-                .putExtra(Intent.EXTRA_ALLOW_MULTIPLE, configuration(context).allowsMultiplePickingInGallery());
+            .putExtra(Intent.EXTRA_ALLOW_MULTIPLE,
+                configuration(context).allowsMultiplePickingInGallery());
     }
 
     /**
      * CreateCustomSectorIntent, creates intent for custom selector activity.
+     *
      * @param context
      * @param type
      * @return Custom selector intent
@@ -80,19 +83,23 @@ public class FilePicker implements Constants {
     }
 
     private static void revokeWritePermission(@NonNull Context context, Uri uri) {
-        context.revokeUriPermission(uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        context.revokeUriPermission(uri,
+            Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
     }
 
     private static void grantWritePermission(@NonNull Context context, Intent intent, Uri uri) {
-        List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
+        List<ResolveInfo> resInfoList = context.getPackageManager()
+            .queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         for (ResolveInfo resolveInfo : resInfoList) {
             String packageName = resolveInfo.activityInfo.packageName;
-            context.grantUriPermission(packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            context.grantUriPermission(packageName, uri,
+                Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
     }
 
     private static void storeType(@NonNull Context context, int type) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(KEY_TYPE, type).apply();
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(KEY_TYPE, type)
+            .apply();
     }
 
     private static int restoreType(@NonNull Context context) {
@@ -104,7 +111,8 @@ public class FilePicker implements Constants {
      *
      * @param type Custom type of your choice, which will be returned with the images
      */
-    public static void openGallery(Activity activity, int type, boolean openDocumentIntentPreferred) {
+    public static void openGallery(Activity activity, int type,
+        boolean openDocumentIntentPreferred) {
         Intent intent = createGalleryIntent(activity, type, openDocumentIntentPreferred);
         activity.startActivityForResult(intent, RequestCodes.PICK_PICTURE_FROM_GALLERY);
     }
@@ -118,7 +126,7 @@ public class FilePicker implements Constants {
     }
 
     /**
-     * Opens the camera app to pick image clicked by user 
+     * Opens the camera app to pick image clicked by user
      */
     public static void openCameraForImage(Activity activity, int type) {
         Intent intent = createCameraForImageIntent(activity, type);
@@ -127,7 +135,8 @@ public class FilePicker implements Constants {
 
     @Nullable
     private static UploadableFile takenCameraPicture(Context context) throws URISyntaxException {
-        String lastCameraPhoto = PreferenceManager.getDefaultSharedPreferences(context).getString(KEY_LAST_CAMERA_PHOTO, null);
+        String lastCameraPhoto = PreferenceManager.getDefaultSharedPreferences(context)
+            .getString(KEY_LAST_CAMERA_PHOTO, null);
         if (lastCameraPhoto != null) {
             return new UploadableFile(new File(lastCameraPhoto));
         } else {
@@ -137,7 +146,8 @@ public class FilePicker implements Constants {
 
     @Nullable
     private static UploadableFile takenCameraVideo(Context context) throws URISyntaxException {
-        String lastCameraPhoto = PreferenceManager.getDefaultSharedPreferences(context).getString(KEY_LAST_CAMERA_VIDEO, null);
+        String lastCameraPhoto = PreferenceManager.getDefaultSharedPreferences(context)
+            .getString(KEY_LAST_CAMERA_VIDEO, null);
         if (lastCameraPhoto != null) {
             return new UploadableFile(new File(lastCameraPhoto));
         } else {
@@ -148,19 +158,22 @@ public class FilePicker implements Constants {
     /**
      * Any activity can use this method to attach their callback to the file picker
      */
-    public static void handleActivityResult(int requestCode, int resultCode, Intent data, Activity activity, @NonNull FilePicker.Callbacks callbacks) {
-        boolean isHandledPickedFile = (requestCode & RequestCodes.FILE_PICKER_IMAGE_IDENTIFICATOR) > 0;
+    public static void handleActivityResult(int requestCode, int resultCode, Intent data,
+        Activity activity, @NonNull FilePicker.Callbacks callbacks) {
+        boolean isHandledPickedFile =
+            (requestCode & RequestCodes.FILE_PICKER_IMAGE_IDENTIFICATOR) > 0;
         if (isHandledPickedFile) {
             requestCode &= ~RequestCodes.SOURCE_CHOOSER;
             if (requestCode == RequestCodes.PICK_PICTURE_FROM_GALLERY ||
-                    requestCode == RequestCodes.TAKE_PICTURE ||
-                    requestCode == RequestCodes.CAPTURE_VIDEO ||
-                    requestCode == RequestCodes.PICK_PICTURE_FROM_DOCUMENTS ||
-                    requestCode == RequestCodes.PICK_PICTURE_FROM_CUSTOM_SELECTOR) {
+                requestCode == RequestCodes.TAKE_PICTURE ||
+                requestCode == RequestCodes.CAPTURE_VIDEO ||
+                requestCode == RequestCodes.PICK_PICTURE_FROM_DOCUMENTS ||
+                requestCode == RequestCodes.PICK_PICTURE_FROM_CUSTOM_SELECTOR) {
                 if (resultCode == Activity.RESULT_OK) {
                     if (requestCode == RequestCodes.PICK_PICTURE_FROM_DOCUMENTS && !isPhoto(data)) {
                         onPictureReturnedFromDocuments(data, activity, callbacks);
-                    } else if (requestCode == RequestCodes.PICK_PICTURE_FROM_GALLERY && !isPhoto(data)) {
+                    } else if (requestCode == RequestCodes.PICK_PICTURE_FROM_GALLERY && !isPhoto(
+                        data)) {
                         onPictureReturnedFromGallery(data, activity, callbacks);
                     } else if (requestCode == RequestCodes.PICK_PICTURE_FROM_CUSTOM_SELECTOR) {
                         onPictureReturnedFromCustomSelector(data, activity, callbacks);
@@ -175,11 +188,13 @@ public class FilePicker implements Constants {
                     }
                 } else {
                     if (requestCode == RequestCodes.PICK_PICTURE_FROM_DOCUMENTS) {
-                        callbacks.onCanceled(FilePicker.ImageSource.DOCUMENTS, restoreType(activity));
+                        callbacks.onCanceled(FilePicker.ImageSource.DOCUMENTS,
+                            restoreType(activity));
                     } else if (requestCode == RequestCodes.PICK_PICTURE_FROM_GALLERY) {
                         callbacks.onCanceled(FilePicker.ImageSource.GALLERY, restoreType(activity));
                     } else {
-                        callbacks.onCanceled(FilePicker.ImageSource.CAMERA_IMAGE, restoreType(activity));
+                        callbacks.onCanceled(FilePicker.ImageSource.CAMERA_IMAGE,
+                            restoreType(activity));
                     }
                 }
             }
@@ -238,26 +253,30 @@ public class FilePicker implements Constants {
         return intent;
     }
 
-    private static void onPictureReturnedFromDocuments(Intent data, Activity activity, @NonNull FilePicker.Callbacks callbacks) {
+    private static void onPictureReturnedFromDocuments(Intent data, Activity activity,
+        @NonNull FilePicker.Callbacks callbacks) {
         try {
             Uri photoPath = data.getData();
             UploadableFile photoFile = PickedFiles.pickedExistingPicture(activity, photoPath);
-            callbacks.onImagesPicked(singleFileList(photoFile), FilePicker.ImageSource.DOCUMENTS, restoreType(activity));
+            callbacks.onImagesPicked(singleFileList(photoFile), FilePicker.ImageSource.DOCUMENTS,
+                restoreType(activity));
 
             if (configuration(activity).shouldCopyPickedImagesToPublicGalleryAppFolder()) {
                 PickedFiles.copyFilesInSeparateThread(activity, singleFileList(photoFile));
             }
         } catch (Exception e) {
             e.printStackTrace();
-            callbacks.onImagePickerError(e, FilePicker.ImageSource.DOCUMENTS, restoreType(activity));
+            callbacks.onImagePickerError(e, FilePicker.ImageSource.DOCUMENTS,
+                restoreType(activity));
         }
     }
 
     /**
-     * onPictureReturnedFromCustomSelector.
-     * Retrieve and forward the images to upload wizard through callback.
+     * onPictureReturnedFromCustomSelector. Retrieve and forward the images to upload wizard through
+     * callback.
      */
-    private static void onPictureReturnedFromCustomSelector(Intent data, Activity activity, @NonNull FilePicker.Callbacks callbacks) {
+    private static void onPictureReturnedFromCustomSelector(Intent data, Activity activity,
+        @NonNull FilePicker.Callbacks callbacks) {
         try {
             List<UploadableFile> files = getFilesFromCustomSelector(data, activity);
             callbacks.onImagesPicked(files, ImageSource.CUSTOM_SELECTOR, restoreType(activity));
@@ -268,13 +287,14 @@ public class FilePicker implements Constants {
     }
 
     /**
-     * Get files from custom selector
-     * Retrieve and process the selected images from the custom selector.
+     * Get files from custom selector Retrieve and process the selected images from the custom
+     * selector.
      */
-    private static List<UploadableFile> getFilesFromCustomSelector(Intent data, Activity activity) throws  IOException, SecurityException {
+    private static List<UploadableFile> getFilesFromCustomSelector(Intent data, Activity activity)
+        throws IOException, SecurityException {
         List<UploadableFile> files = new ArrayList<>();
         ArrayList<Image> images = data.getParcelableArrayListExtra("Images");
-        for(Image image : images) {
+        for (Image image : images) {
             Uri uri = image.getUri();
             UploadableFile file = PickedFiles.pickedExistingPicture(activity, uri);
             files.add(file);
@@ -287,7 +307,8 @@ public class FilePicker implements Constants {
         return files;
     }
 
-    private static void onPictureReturnedFromGallery(Intent data, Activity activity, @NonNull FilePicker.Callbacks callbacks) {
+    private static void onPictureReturnedFromGallery(Intent data, Activity activity,
+        @NonNull FilePicker.Callbacks callbacks) {
         try {
             List<UploadableFile> files = getFilesFromGalleryPictures(data, activity);
             callbacks.onImagesPicked(files, FilePicker.ImageSource.GALLERY, restoreType(activity));
@@ -297,7 +318,8 @@ public class FilePicker implements Constants {
         }
     }
 
-    private static List<UploadableFile> getFilesFromGalleryPictures(Intent data, Activity activity) throws IOException, SecurityException {
+    private static List<UploadableFile> getFilesFromGalleryPictures(Intent data, Activity activity)
+        throws IOException, SecurityException {
         List<UploadableFile> files = new ArrayList<>();
         ClipData clipData = data.getClipData();
         if (clipData == null) {
@@ -319,9 +341,11 @@ public class FilePicker implements Constants {
         return files;
     }
 
-    private static void onPictureReturnedFromCamera(Activity activity, @NonNull FilePicker.Callbacks callbacks) {
+    private static void onPictureReturnedFromCamera(Activity activity,
+        @NonNull FilePicker.Callbacks callbacks) {
         try {
-            String lastImageUri = PreferenceManager.getDefaultSharedPreferences(activity).getString(KEY_PHOTO_URI, null);
+            String lastImageUri = PreferenceManager.getDefaultSharedPreferences(activity)
+                .getString(KEY_PHOTO_URI, null);
             if (!TextUtils.isEmpty(lastImageUri)) {
                 revokeWritePermission(activity, Uri.parse(lastImageUri));
             }
@@ -331,30 +355,36 @@ public class FilePicker implements Constants {
             files.add(photoFile);
 
             if (photoFile == null) {
-                Exception e = new IllegalStateException("Unable to get the picture returned from camera");
-                callbacks.onImagePickerError(e, FilePicker.ImageSource.CAMERA_IMAGE, restoreType(activity));
+                Exception e = new IllegalStateException(
+                    "Unable to get the picture returned from camera");
+                callbacks.onImagePickerError(e, FilePicker.ImageSource.CAMERA_IMAGE,
+                    restoreType(activity));
             } else {
                 if (configuration(activity).shouldCopyTakenPhotosToPublicGalleryAppFolder()) {
                     PickedFiles.copyFilesInSeparateThread(activity, singleFileList(photoFile));
                 }
 
-                callbacks.onImagesPicked(files, FilePicker.ImageSource.CAMERA_IMAGE, restoreType(activity));
+                callbacks.onImagesPicked(files, FilePicker.ImageSource.CAMERA_IMAGE,
+                    restoreType(activity));
             }
 
             PreferenceManager.getDefaultSharedPreferences(activity)
-                    .edit()
-                    .remove(KEY_LAST_CAMERA_PHOTO)
-                    .remove(KEY_PHOTO_URI)
-                    .apply();
+                .edit()
+                .remove(KEY_LAST_CAMERA_PHOTO)
+                .remove(KEY_PHOTO_URI)
+                .apply();
         } catch (Exception e) {
             e.printStackTrace();
-            callbacks.onImagePickerError(e, FilePicker.ImageSource.CAMERA_IMAGE, restoreType(activity));
+            callbacks.onImagePickerError(e, FilePicker.ImageSource.CAMERA_IMAGE,
+                restoreType(activity));
         }
     }
 
-    private static void onVideoReturnedFromCamera(Activity activity, @NonNull FilePicker.Callbacks callbacks) {
+    private static void onVideoReturnedFromCamera(Activity activity,
+        @NonNull FilePicker.Callbacks callbacks) {
         try {
-            String lastVideoUri = PreferenceManager.getDefaultSharedPreferences(activity).getString(KEY_VIDEO_URI, null);
+            String lastVideoUri = PreferenceManager.getDefaultSharedPreferences(activity)
+                .getString(KEY_VIDEO_URI, null);
             if (!TextUtils.isEmpty(lastVideoUri)) {
                 revokeWritePermission(activity, Uri.parse(lastVideoUri));
             }
@@ -364,24 +394,28 @@ public class FilePicker implements Constants {
             files.add(photoFile);
 
             if (photoFile == null) {
-                Exception e = new IllegalStateException("Unable to get the video returned from camera");
-                callbacks.onImagePickerError(e, FilePicker.ImageSource.CAMERA_VIDEO, restoreType(activity));
+                Exception e = new IllegalStateException(
+                    "Unable to get the video returned from camera");
+                callbacks.onImagePickerError(e, FilePicker.ImageSource.CAMERA_VIDEO,
+                    restoreType(activity));
             } else {
                 if (configuration(activity).shouldCopyTakenPhotosToPublicGalleryAppFolder()) {
                     PickedFiles.copyFilesInSeparateThread(activity, singleFileList(photoFile));
                 }
 
-                callbacks.onImagesPicked(files, FilePicker.ImageSource.CAMERA_VIDEO, restoreType(activity));
+                callbacks.onImagesPicked(files, FilePicker.ImageSource.CAMERA_VIDEO,
+                    restoreType(activity));
             }
 
             PreferenceManager.getDefaultSharedPreferences(activity)
-                    .edit()
-                    .remove(KEY_LAST_CAMERA_VIDEO)
-                    .remove(KEY_VIDEO_URI)
-                    .apply();
+                .edit()
+                .remove(KEY_LAST_CAMERA_VIDEO)
+                .remove(KEY_VIDEO_URI)
+                .apply();
         } catch (Exception e) {
             e.printStackTrace();
-            callbacks.onImagePickerError(e, FilePicker.ImageSource.CAMERA_VIDEO, restoreType(activity));
+            callbacks.onImagePickerError(e, FilePicker.ImageSource.CAMERA_VIDEO,
+                restoreType(activity));
         }
     }
 
@@ -395,9 +429,11 @@ public class FilePicker implements Constants {
     }
 
     public interface Callbacks {
+
         void onImagePickerError(Exception e, FilePicker.ImageSource source, int type);
 
-        void onImagesPicked(@NonNull List<UploadableFile> imageFiles, FilePicker.ImageSource source, int type);
+        void onImagesPicked(@NonNull List<UploadableFile> imageFiles, FilePicker.ImageSource source,
+            int type);
 
         void onCanceled(FilePicker.ImageSource source, int type);
     }

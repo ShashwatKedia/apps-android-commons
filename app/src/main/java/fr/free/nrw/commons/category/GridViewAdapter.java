@@ -23,6 +23,7 @@ import fr.free.nrw.commons.R;
  */
 
 public class GridViewAdapter extends ArrayAdapter {
+
     private List<Media> data;
 
     public GridViewAdapter(Context context, int layoutResourceId, List<Media> data) {
@@ -33,6 +34,7 @@ public class GridViewAdapter extends ArrayAdapter {
     /**
      * Adds more item to the list
      * Its triggered on scrolling down in the list
+     *
      * @param images
      */
     public void addItems(List<Media> images) {
@@ -46,9 +48,10 @@ public class GridViewAdapter extends ArrayAdapter {
     /**
      * Check the first item in the new list with old list and returns true if they are same
      * Its triggered on successful response of the fetch images API.
+     *
      * @param images
      */
-    public boolean containsAll(List<Media> images){
+    public boolean containsAll(List<Media> images) {
         if (images == null || images.isEmpty()) {
             return false;
         }
@@ -71,6 +74,7 @@ public class GridViewAdapter extends ArrayAdapter {
 
     /**
      * Sets up the UI for the category image item
+     *
      * @param position
      * @param convertView
      * @param parent
@@ -80,7 +84,8 @@ public class GridViewAdapter extends ArrayAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.layout_category_images, null);
+            convertView = LayoutInflater.from(getContext())
+                .inflate(R.layout.layout_category_images, null);
         }
 
         Media item = data.get(position);
@@ -105,6 +110,7 @@ public class GridViewAdapter extends ArrayAdapter {
 
     /**
      * Shows author information if its present
+     *
      * @param item
      * @param uploader
      */

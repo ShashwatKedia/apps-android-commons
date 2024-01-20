@@ -8,6 +8,7 @@ import java.util.Date;
  * Represents a category
  */
 public class Category {
+
     private Uri contentUri;
     private String name;
     private String description;
@@ -18,7 +19,8 @@ public class Category {
     public Category() {
     }
 
-    public Category(Uri contentUri, String name, String description, String thumbnail, Date lastUsed, int timesUsed) {
+    public Category(Uri contentUri, String name, String description, String thumbnail,
+        Date lastUsed, int timesUsed) {
         this.contentUri = contentUri;
         this.name = name;
         this.description = description;
@@ -52,7 +54,7 @@ public class Category {
      */
     public Date getLastUsed() {
         // warning: Date objects are mutable.
-        return (Date)lastUsed.clone();
+        return (Date) lastUsed.clone();
     }
 
     /**

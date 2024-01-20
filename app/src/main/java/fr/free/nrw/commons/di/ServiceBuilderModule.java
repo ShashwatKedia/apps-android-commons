@@ -5,9 +5,9 @@ import dagger.android.ContributesAndroidInjector;
 import fr.free.nrw.commons.auth.WikiAccountAuthenticatorService;
 
 /**
- * This Class Represents the Module for dependency injection (using dagger)
- * so, if a developer needs to add a new Service to the commons app
- * then that must be mentioned here to inject the dependencies 
+ * This Class Represents the Module for dependency injection (using dagger) so, if a developer needs
+ * to add a new Service to the commons app then that must be mentioned here to inject the
+ * dependencies
  */
 @Module
 @SuppressWarnings({"WeakerAccess", "unused"})

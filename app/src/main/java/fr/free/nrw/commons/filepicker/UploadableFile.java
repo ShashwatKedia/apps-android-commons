@@ -17,6 +17,7 @@ import java.util.Date;
 import timber.log.Timber;
 
 public class UploadableFile implements Parcelable {
+
     public static final Creator<UploadableFile> CREATOR = new Creator<UploadableFile>() {
         @Override
         public UploadableFile createFromParcel(Parcel in) {
@@ -74,6 +75,7 @@ public class UploadableFile implements Parcelable {
 
     /**
      * First try to get the file creation date from EXIF else fall back to CP
+     *
      * @param context
      * @return
      */
@@ -99,7 +101,8 @@ public class UploadableFile implements Parcelable {
                 return null;//Could not fetch last_modified
             }
             //Content provider contracts for opening gallery from the app and that by sharing from gallery from outside are different and we need to handle both the cases
-            int lastModifiedColumnIndex = cursor.getColumnIndex("last_modified");//If gallery is opened from in app
+            int lastModifiedColumnIndex = cursor.getColumnIndex(
+                "last_modified");//If gallery is opened from in app
             if (lastModifiedColumnIndex == -1) {
                 lastModifiedColumnIndex = cursor.getColumnIndex("datetaken");
             }
@@ -109,7 +112,8 @@ public class UploadableFile implements Parcelable {
                 return null;
             }
             cursor.moveToFirst();
-            return new DateTimeWithSource(cursor.getLong(lastModifiedColumnIndex), DateTimeWithSource.CP_SOURCE);
+            return new DateTimeWithSource(cursor.getLong(lastModifiedColumnIndex),
+                DateTimeWithSource.CP_SOURCE);
         } catch (Exception e) {
             return null;////Could not fetch last_modified
         }
@@ -144,17 +148,19 @@ public class UploadableFile implements Parcelable {
             // TAG_DATETIME returns the last edited date, we need TAG_DATETIME_ORIGINAL for creation date
             // See issue https://github.com/commons-app/apps-android-commons/issues/1971
             String dateTimeSubString = exif.getAttribute(ExifInterface.TAG_DATETIME_ORIGINAL);
-            if (dateTimeSubString!=null) { //getAttribute may return null
-                String year = dateTimeSubString.substring(0,4);
-                String month = dateTimeSubString.substring(5,7);
-                String day = dateTimeSubString.substring(8,10);
+            if (dateTimeSubString != null) { //getAttribute may return null
+                String year = dateTimeSubString.substring(0, 4);
+                String month = dateTimeSubString.substring(5, 7);
+                String day = dateTimeSubString.substring(8, 10);
                 // This date is stored as a string (not as a date), the rason is we don't want to include timezones
-                String dateCreatedString = String.format("%04d-%02d-%02d", Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day));
+                String dateCreatedString = String.format("%04d-%02d-%02d", Integer.parseInt(year),
+                    Integer.parseInt(month), Integer.parseInt(day));
                 if (dateCreatedString.length() == 10) { //yyyy-MM-dd format of date is expected
                     @SuppressLint("RestrictedApi") Long dateTime = exif.getDateTimeOriginal();
-                    if(dateTime != null){
+                    if (dateTime != null) {
                         Date date = new Date(dateTime);
-                        return new DateTimeWithSource(date, dateCreatedString, DateTimeWithSource.EXIF_SOURCE);
+                        return new DateTimeWithSource(date, dateCreatedString,
+                            DateTimeWithSource.EXIF_SOURCE);
                     }
                 }
             }
@@ -175,6 +181,7 @@ public class UploadableFile implements Parcelable {
      * This class contains the epochDate along with the source from which it was extracted
      */
     public class DateTimeWithSource {
+
         public static final String CP_SOURCE = "contentProvider";
         public static final String EXIF_SOURCE = "exif";
 

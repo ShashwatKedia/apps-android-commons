@@ -4,7 +4,9 @@ import static fr.free.nrw.commons.notification.NotificationHelper.NOTIFICATION_D
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+
 import static fr.free.nrw.commons.utils.LangCodeUtils.getLocalizedResources;
+
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -36,6 +38,7 @@ import timber.log.Timber;
  */
 @Singleton
 public class DeleteHelper {
+
     private final NotificationHelper notificationHelper;
     private final PageEditClient pageEditClient;
     private final ViewUtilWrapper viewUtil;
@@ -45,9 +48,9 @@ public class DeleteHelper {
 
     @Inject
     public DeleteHelper(NotificationHelper notificationHelper,
-                        @Named("commons-page-edit") PageEditClient pageEditClient,
-                        ViewUtilWrapper viewUtil,
-                        @Named("username") String username) {
+        @Named("commons-page-edit") PageEditClient pageEditClient,
+        ViewUtilWrapper viewUtil,
+        @Named("username") String username) {
         this.notificationHelper = notificationHelper;
         this.pageEditClient = pageEditClient;
         this.viewUtil = viewUtil;
@@ -56,21 +59,24 @@ public class DeleteHelper {
 
     /**
      * Public interface to nominate a particular media file for deletion
+     *
      * @param context
      * @param media
      * @param reason
      * @return
      */
     public Single<Boolean> makeDeletion(Context context, Media media, String reason) {
-        viewUtil.showShortToast(context, "Trying to nominate " + media.getDisplayTitle() + " for deletion");
+        viewUtil.showShortToast(context,
+            "Trying to nominate " + media.getDisplayTitle() + " for deletion");
 
         return delete(media, reason)
-                .flatMapSingle(result -> Single.just(showDeletionNotification(context, media, result)))
-                .firstOrError();
+            .flatMapSingle(result -> Single.just(showDeletionNotification(context, media, result)))
+            .firstOrError();
     }
 
     /**
      * Makes several API calls to nominate the file for deletion
+     *
      * @param media
      * @param reason
      * @return
@@ -80,23 +86,23 @@ public class DeleteHelper {
         String summary = "Nominating " + media.getFilename() + " for deletion.";
         Calendar calendar = Calendar.getInstance();
         String fileDeleteString = "{{delete|reason=" + reason +
-                "|subpage=" + media.getFilename() +
-                "|day=" + calendar.get(Calendar.DAY_OF_MONTH) +
-                "|month=" + calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH) +
-                "|year=" + calendar.get(Calendar.YEAR) +
-                "}}";
+            "|subpage=" + media.getFilename() +
+            "|day=" + calendar.get(Calendar.DAY_OF_MONTH) +
+            "|month=" + calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.ENGLISH) +
+            "|year=" + calendar.get(Calendar.YEAR) +
+            "}}";
 
         String subpageString = "=== [[:" + media.getFilename() + "]] ===\n" +
-                reason +
-                " ~~~~";
+            reason +
+            " ~~~~";
 
         String logPageString = "\n{{Commons:Deletion requests/" + media.getFilename() +
-                "}}\n";
+            "}}\n";
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault());
         String date = sdf.format(calendar.getTime());
 
         String userPageString = "\n{{subst:idw|" + media.getFilename() +
-                "}} ~~~~";
+            "}} ~~~~";
 
         String creator = media.getAuthor();
         if (creator == null || creator.isEmpty()) {
@@ -104,22 +110,25 @@ public class DeleteHelper {
         }
 
         return pageEditClient.prependEdit(media.getFilename(), fileDeleteString + "\n", summary)
-                .flatMap(result -> {
-                    if (result) {
-                        return pageEditClient.edit("Commons:Deletion_requests/" + media.getFilename(), subpageString + "\n", summary);
-                    }
-                    throw new RuntimeException("Failed to nominate for deletion");
-                }).flatMap(result -> {
-                    if (result) {
-                        return pageEditClient.appendEdit("Commons:Deletion_requests/" + date, logPageString + "\n", summary);
-                    }
-                    throw new RuntimeException("Failed to nominate for deletion");
-                }).flatMap(result -> {
-                    if (result) {
-                        return pageEditClient.appendEdit("User_Talk:" + creator, userPageString + "\n", summary);
-                    }
-                    throw new RuntimeException("Failed to nominate for deletion");
-                });
+            .flatMap(result -> {
+                if (result) {
+                    return pageEditClient.edit("Commons:Deletion_requests/" + media.getFilename(),
+                        subpageString + "\n", summary);
+                }
+                throw new RuntimeException("Failed to nominate for deletion");
+            }).flatMap(result -> {
+                if (result) {
+                    return pageEditClient.appendEdit("Commons:Deletion_requests/" + date,
+                        logPageString + "\n", summary);
+                }
+                throw new RuntimeException("Failed to nominate for deletion");
+            }).flatMap(result -> {
+                if (result) {
+                    return pageEditClient.appendEdit("User_Talk:" + creator, userPageString + "\n",
+                        summary);
+                }
+                throw new RuntimeException("Failed to nominate for deletion");
+            });
     }
 
     private boolean showDeletionNotification(Context context, Media media, boolean result) {
@@ -128,20 +137,24 @@ public class DeleteHelper {
 
         if (result) {
             title += ": " + context.getString(R.string.delete_helper_show_deletion_title_success);
-            message = context.getString((R.string.delete_helper_show_deletion_message_if),media.getDisplayTitle());
+            message = context.getString((R.string.delete_helper_show_deletion_message_if),
+                media.getDisplayTitle());
         } else {
             title += ": " + context.getString(R.string.delete_helper_show_deletion_title_failed);
-            message = context.getString(R.string.delete_helper_show_deletion_message_else) ;
+            message = context.getString(R.string.delete_helper_show_deletion_message_else);
         }
 
-        String urlForDelete = BuildConfig.COMMONS_URL + "/wiki/Commons:Deletion_requests/" + media.getFilename();
+        String urlForDelete =
+            BuildConfig.COMMONS_URL + "/wiki/Commons:Deletion_requests/" + media.getFilename();
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlForDelete));
-        notificationHelper.showNotification(context, title, message, NOTIFICATION_DELETE, browserIntent);
+        notificationHelper.showNotification(context, title, message, NOTIFICATION_DELETE,
+            browserIntent);
         return result;
     }
 
     /**
      * Invoked when a reason needs to be asked before nominating for deletion
+     *
      * @param media
      * @param context
      * @param question
@@ -149,10 +162,10 @@ public class DeleteHelper {
      */
     @SuppressLint("CheckResult")
     public void askReasonAndExecute(Media media,
-                                    Context context,
-                                    String question,
-                                    ReviewController.DeleteReason problem,
-                                    ReviewController.ReviewCallback reviewCallback) {
+        Context context,
+        String question,
+        ReviewController.DeleteReason problem,
+        ReviewController.ReviewCallback reviewCallback) {
         AlertDialog.Builder alert = new AlertDialog.Builder(context);
         alert.setTitle(question);
 
@@ -163,50 +176,60 @@ public class DeleteHelper {
         final String[] reasonListEnglish;
 
         if (problem == ReviewController.DeleteReason.SPAM) {
-            reasonList = new String[] {
+            reasonList = new String[]{
                 context.getString(R.string.delete_helper_ask_spam_selfie),
                 context.getString(R.string.delete_helper_ask_spam_blurry),
                 context.getString(R.string.delete_helper_ask_spam_nonsense)
             };
-            reasonListEnglish = new String[] {
-                getLocalizedResources(context, Locale.ENGLISH).getString(R.string.delete_helper_ask_spam_selfie),
-                getLocalizedResources(context, Locale.ENGLISH).getString(R.string.delete_helper_ask_spam_blurry),
-                getLocalizedResources(context, Locale.ENGLISH).getString(R.string.delete_helper_ask_spam_nonsense)
+            reasonListEnglish = new String[]{
+                getLocalizedResources(context, Locale.ENGLISH).getString(
+                    R.string.delete_helper_ask_spam_selfie),
+                getLocalizedResources(context, Locale.ENGLISH).getString(
+                    R.string.delete_helper_ask_spam_blurry),
+                getLocalizedResources(context, Locale.ENGLISH).getString(
+                    R.string.delete_helper_ask_spam_nonsense)
             };
         } else if (problem == ReviewController.DeleteReason.COPYRIGHT_VIOLATION) {
-            reasonList = new String[] {
+            reasonList = new String[]{
                 context.getString(R.string.delete_helper_ask_reason_copyright_press_photo),
                 context.getString(R.string.delete_helper_ask_reason_copyright_internet_photo),
                 context.getString(R.string.delete_helper_ask_reason_copyright_logo),
-                context.getString(R.string.delete_helper_ask_reason_copyright_no_freedom_of_panorama)
+                context.getString(
+                    R.string.delete_helper_ask_reason_copyright_no_freedom_of_panorama)
             };
-            reasonListEnglish = new String[] {
-                getLocalizedResources(context, Locale.ENGLISH).getString(R.string.delete_helper_ask_reason_copyright_press_photo),
-                getLocalizedResources(context, Locale.ENGLISH).getString(R.string.delete_helper_ask_reason_copyright_internet_photo),
-                getLocalizedResources(context, Locale.ENGLISH).getString(R.string.delete_helper_ask_reason_copyright_logo),
-                getLocalizedResources(context, Locale.ENGLISH).getString(R.string.delete_helper_ask_reason_copyright_no_freedom_of_panorama)
+            reasonListEnglish = new String[]{
+                getLocalizedResources(context, Locale.ENGLISH).getString(
+                    R.string.delete_helper_ask_reason_copyright_press_photo),
+                getLocalizedResources(context, Locale.ENGLISH).getString(
+                    R.string.delete_helper_ask_reason_copyright_internet_photo),
+                getLocalizedResources(context, Locale.ENGLISH).getString(
+                    R.string.delete_helper_ask_reason_copyright_logo),
+                getLocalizedResources(context, Locale.ENGLISH).getString(
+                    R.string.delete_helper_ask_reason_copyright_no_freedom_of_panorama)
             };
         } else {
-            reasonList = new String[] {};
-            reasonListEnglish = new String[] {};
+            reasonList = new String[]{};
+            reasonListEnglish = new String[]{};
         }
 
-        alert.setMultiChoiceItems(reasonList, checkedItems, listener = (dialogInterface, position, isChecked) -> {
+        alert.setMultiChoiceItems(reasonList, checkedItems,
+            listener = (dialogInterface, position, isChecked) -> {
 
-            if (isChecked) {
-                mUserReason.add(position);
-            } else {
-                mUserReason.remove((Integer.valueOf(position)));
-            }
+                if (isChecked) {
+                    mUserReason.add(position);
+                } else {
+                    mUserReason.remove((Integer.valueOf(position)));
+                }
 
-            // disable the OK button if no reason selected
-            ((AlertDialog) dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(
-                !mUserReason.isEmpty());
-        });
+                // disable the OK button if no reason selected
+                ((AlertDialog) dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(
+                    !mUserReason.isEmpty());
+            });
 
         alert.setPositiveButton(context.getString(R.string.ok), (dialogInterface, i) -> {
 
-            String reason = getLocalizedResources(context, Locale.ENGLISH).getString(R.string.delete_helper_ask_alert_set_positive_button_reason) + " ";
+            String reason = getLocalizedResources(context, Locale.ENGLISH).getString(
+                R.string.delete_helper_ask_alert_set_positive_button_reason) + " ";
 
             for (int j = 0; j < mUserReason.size(); j++) {
                 reason = reason + reasonListEnglish[mUserReason.get(j)];
@@ -220,7 +243,7 @@ public class DeleteHelper {
             String finalReason = reason;
 
             Single.defer((Callable<SingleSource<Boolean>>) () ->
-                makeDeletion(context, media, finalReason))
+                    makeDeletion(context, media, finalReason))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aBoolean -> {
@@ -232,7 +255,8 @@ public class DeleteHelper {
                 });
 
         });
-        alert.setNegativeButton(context.getString(R.string.cancel), (dialog, which) -> reviewCallback.onFailure());
+        alert.setNegativeButton(context.getString(R.string.cancel),
+            (dialog, which) -> reviewCallback.onFailure());
         d = alert.create();
         d.show();
 
@@ -241,18 +265,17 @@ public class DeleteHelper {
     }
 
     /**
-     * returns the instance of shown AlertDialog,
-     * used for taking reference during unit test
-     * */
-    public AlertDialog getDialog(){
-        return  d;
+     * returns the instance of shown AlertDialog, used for taking reference during unit test
+     */
+    public AlertDialog getDialog() {
+        return d;
     }
 
     /**
-     * returns the instance of shown DialogInterface.OnMultiChoiceClickListener,
-     * used for taking reference during unit test
-     * */
-    public DialogInterface.OnMultiChoiceClickListener getListener(){
+     * returns the instance of shown DialogInterface.OnMultiChoiceClickListener, used for taking
+     * reference during unit test
+     */
+    public DialogInterface.OnMultiChoiceClickListener getListener() {
         return listener;
     }
 }

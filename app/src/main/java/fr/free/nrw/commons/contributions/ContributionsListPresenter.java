@@ -36,7 +36,7 @@ public class ContributionsListPresenter implements UserActionListener {
         this.contributionBoundaryCallback = contributionBoundaryCallback;
         this.repository = repository;
         this.ioThreadScheduler = ioThreadScheduler;
-        this.contributionsRemoteDataSource=contributionsRemoteDataSource;
+        this.contributionsRemoteDataSource = contributionsRemoteDataSource;
         compositeDisposable = new CompositeDisposable();
     }
 
@@ -74,7 +74,8 @@ public class ContributionsListPresenter implements UserActionListener {
             factory = repository.fetchContributions();
         }
 
-        LivePagedListBuilder livePagedListBuilder = new LivePagedListBuilder(factory, pagedListConfig);
+        LivePagedListBuilder livePagedListBuilder = new LivePagedListBuilder(factory,
+            pagedListConfig);
         if (shouldSetBoundaryCallback) {
             livePagedListBuilder.setBoundaryCallback(contributionBoundaryCallback);
         }

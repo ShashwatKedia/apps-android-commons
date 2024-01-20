@@ -54,7 +54,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import timber.log.Timber;
 
-public class MainActivity  extends BaseActivity
+public class MainActivity extends BaseActivity
     implements FragmentManager.OnBackStackChangedListener {
 
     @Inject
@@ -146,16 +146,16 @@ public class MainActivity  extends BaseActivity
             if (applicationKvStore.getBoolean("firstrun", true)) {
                 applicationKvStore.putBoolean("hasAlreadyLaunchedBigMultiupload", false);
             }
-            if(savedInstanceState == null){
+            if (savedInstanceState == null) {
                 //starting a fresh fragment.
                 // Open Last opened screen if it is Contributions or Nearby, otherwise Contributions
-                if(applicationKvStore.getBoolean("last_opened_nearby")){
+                if (applicationKvStore.getBoolean("last_opened_nearby")) {
                     setTitle(getString(R.string.nearby_fragment));
                     showNearby();
-                    loadFragment(NearbyParentFragment.newInstance(),false);
-                }else{
+                    loadFragment(NearbyParentFragment.newInstance(), false);
+                } else {
                     setTitle(getString(R.string.contributions_fragment));
-                    loadFragment(ContributionsFragment.newInstance(),false);
+                    loadFragment(ContributionsFragment.newInstance(), false);
                 }
             }
             setUpPager();
@@ -167,7 +167,8 @@ public class MainActivity  extends BaseActivity
             if (VERSION.SDK_INT >= VERSION_CODES.Q) {
                 PermissionUtils.checkPermissionsAndPerformAction(
                     this,
-                    () -> {},
+                    () -> {
+                    },
                     R.string.media_location_permission_denied,
                     R.string.add_location_manually,
                     permission.ACCESS_MEDIA_LOCATION);
@@ -195,18 +196,18 @@ public class MainActivity  extends BaseActivity
     }
 
     private void setUpLoggedOutPager() {
-        loadFragment(ExploreFragment.newInstance(),false);
+        loadFragment(ExploreFragment.newInstance(), false);
         tabLayout.setOnNavigationItemSelectedListener(item -> {
             if (!item.getTitle().equals(getString(R.string.more))) {
                 // do not change title for more fragment
                 setTitle(item.getTitle());
             }
             Fragment fragment = NavTabLoggedOut.of(item.getOrder()).newInstance();
-            return loadFragment(fragment,true);
+            return loadFragment(fragment, true);
         });
     }
 
-    private boolean loadFragment(Fragment fragment,boolean showBottom ) {
+    private boolean loadFragment(Fragment fragment, boolean showBottom) {
         //showBottom so that we do not show the bottom tray again when constructing
         //from the saved instance state.
         if (fragment instanceof ContributionsFragment) {
@@ -236,7 +237,8 @@ public class MainActivity  extends BaseActivity
             bookmarkFragment = (BookmarkFragment) fragment;
             activeFragment = ActiveFragment.BOOKMARK;
         } else if (fragment == null && showBottom) {
-            if (applicationKvStore.getBoolean("login_skipped") == true) { // If logged out, more sheet is different
+            if (applicationKvStore.getBoolean("login_skipped") == true) {
+                // If logged out, more sheet is different
                 MoreBottomSheetLoggedOutFragment bottomSheet = new MoreBottomSheetLoggedOutFragment();
                 bottomSheet.show(getSupportFragmentManager(),
                     "MoreBottomSheetLoggedOut");
@@ -266,28 +268,30 @@ public class MainActivity  extends BaseActivity
     }
 
     /**
-     * Adds number of uploads next to tab text "Contributions" then it will look like
-     * "Contributions (NUMBER)"
+     * Adds number of uploads next to tab text "Contributions" then it will look like "Contributions
+     * (NUMBER)"
+     *
      * @param uploadCount
      */
     public void setNumOfUploads(int uploadCount) {
         if (activeFragment == ActiveFragment.CONTRIBUTIONS) {
-            setTitle(getResources().getString(R.string.contributions_fragment) +" "+ (
+            setTitle(getResources().getString(R.string.contributions_fragment) + " " + (
                 !(uploadCount == 0) ?
-                getResources()
-                .getQuantityString(R.plurals.contributions_subtitle,
-                    uploadCount, uploadCount):getString(R.string.contributions_subtitle_zero)));
+                    getResources()
+                        .getQuantityString(R.plurals.contributions_subtitle,
+                            uploadCount, uploadCount)
+                    : getString(R.string.contributions_subtitle_zero)));
         }
     }
 
     /**
-     * Resume the uploads that got stuck because of the app being killed
-     * or the device being rebooted.
-     *
+     * Resume the uploads that got stuck because of the app being killed or the device being
+     * rebooted.
+     * <p>
      * When the app is terminated or the device is restarted, contributions remain in the
-     * 'STATE_IN_PROGRESS' state. This status persists and doesn't change during these events.
-     * So, retrieving contributions labeled as 'STATE_IN_PROGRESS'
-     * from the database will provide the list of uploads that appear as stuck on opening the app again
+     * 'STATE_IN_PROGRESS' state. This status persists and doesn't change during these events. So,
+     * retrieving contributions labeled as 'STATE_IN_PROGRESS' from the database will provide the
+     * list of uploads that appear as stuck on opening the app again
      */
     @SuppressLint("CheckResult")
     private void checkAndResumeStuckUploads() {
@@ -296,8 +300,8 @@ public class MainActivity  extends BaseActivity
             .subscribeOn(Schedulers.io())
             .blockingGet();
         Timber.d("Resuming " + stuckUploads.size() + " uploads...");
-        if(!stuckUploads.isEmpty()) {
-            for(Contribution contribution: stuckUploads) {
+        if (!stuckUploads.isEmpty()) {
+            for (Contribution contribution : stuckUploads) {
                 contribution.setState(Contribution.STATE_QUEUED);
                 Completable.fromAction(() -> contributionDao.saveSynchronous(contribution))
                     .subscribeOn(Schedulers.io())
@@ -325,24 +329,24 @@ public class MainActivity  extends BaseActivity
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         String activeFragmentName = savedInstanceState.getString("activeFragment");
-        if(activeFragmentName != null) {
+        if (activeFragmentName != null) {
             restoreActiveFragment(activeFragmentName);
         }
     }
 
     private void restoreActiveFragment(@NonNull String fragmentName) {
-        if(fragmentName.equals(ActiveFragment.CONTRIBUTIONS.name())) {
+        if (fragmentName.equals(ActiveFragment.CONTRIBUTIONS.name())) {
             setTitle(getString(R.string.contributions_fragment));
-            loadFragment(ContributionsFragment.newInstance(),false);
-        }else if(fragmentName.equals(ActiveFragment.NEARBY.name())) {
+            loadFragment(ContributionsFragment.newInstance(), false);
+        } else if (fragmentName.equals(ActiveFragment.NEARBY.name())) {
             setTitle(getString(R.string.nearby_fragment));
-            loadFragment(NearbyParentFragment.newInstance(),false);
-        }else if(fragmentName.equals(ActiveFragment.EXPLORE.name())) {
+            loadFragment(NearbyParentFragment.newInstance(), false);
+        } else if (fragmentName.equals(ActiveFragment.EXPLORE.name())) {
             setTitle(getString(R.string.navigation_item_explore));
-            loadFragment(ExploreFragment.newInstance(),false);
-        }else if(fragmentName.equals(ActiveFragment.BOOKMARK.name())) {
+            loadFragment(ExploreFragment.newInstance(), false);
+        } else if (fragmentName.equals(ActiveFragment.BOOKMARK.name())) {
             setTitle(getString(R.string.bookmarks));
-            loadFragment(BookmarkFragment.newInstance(),false);
+            loadFragment(BookmarkFragment.newInstance(), false);
         }
     }
 
@@ -358,8 +362,9 @@ public class MainActivity  extends BaseActivity
             // Means that nearby fragment is visible
             /* If function nearbyParentFragment.backButtonClick() returns false, it means that the bottomsheet is
               not expanded. So if the back button is pressed, then go back to the Contributions tab */
-            if(!nearbyParentFragment.backButtonClicked()){
-                getSupportFragmentManager().beginTransaction().remove(nearbyParentFragment).commit();
+            if (!nearbyParentFragment.backButtonClicked()) {
+                getSupportFragmentManager().beginTransaction().remove(nearbyParentFragment)
+                    .commit();
                 setSelectedItemId(NavTab.CONTRIBUTIONS.code());
             }
         } else if (exploreFragment != null && activeFragment == ActiveFragment.EXPLORE) {
@@ -405,7 +410,7 @@ public class MainActivity  extends BaseActivity
             getContribution(Collections.singletonList(Contribution.STATE_FAILED))
             .subscribeOn(Schedulers.io())
             .subscribe(failedUploads -> {
-                for (Contribution contribution: failedUploads) {
+                for (Contribution contribution : failedUploads) {
                     contributionsFragment.retryUpload(contribution);
                 }
             });
@@ -429,19 +434,20 @@ public class MainActivity  extends BaseActivity
 
     public void centerMapToPlace(Place place) {
         setSelectedItemId(NavTab.NEARBY.code());
-        nearbyParentFragment.setNearbyParentFragmentInstanceReadyCallback(new NearbyParentFragmentInstanceReadyCallback() {
-            // if mapBox initialize in nearbyParentFragment then MapReady() function called
-            // so that nearbyParentFragemt.centerMaptoPlace(place) not throw any null pointer exception
-            @Override
-            public void onReady() {
-                nearbyParentFragment.centerMapToPlace(place);
-            }
-        });
+        nearbyParentFragment.setNearbyParentFragmentInstanceReadyCallback(
+            new NearbyParentFragmentInstanceReadyCallback() {
+                // if mapBox initialize in nearbyParentFragment then MapReady() function called
+                // so that nearbyParentFragemt.centerMaptoPlace(place) not throw any null pointer exception
+                @Override
+                public void onReady() {
+                    nearbyParentFragment.centerMapToPlace(place);
+                }
+            });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Timber.d(data!=null?data.toString():"onActivityResult data is null");
+        Timber.d(data != null ? data.toString() : "onActivityResult data is null");
         super.onActivityResult(requestCode, resultCode, data);
         controller.handleActivityResult(this, requestCode, resultCode, data);
     }
@@ -486,14 +492,15 @@ public class MainActivity  extends BaseActivity
     /**
      * Load default language in onCreate from SharedPreferences
      */
-    private void loadLocale(){
-        final SharedPreferences preferences = getSharedPreferences("Settings", Activity.MODE_PRIVATE);
+    private void loadLocale() {
+        final SharedPreferences preferences = getSharedPreferences("Settings",
+            Activity.MODE_PRIVATE);
         final String language = preferences.getString("language", "");
         final SettingsFragment settingsFragment = new SettingsFragment();
         settingsFragment.setLocale(this, language);
     }
 
-    public NavTabLayout.OnNavigationItemSelectedListener getNavListener(){
+    public NavTabLayout.OnNavigationItemSelectedListener getNavListener() {
         return navListener;
     }
 }

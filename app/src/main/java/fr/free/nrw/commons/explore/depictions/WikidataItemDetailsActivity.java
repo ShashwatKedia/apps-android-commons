@@ -41,18 +41,20 @@ import javax.inject.Inject;
 /**
  * Activity to show depiction media, parent classes and child classes of depicted items in Explore
  */
-public class WikidataItemDetailsActivity extends BaseActivity implements MediaDetailPagerFragment.MediaDetailProvider,
+public class WikidataItemDetailsActivity extends BaseActivity implements
+    MediaDetailPagerFragment.MediaDetailProvider,
     CategoryImagesCallback {
+
     private FragmentManager supportFragmentManager;
     private DepictedImagesFragment depictionImagesListFragment;
     private MediaDetailPagerFragment mediaDetailPagerFragment;
 
     /**
-     * Name of the depicted item
-     * Ex: Rabbit
+     * Name of the depicted item Ex: Rabbit
      */
 
-    @Inject BookmarkItemsDao bookmarkItemsDao;
+    @Inject
+    BookmarkItemsDao bookmarkItemsDao;
     private CompositeDisposable compositeDisposable;
     @Inject
     DepictModel depictModel;
@@ -100,12 +102,12 @@ public class WikidataItemDetailsActivity extends BaseActivity implements MediaDe
     }
 
     /**
-     * This method is called on success of API call for featured Images.
-     * The viewpager will notified that number of items have changed.
+     * This method is called on success of API call for featured Images. The viewpager will notified
+     * that number of items have changed.
      */
     @Override
     public void viewPagerNotifyDataSetChanged() {
-        if (mediaDetailPagerFragment !=null){
+        if (mediaDetailPagerFragment != null) {
             mediaDetailPagerFragment.notifyDataSetChanged();
         }
     }
@@ -156,10 +158,10 @@ public class WikidataItemDetailsActivity extends BaseActivity implements MediaDe
             mediaDetailPagerFragment = MediaDetailPagerFragment.newInstance(false, true);
             FragmentManager supportFragmentManager = getSupportFragmentManager();
             supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.mediaContainer, mediaDetailPagerFragment)
-                    .addToBackStack(null)
-                    .commit();
+                .beginTransaction()
+                .replace(R.id.mediaContainer, mediaDetailPagerFragment)
+                .addToBackStack(null)
+                .commit();
             supportFragmentManager.executePendingTransactions();
         }
         mediaDetailPagerFragment.showImage(position);
@@ -167,8 +169,9 @@ public class WikidataItemDetailsActivity extends BaseActivity implements MediaDe
 
     /**
      * This method is called mediaDetailPagerFragment. It returns the Media Object at that Index
-     * @param i It is the index of which media object is to be returned which is same as
-     *          current index of viewPager.
+     *
+     * @param i It is the index of which media object is to be returned which is same as current
+     *          index of viewPager.
      * @return Media Object
      */
     @Override
@@ -177,12 +180,12 @@ public class WikidataItemDetailsActivity extends BaseActivity implements MediaDe
     }
 
     /**
-     * This method is called on backPressed of anyFragment in the activity.
-     * If condition is called when mediaDetailFragment is opened.
+     * This method is called on backPressed of anyFragment in the activity. If condition is called
+     * when mediaDetailFragment is opened.
      */
     @Override
     public void onBackPressed() {
-        if (supportFragmentManager.getBackStackEntryCount() == 1){
+        if (supportFragmentManager.getBackStackEntryCount() == 1) {
             tabLayout.setVisibility(View.VISIBLE);
             viewPager.setVisibility(View.VISIBLE);
             mediaContainer.setVisibility(View.GONE);
@@ -191,8 +194,9 @@ public class WikidataItemDetailsActivity extends BaseActivity implements MediaDe
     }
 
     /**
-     * This method is called on from getCount of MediaDetailPagerFragment
-     * The viewpager will contain same number of media items as that of media elements in adapter.
+     * This method is called on from getCount of MediaDetailPagerFragment The viewpager will contain
+     * same number of media items as that of media elements in adapter.
+     *
      * @return Total Media count in the adapter
      */
     @Override
@@ -237,8 +241,8 @@ public class WikidataItemDetailsActivity extends BaseActivity implements MediaDe
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater=getMenuInflater();
-        menuInflater.inflate(R.menu.menu_wikidata_item,menu);
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_wikidata_item, menu);
 
         updateBookmarkState(menu.findItem(R.id.menu_bookmark_current_item));
 
@@ -246,38 +250,38 @@ public class WikidataItemDetailsActivity extends BaseActivity implements MediaDe
     }
 
     /**
-     * This method handles the logic on item select in toolbar menu
-     * Currently only 1 choice is available to open Wikidata item details page in browser
+     * This method handles the logic on item select in toolbar menu Currently only 1 choice is
+     * available to open Wikidata item details page in browser
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.browser_actions_menu_items:
-                String entityId=getIntent().getStringExtra("entityId");
+                String entityId = getIntent().getStringExtra("entityId");
                 Uri uri = Uri.parse("https://www.wikidata.org/wiki/" + entityId);
                 Utils.handleWebUrl(this, uri);
                 return true;
             case R.id.menu_bookmark_current_item:
 
-                if(getIntent().getStringExtra("fragment") != null) {
+                if (getIntent().getStringExtra("fragment") != null) {
                     compositeDisposable.add(depictModel.getDepictions(
-                        getIntent().getStringExtra("entityId")
-                    ).subscribeOn(Schedulers.io())
-                     .observeOn(AndroidSchedulers.mainThread())
-                     .subscribe(depictedItems -> {
-                         final boolean bookmarkExists = bookmarkItemsDao.updateBookmarkItem(
-                             depictedItems.get(0));
-                         final Snackbar snackbar
-                             = bookmarkExists ? Snackbar.make(findViewById(R.id.toolbar_layout),
-                             R.string.add_bookmark, Snackbar.LENGTH_LONG)
-                             : Snackbar.make(findViewById(R.id.toolbar_layout),
-                                 R.string.remove_bookmark,
-                                 Snackbar.LENGTH_LONG);
+                            getIntent().getStringExtra("entityId")
+                        ).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(depictedItems -> {
+                            final boolean bookmarkExists = bookmarkItemsDao.updateBookmarkItem(
+                                depictedItems.get(0));
+                            final Snackbar snackbar
+                                = bookmarkExists ? Snackbar.make(findViewById(R.id.toolbar_layout),
+                                R.string.add_bookmark, Snackbar.LENGTH_LONG)
+                                : Snackbar.make(findViewById(R.id.toolbar_layout),
+                                    R.string.remove_bookmark,
+                                    Snackbar.LENGTH_LONG);
 
-                         snackbar.show();
-                         updateBookmarkState(item);
-                     }));
+                            snackbar.show();
+                            updateBookmarkState(item);
+                        }));
 
                 } else {
                     final boolean bookmarkExists
@@ -292,7 +296,7 @@ public class WikidataItemDetailsActivity extends BaseActivity implements MediaDe
                     updateBookmarkState(item);
                 }
                 return true;
-            case  android.R.id.home:
+            case android.R.id.home:
                 onBackPressed();
                 return true;
             default:
@@ -302,7 +306,7 @@ public class WikidataItemDetailsActivity extends BaseActivity implements MediaDe
 
     private void updateBookmarkState(final MenuItem item) {
         final boolean isBookmarked;
-        if(getIntent().getStringExtra("fragment") != null) {
+        if (getIntent().getStringExtra("fragment") != null) {
             isBookmarked
                 = bookmarkItemsDao.findBookmarkItem(getIntent().getStringExtra("entityId"));
         } else {

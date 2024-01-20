@@ -1,12 +1,14 @@
 package fr.free.nrw.commons.filepicker;
 
 public interface Constants {
+
     String DEFAULT_FOLDER_NAME = "CommonsContributions";
 
     /**
      * Provides the request codes utilised by the FilePicker
      */
     interface RequestCodes {
+
         int LOCATION = 1;
         int STORAGE = 2;
         int FILE_PICKER_IMAGE_IDENTIFICATOR = 0b1101101100; //876
@@ -25,6 +27,7 @@ public interface Constants {
      * Provides locations as string for corresponding operations
      */
     interface BundleKeys {
+
         String FOLDER_NAME = "fr.free.nrw.commons.folder_name";
         String ALLOW_MULTIPLE = "fr.free.nrw.commons.allow_multiple";
         String COPY_TAKEN_PHOTOS = "fr.free.nrw.commons.copy_taken_photos";

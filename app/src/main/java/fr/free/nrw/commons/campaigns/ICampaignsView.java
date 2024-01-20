@@ -7,5 +7,6 @@ import fr.free.nrw.commons.campaigns.models.Campaign;
  * Interface which defines the view contracts of the campaign view
  */
 public interface ICampaignsView extends MvpView {
+
     void showCampaigns(Campaign campaign);
 }

@@ -29,6 +29,7 @@ public class ContributionsRepository {
 
     /**
      * Deletes a failed upload from DB
+     *
      * @param contribution
      * @return
      */
@@ -38,6 +39,7 @@ public class ContributionsRepository {
 
     /**
      * Get contribution object with title
+     *
      * @param fileName
      * @return
      */
@@ -53,12 +55,12 @@ public class ContributionsRepository {
         return localDataSource.saveContributions(contributions);
     }
 
-    public Completable save(Contribution contributions){
+    public Completable save(Contribution contributions) {
         return localDataSource.saveContributions(contributions);
     }
 
     public void set(String key, long value) {
-        localDataSource.set(key,value);
+        localDataSource.set(key, value);
     }
 
     public Completable updateContribution(Contribution contribution) {

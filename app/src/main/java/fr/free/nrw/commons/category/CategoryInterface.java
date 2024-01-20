@@ -20,11 +20,11 @@ public interface CategoryInterface {
      * @return
      */
     @GET("w/api.php?action=query&format=json&formatversion=2"
-            + "&generator=search&prop=description|pageimages&piprop=thumbnail&pithumbsize=70"
-            + "&gsrnamespace=14")
+        + "&generator=search&prop=description|pageimages&piprop=thumbnail&pithumbsize=70"
+        + "&gsrnamespace=14")
     Single<MwQueryResponse> searchCategories(@Query("gsrsearch") String filter,
-                                                 @Query("gsrlimit") int itemLimit,
-                                                 @Query("gsroffset") int offset);
+        @Query("gsrlimit") int itemLimit,
+        @Query("gsroffset") int offset);
 
     /**
      * Searches for categories starting with the specified prefix.
@@ -34,19 +34,19 @@ public interface CategoryInterface {
      * @return
      */
     @GET("w/api.php?action=query&format=json&formatversion=2"
-            + "&generator=allcategories&prop=categoryinfo|description|pageimages&piprop=thumbnail"
-            + "&pithumbsize=70")
+        + "&generator=allcategories&prop=categoryinfo|description|pageimages&piprop=thumbnail"
+        + "&pithumbsize=70")
     Single<MwQueryResponse> searchCategoriesForPrefix(@Query("gacprefix") String prefix,
-                                                          @Query("gaclimit") int itemLimit,
-                                                          @Query("gacoffset") int offset);
+        @Query("gaclimit") int itemLimit,
+        @Query("gacoffset") int offset);
 
     /**
      * Fetches categories starting and ending with a specified name.
      *
      * @param startingCategory Name of the category to start
-     * @param endingCategory Name of the category to end
-     * @param itemLimit How many categories to return
-     * @param offset offset
+     * @param endingCategory   Name of the category to end
+     * @param itemLimit        How many categories to return
+     * @param offset           offset
      * @return MwQueryResponse
      */
     @GET("w/api.php?action=query&format=json&formatversion=2"
@@ -58,13 +58,13 @@ public interface CategoryInterface {
         @Query("gacoffset") int offset);
 
     @GET("w/api.php?action=query&format=json&formatversion=2"
-            + "&generator=categorymembers&gcmtype=subcat"
-            + "&prop=info&gcmlimit=50")
+        + "&generator=categorymembers&gcmtype=subcat"
+        + "&prop=info&gcmlimit=50")
     Single<MwQueryResponse> getSubCategoryList(@Query("gcmtitle") String categoryName,
         @QueryMap(encoded = true) Map<String, String> continuation);
 
     @GET("w/api.php?action=query&format=json&formatversion=2"
-            + "&generator=categories&prop=info&gcllimit=50")
+        + "&generator=categories&prop=info&gcllimit=50")
     Single<MwQueryResponse> getParentCategoryList(@Query("titles") String categoryName,
         @QueryMap(encoded = true) Map<String, String> continuation);
 

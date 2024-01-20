@@ -4,6 +4,7 @@ package fr.free.nrw.commons.feedback.model;
  * Pojo class for storing information that are required while uploading a feedback
  */
 public class Feedback {
+
     /**
      * Version of app
      */
@@ -37,9 +38,11 @@ public class Feedback {
      */
     private String networkType;
 
-    public Feedback(final String version, final String apiLevel, final String title, final String androidVersion,
-        final String deviceModel, final String deviceManufacturer, final String device, final String networkType
-        ) {
+    public Feedback(final String version, final String apiLevel, final String title,
+        final String androidVersion,
+        final String deviceModel, final String deviceManufacturer, final String device,
+        final String networkType
+    ) {
         this.version = version;
         this.apiLevel = apiLevel;
         this.title = title;

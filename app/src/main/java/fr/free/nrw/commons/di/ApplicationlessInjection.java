@@ -21,34 +21,41 @@ import dagger.android.HasServiceInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
 /**
- * Provides injectors for all sorts of components
- * Ex: Activities, Fragments, Services, ContentProviders
+ * Provides injectors for all sorts of components Ex: Activities, Fragments, Services,
+ * ContentProviders
  */
 public class ApplicationlessInjection
-        implements
-        HasAndroidInjector,
-        HasActivityInjector,
-        HasFragmentInjector,
-        HasSupportFragmentInjector,
-        HasServiceInjector,
-        HasBroadcastReceiverInjector,
-        HasContentProviderInjector {
+    implements
+    HasAndroidInjector,
+    HasActivityInjector,
+    HasFragmentInjector,
+    HasSupportFragmentInjector,
+    HasServiceInjector,
+    HasBroadcastReceiverInjector,
+    HasContentProviderInjector {
 
     private static ApplicationlessInjection instance = null;
 
-    @Inject DispatchingAndroidInjector<Object> androidInjector;
-    @Inject DispatchingAndroidInjector<Activity> activityInjector;
-    @Inject DispatchingAndroidInjector<BroadcastReceiver> broadcastReceiverInjector;
-    @Inject DispatchingAndroidInjector<android.app.Fragment> fragmentInjector;
-    @Inject DispatchingAndroidInjector<Fragment> supportFragmentInjector;
-    @Inject DispatchingAndroidInjector<Service> serviceInjector;
-    @Inject DispatchingAndroidInjector<ContentProvider> contentProviderInjector;
+    @Inject
+    DispatchingAndroidInjector<Object> androidInjector;
+    @Inject
+    DispatchingAndroidInjector<Activity> activityInjector;
+    @Inject
+    DispatchingAndroidInjector<BroadcastReceiver> broadcastReceiverInjector;
+    @Inject
+    DispatchingAndroidInjector<android.app.Fragment> fragmentInjector;
+    @Inject
+    DispatchingAndroidInjector<Fragment> supportFragmentInjector;
+    @Inject
+    DispatchingAndroidInjector<Service> serviceInjector;
+    @Inject
+    DispatchingAndroidInjector<ContentProvider> contentProviderInjector;
 
     private CommonsApplicationComponent commonsApplicationComponent;
 
     public ApplicationlessInjection(Context applicationContext) {
         commonsApplicationComponent = DaggerCommonsApplicationComponent.builder()
-                .appModule(new CommonsApplicationModule(applicationContext)).build();
+            .appModule(new CommonsApplicationModule(applicationContext)).build();
         commonsApplicationComponent.inject(this);
     }
 

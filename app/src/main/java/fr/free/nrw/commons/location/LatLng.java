@@ -24,10 +24,9 @@ public class LatLng implements Parcelable {
      * @param longitude the longitude
      * @param accuracy the accuracy
      *
-     * Examples:
-     * the Statue of Liberty is located at 40.69° N, 74.04° W
-     * The Statue of Liberty could be constructed as LatLng(40.69, -74.04, 1.0)
-     * where positive signifies north, east and negative signifies south, west.
+     * Examples: the Statue of Liberty is located at 40.69° N, 74.04° W The Statue of Liberty could
+     * be constructed as LatLng(40.69, -74.04, 1.0) where positive signifies north, east and negative
+     * signifies south, west.
      */
     public LatLng(double latitude, double longitude, float accuracy) {
         if (-180.0D <= longitude && longitude < 180.0D) {
@@ -38,8 +37,10 @@ public class LatLng implements Parcelable {
         this.latitude = Math.max(-90.0D, Math.min(90.0D, latitude));
         this.accuracy = accuracy;
     }
+
     /**
      * An alternate constructor for this class.
+     *
      * @param in A parcelable which contains the latitude, longitude, and accuracy
      */
     public LatLng(Parcel in) {
@@ -50,6 +51,7 @@ public class LatLng implements Parcelable {
 
     /**
      * gets the latitude and longitude of a given non-null location
+     *
      * @param location the non-null location of the user
      * @return LatLng the Latitude and Longitude of a given location
      */
@@ -63,14 +65,15 @@ public class LatLng implements Parcelable {
     public int hashCode() {
         byte var1 = 1;
         long var2 = Double.doubleToLongBits(this.latitude);
-        int var3 = 31 * var1 + (int)(var2 ^ var2 >>> 32);
+        int var3 = 31 * var1 + (int) (var2 ^ var2 >>> 32);
         var2 = Double.doubleToLongBits(this.longitude);
-        var3 = 31 * var3 + (int)(var2 ^ var2 >>> 32);
+        var3 = 31 * var3 + (int) (var2 ^ var2 >>> 32);
         return var3;
     }
 
     /**
      * checks for equality of two LatLng objects
+     *
      * @param o the second LatLng object
      */
     public boolean equals(Object o) {
@@ -79,8 +82,10 @@ public class LatLng implements Parcelable {
         } else if (!(o instanceof LatLng)) {
             return false;
         } else {
-            LatLng var2 = (LatLng)o;
-            return Double.doubleToLongBits(this.latitude) == Double.doubleToLongBits(var2.latitude) && Double.doubleToLongBits(this.longitude) == Double.doubleToLongBits(var2.longitude);
+            LatLng var2 = (LatLng) o;
+            return Double.doubleToLongBits(this.latitude) == Double.doubleToLongBits(var2.latitude)
+                && Double.doubleToLongBits(this.longitude) == Double.doubleToLongBits(
+                var2.longitude);
         }
     }
 
@@ -130,14 +135,13 @@ public class LatLng implements Parcelable {
     }
 
     /**
-     * Returns a nicely formatted coordinate string. Used e.g. in
-     * the detail view.
+     * Returns a nicely formatted coordinate string. Used e.g. in the detail view.
      *
      * @return The formatted string.
      */
     public String getPrettyCoordinateString() {
         return formatCoordinate(this.latitude) + " " + this.getNorthSouth() + ", "
-               + formatCoordinate(this.longitude) + " " + this.getEastWest();
+            + formatCoordinate(this.longitude) + " " + this.getEastWest();
     }
 
     /**

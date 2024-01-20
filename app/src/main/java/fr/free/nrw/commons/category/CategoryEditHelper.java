@@ -20,6 +20,7 @@ import javax.inject.Named;
 import timber.log.Timber;
 
 public class CategoryEditHelper {
+
     private final NotificationHelper notificationHelper;
     public final PageEditClient pageEditClient;
     private final ViewUtilWrapper viewUtil;
@@ -38,6 +39,7 @@ public class CategoryEditHelper {
 
     /**
      * Public interface to edit categories
+     *
      * @param context
      * @param media
      * @param categories
@@ -45,9 +47,11 @@ public class CategoryEditHelper {
      */
     public Single<Boolean> makeCategoryEdit(Context context, Media media, List<String> categories,
         final String wikiText) {
-        viewUtil.showShortToast(context, context.getString(R.string.category_edit_helper_make_edit_toast));
+        viewUtil.showShortToast(context,
+            context.getString(R.string.category_edit_helper_make_edit_toast));
         return addCategory(media, categories, wikiText)
-            .flatMapSingle(result -> Single.just(showCategoryEditNotification(context, media, result)))
+            .flatMapSingle(
+                result -> Single.just(showCategoryEditNotification(context, media, result)))
             .firstOrError();
     }
 
@@ -77,10 +81,11 @@ public class CategoryEditHelper {
             // the code will add "None selected" to categories list in order to see in picture's categories with "None selected".
             // So that after selected some category,"None selected" should be removed from list
             for (int i = 0; i < categories.size(); i++) {
-                if (!categories.get(i).equals("None selected")//Not to add "None selected" as category to wikiText
+                if (!categories.get(i).equals("None selected")
+                    //Not to add "None selected" as category to wikiText
                     || !wikiText.contains("Uncategorized")) {
-                        buffer.append("[[Category:").append(categories.get(i)).append("]]\n");
-                    }
+                    buffer.append("[[Category:").append(categories.get(i)).append("]]\n");
+                }
             }
             categories.remove("None selected");
         } else {
@@ -100,25 +105,29 @@ public class CategoryEditHelper {
             List<String> mediaCategoryList = media.getCategories();
             for (String category : mediaCategoryList) {
                 categoriesInMessage.append(category);
-                if (category.equals(mediaCategoryList.get(mediaCategoryList.size()-1))) {
+                if (category.equals(mediaCategoryList.get(mediaCategoryList.size() - 1))) {
                     continue;
                 }
                 categoriesInMessage.append(",");
             }
 
-            message = context.getResources().getQuantityString(R.plurals.category_edit_helper_show_edit_message_if, mediaCategoryList.size(), categoriesInMessage.toString());
+            message = context.getResources()
+                .getQuantityString(R.plurals.category_edit_helper_show_edit_message_if,
+                    mediaCategoryList.size(), categoriesInMessage.toString());
         } else {
             title += ": " + context.getString(R.string.category_edit_helper_show_edit_title);
-            message = context.getString(R.string.category_edit_helper_edit_message_else) ;
+            message = context.getString(R.string.category_edit_helper_edit_message_else);
         }
 
         String urlForFile = BuildConfig.COMMONS_URL + "/wiki/" + media.getFilename();
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlForFile));
-        notificationHelper.showNotification(context, title, message, NOTIFICATION_EDIT_CATEGORY, browserIntent);
+        notificationHelper.showNotification(context, title, message, NOTIFICATION_EDIT_CATEGORY,
+            browserIntent);
         return result;
     }
 
-    public interface  Callback {
+    public interface Callback {
+
         boolean updateCategoryDisplay(List<String> categories);
     }
 }

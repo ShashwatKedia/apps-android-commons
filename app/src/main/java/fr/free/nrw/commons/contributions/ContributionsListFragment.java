@@ -102,26 +102,29 @@ public class ContributionsListFragment extends CommonsDaggerSupportFragment impl
     private int contributionsSize;
     private String userName;
 
-    private ActivityResultLauncher<String[]> inAppCameraLocationPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
-        @Override
-        public void onActivityResult(Map<String, Boolean> result) {
-            boolean areAllGranted = true;
-            for (final boolean b : result.values()) {
-                areAllGranted = areAllGranted && b;
-            }
+    private ActivityResultLauncher<String[]> inAppCameraLocationPermissionLauncher = registerForActivityResult(
+        new ActivityResultContracts.RequestMultiplePermissions(),
+        new ActivityResultCallback<Map<String, Boolean>>() {
+            @Override
+            public void onActivityResult(Map<String, Boolean> result) {
+                boolean areAllGranted = true;
+                for (final boolean b : result.values()) {
+                    areAllGranted = areAllGranted && b;
+                }
 
-            if (areAllGranted) {
-                controller.locationPermissionCallback.onLocationPermissionGranted();
-            } else {
-                if (shouldShowRequestPermissionRationale(permission.ACCESS_FINE_LOCATION)) {
-                    controller.handleShowRationaleFlowCameraLocation(getActivity());
+                if (areAllGranted) {
+                    controller.locationPermissionCallback.onLocationPermissionGranted();
                 } else {
-                    controller.locationPermissionCallback.onLocationPermissionDenied(
-                        getActivity().getString(R.string.in_app_camera_location_permission_denied));
+                    if (shouldShowRequestPermissionRationale(permission.ACCESS_FINE_LOCATION)) {
+                        controller.handleShowRationaleFlowCameraLocation(getActivity());
+                    } else {
+                        controller.locationPermissionCallback.onLocationPermissionDenied(
+                            getActivity().getString(
+                                R.string.in_app_camera_location_permission_denied));
+                    }
                 }
             }
-        }
-    });
+        });
 
 
     @Override
@@ -156,7 +159,8 @@ public class ContributionsListFragment extends CommonsDaggerSupportFragment impl
             binding.fabLayout.setVisibility(VISIBLE);
         } else {
             binding.tvContributionsOfUser.setVisibility(VISIBLE);
-            binding.tvContributionsOfUser.setText(getString(R.string.contributions_of_user, userName));
+            binding.tvContributionsOfUser.setText(
+                getString(R.string.contributions_of_user, userName));
             binding.fabLayout.setVisibility(GONE);
         }
 
@@ -301,8 +305,9 @@ public class ContributionsListFragment extends CommonsDaggerSupportFragment impl
     public void onConfigurationChanged(final Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // check orientation
-        binding.fabLayout.setOrientation(newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ?
-            LinearLayout.HORIZONTAL : LinearLayout.VERTICAL);
+        binding.fabLayout.setOrientation(
+            newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE ?
+                LinearLayout.HORIZONTAL : LinearLayout.VERTICAL);
         rvContributionsList
             .setLayoutManager(
                 new GridLayoutManager(getContext(), getSpanCount(newConfig.orientation)));
@@ -417,7 +422,8 @@ public class ContributionsListFragment extends CommonsDaggerSupportFragment impl
                 getString(R.string.cancelling_upload)),
             String.format(Locale.getDefault(),
                 getString(R.string.cancel_upload_dialog)),
-            String.format(Locale.getDefault(), getString(R.string.yes)), String.format(Locale.getDefault(), getString(R.string.no)),
+            String.format(Locale.getDefault(), getString(R.string.yes)),
+            String.format(Locale.getDefault(), getString(R.string.no)),
             () -> {
                 ViewUtil.showShortToast(getContext(), R.string.cancelling_upload);
                 contributionsListPresenter.deleteUpload(contribution);

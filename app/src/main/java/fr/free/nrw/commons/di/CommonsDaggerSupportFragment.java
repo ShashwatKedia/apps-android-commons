@@ -12,7 +12,8 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 import io.reactivex.disposables.CompositeDisposable;
 
-public abstract class CommonsDaggerSupportFragment extends Fragment implements HasSupportFragmentInjector {
+public abstract class CommonsDaggerSupportFragment extends Fragment implements
+    HasSupportFragmentInjector {
 
     @Inject
     DispatchingAndroidInjector<Fragment> childFragmentInjector;
@@ -43,7 +44,9 @@ public abstract class CommonsDaggerSupportFragment extends Fragment implements H
         AndroidInjector<Fragment> fragmentInjector = hasSupportFragmentInjector.supportFragmentInjector();
 
         if (fragmentInjector == null) {
-            throw new NullPointerException(String.format("%s.supportFragmentInjector() returned null", hasSupportFragmentInjector.getClass().getCanonicalName()));
+            throw new NullPointerException(
+                String.format("%s.supportFragmentInjector() returned null",
+                    hasSupportFragmentInjector.getClass().getCanonicalName()));
         }
 
         fragmentInjector.inject(this);
@@ -64,12 +67,14 @@ public abstract class CommonsDaggerSupportFragment extends Fragment implements H
             return (HasSupportFragmentInjector) activity;
         }
 
-        ApplicationlessInjection injection = ApplicationlessInjection.getInstance(activity.getApplicationContext());
+        ApplicationlessInjection injection = ApplicationlessInjection.getInstance(
+            activity.getApplicationContext());
         if (injection != null) {
             return injection;
         }
 
-        throw new IllegalArgumentException(String.format("No injector was found for %s", getClass().getCanonicalName()));
+        throw new IllegalArgumentException(
+            String.format("No injector was found for %s", getClass().getCanonicalName()));
     }
 
 }

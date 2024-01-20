@@ -13,10 +13,10 @@ import fr.free.nrw.commons.utils.ConfigUtils;
 import fr.free.nrw.commons.utils.DeviceInfoUtil;
 
 /**
- * Feedback dialog that asks user for message and
- * other device specifications
+ * Feedback dialog that asks user for message and other device specifications
  */
 public class FeedbackDialog extends Dialog {
+
     DialogFeedbackBinding dialogFeedbackBinding;
 
     private OnFeedbackSubmitCallback onFeedbackSubmitCallback;
@@ -41,21 +41,31 @@ public class FeedbackDialog extends Dialog {
     }
 
     /**
-     * When the button is clicked, it will create a feedback object
-     * and give a callback to calling activity/fragment
+     * When the button is clicked, it will create a feedback object and give a callback to calling
+     * activity/fragment
      */
     void submitFeedback() {
-        if(dialogFeedbackBinding.feedbackItemEditText.getText().toString().equals("")) {
-            dialogFeedbackBinding.feedbackItemEditText.setError(getContext().getString(R.string.enter_description));
+        if (dialogFeedbackBinding.feedbackItemEditText.getText().toString().equals("")) {
+            dialogFeedbackBinding.feedbackItemEditText.setError(
+                getContext().getString(R.string.enter_description));
             return;
         }
         String appVersion = ConfigUtils.getVersionNameWithSha(getContext());
-        String androidVersion = dialogFeedbackBinding.androidVersionCheckbox.isChecked() ? DeviceInfoUtil.getAndroidVersion() : null;
-        String apiLevel = dialogFeedbackBinding.apiLevelCheckbox.isChecked() ? DeviceInfoUtil.getAPILevel() : null;
-        String deviceManufacturer = dialogFeedbackBinding.deviceManufacturerCheckbox.isChecked() ? DeviceInfoUtil.getDeviceManufacturer() : null;
-        String deviceModel = dialogFeedbackBinding.deviceModelCheckbox.isChecked() ? DeviceInfoUtil.getDeviceModel() : null;
-        String deviceName = dialogFeedbackBinding.deviceNameCheckbox.isChecked() ? DeviceInfoUtil.getDevice() : null;
-        String networkType = dialogFeedbackBinding.networkTypeCheckbox.isChecked() ? DeviceInfoUtil.getConnectionType(getContext()).toString() : null;
+        String androidVersion = dialogFeedbackBinding.androidVersionCheckbox.isChecked()
+            ? DeviceInfoUtil.getAndroidVersion() : null;
+        String apiLevel =
+            dialogFeedbackBinding.apiLevelCheckbox.isChecked() ? DeviceInfoUtil.getAPILevel()
+                : null;
+        String deviceManufacturer = dialogFeedbackBinding.deviceManufacturerCheckbox.isChecked()
+            ? DeviceInfoUtil.getDeviceManufacturer() : null;
+        String deviceModel =
+            dialogFeedbackBinding.deviceModelCheckbox.isChecked() ? DeviceInfoUtil.getDeviceModel()
+                : null;
+        String deviceName =
+            dialogFeedbackBinding.deviceNameCheckbox.isChecked() ? DeviceInfoUtil.getDevice()
+                : null;
+        String networkType = dialogFeedbackBinding.networkTypeCheckbox.isChecked()
+            ? DeviceInfoUtil.getConnectionType(getContext()).toString() : null;
         Feedback feedback = new Feedback(appVersion, apiLevel
             , dialogFeedbackBinding.feedbackItemEditText.getText().toString()
             , androidVersion, deviceModel, deviceManufacturer, deviceName, networkType);

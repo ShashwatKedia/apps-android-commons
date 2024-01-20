@@ -24,8 +24,8 @@ import static fr.free.nrw.commons.explore.recentsearches.RecentSearchesDao.Table
 
 
 /**
- * This class contains functions for executing queries for
- * inserting, searching, deleting, editing recent searches in SqLite DB
+ * This class contains functions for executing queries for inserting, searching, deleting, editing
+ * recent searches in SqLite DB
  **/
 public class RecentSearchesContentProvider extends CommonsDaggerContentProvider {
 
@@ -33,19 +33,22 @@ public class RecentSearchesContentProvider extends CommonsDaggerContentProvider 
     private static final int RECENT_SEARCHES = 1;
     private static final int RECENT_SEARCHES_ID = 2;
     private static final String BASE_PATH = "recent_searches";
-    public static final Uri BASE_URI = Uri.parse("content://" + BuildConfig.RECENT_SEARCH_AUTHORITY + "/" + BASE_PATH);
+    public static final Uri BASE_URI = Uri.parse(
+        "content://" + BuildConfig.RECENT_SEARCH_AUTHORITY + "/" + BASE_PATH);
     private static final UriMatcher uriMatcher = new UriMatcher(NO_MATCH);
 
     static {
         uriMatcher.addURI(BuildConfig.RECENT_SEARCH_AUTHORITY, BASE_PATH, RECENT_SEARCHES);
-        uriMatcher.addURI(BuildConfig.RECENT_SEARCH_AUTHORITY, BASE_PATH + "/#", RECENT_SEARCHES_ID);
+        uriMatcher.addURI(BuildConfig.RECENT_SEARCH_AUTHORITY, BASE_PATH + "/#",
+            RECENT_SEARCHES_ID);
     }
 
     public static Uri uriForId(int id) {
         return Uri.parse(BASE_URI.toString() + "/" + id);
     }
 
-    @Inject DBOpenHelper dbOpenHelper;
+    @Inject
+    DBOpenHelper dbOpenHelper;
 
     /**
      * This functions executes query for searching recent searches in SqLite DB
@@ -53,7 +56,7 @@ public class RecentSearchesContentProvider extends CommonsDaggerContentProvider 
     @SuppressWarnings("ConstantConditions")
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
-                        String[] selectionArgs, String sortOrder) {
+        String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(TABLE_NAME);
 
@@ -65,16 +68,16 @@ public class RecentSearchesContentProvider extends CommonsDaggerContentProvider 
         switch (uriType) {
             case RECENT_SEARCHES:
                 cursor = queryBuilder.query(db, projection, selection, selectionArgs,
-                        null, null, sortOrder);
+                    null, null, sortOrder);
                 break;
             case RECENT_SEARCHES_ID:
                 cursor = queryBuilder.query(db,
-                        ALL_FIELDS,
-                        "_id = ?",
-                        new String[]{uri.getLastPathSegment()},
-                        null,
-                        null,
-                        sortOrder
+                    ALL_FIELDS,
+                    "_id = ?",
+                    new String[]{uri.getLastPathSegment()},
+                    null,
+                    null,
+                    sortOrder
                 );
                 break;
             default:
@@ -123,8 +126,8 @@ public class RecentSearchesContentProvider extends CommonsDaggerContentProvider 
             case RECENT_SEARCHES_ID:
                 Timber.d("Deleting recent searches id %s", uri.getLastPathSegment());
                 rows = db.delete(RecentSearchesDao.Table.TABLE_NAME,
-                        "_id = ?",
-                        new String[]{uri.getLastPathSegment()}
+                    "_id = ?",
+                    new String[]{uri.getLastPathSegment()}
                 );
                 break;
             default:
@@ -166,7 +169,7 @@ public class RecentSearchesContentProvider extends CommonsDaggerContentProvider 
     @SuppressWarnings("ConstantConditions")
     @Override
     public int update(@NonNull Uri uri, ContentValues contentValues, String selection,
-                      String[] selectionArgs) {
+        String[] selectionArgs) {
         /*
         SQL Injection warnings: First, note that we're not exposing this to the
         outside world (exported="false"). Even then, we should make sure to sanitize
@@ -184,12 +187,12 @@ public class RecentSearchesContentProvider extends CommonsDaggerContentProvider 
                 if (TextUtils.isEmpty(selection)) {
                     int id = Integer.valueOf(uri.getLastPathSegment());
                     rowsUpdated = sqlDB.update(TABLE_NAME,
-                            contentValues,
-                            COLUMN_ID + " = ?",
-                            new String[]{String.valueOf(id)});
+                        contentValues,
+                        COLUMN_ID + " = ?",
+                        new String[]{String.valueOf(id)});
                 } else {
                     throw new IllegalArgumentException(
-                            "Parameter `selection` should be empty when updating an ID");
+                        "Parameter `selection` should be empty when updating an ID");
                 }
                 break;
             default:

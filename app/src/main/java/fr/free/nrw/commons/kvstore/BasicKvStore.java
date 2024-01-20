@@ -13,6 +13,7 @@ import java.util.Set;
 import timber.log.Timber;
 
 public class BasicKvStore implements KeyValueStore {
+
     private static final String KEY_VERSION = "__version__";
     /*
     This class only performs puts, sets and clears.
@@ -26,10 +27,11 @@ public class BasicKvStore implements KeyValueStore {
     }
 
     /**
-     * If you don't want onVersionUpdate to be called on a fresh creation, the first version supplied for the kvstore should be set to 0.
+     * If you don't want onVersionUpdate to be called on a fresh creation, the first version
+     * supplied for the kvstore should be set to 0.
      */
     public BasicKvStore(Context context, String storeName, int version) {
-        this(context,storeName,version,false);
+        this(context, storeName, version, false);
     }
 
     public BasicKvStore(Context context, String storeName, int version, boolean clearAllOnUpgrade) {
@@ -37,21 +39,22 @@ public class BasicKvStore implements KeyValueStore {
         int oldVersion = getInt(KEY_VERSION);
 
         if (version > oldVersion) {
-            Timber.i("version updated from %s to %s, with clearFlag %b", oldVersion, version, clearAllOnUpgrade);
+            Timber.i("version updated from %s to %s, with clearFlag %b", oldVersion, version,
+                clearAllOnUpgrade);
             onVersionUpdate(oldVersion, version, clearAllOnUpgrade);
         }
 
         if (version < oldVersion) {
             throw new IllegalArgumentException(
-                    "kvstore downgrade not allowed, old version:" + oldVersion + ", new version: " +
-                            version);
+                "kvstore downgrade not allowed, old version:" + oldVersion + ", new version: " +
+                    version);
         }
         //Keep this statement at the end so that clearing of store does not cause version also to get removed.
         putIntInternal(KEY_VERSION, version);
     }
 
     public void onVersionUpdate(int oldVersion, int version, boolean clearAllFlag) {
-        if(clearAllFlag) {
+        if (clearAllFlag) {
             clearAll();
         }
     }
@@ -127,10 +130,10 @@ public class BasicKvStore implements KeyValueStore {
     }
 
     private void putString(SharedPreferences.Editor editor, String key, String value,
-                           boolean commit) {
+        boolean commit) {
         assertKeyNotReserved(key);
         editor.putString(key, value);
-        if(commit) {
+        if (commit) {
             editor.apply();
         }
     }
@@ -205,11 +208,11 @@ public class BasicKvStore implements KeyValueStore {
         _store.unregisterOnSharedPreferenceChangeListener(l);
     }
 
-    public Set<String> getStringSet(String key){
+    public Set<String> getStringSet(String key) {
         return _store.getStringSet(key, new HashSet<>());
     }
 
-    public void putStringSet(String key,Set<String> value){
-        _store.edit().putStringSet(key,value).apply();
+    public void putStringSet(String key, Set<String> value) {
+        _store.edit().putStringSet(key, value).apply();
     }
 }

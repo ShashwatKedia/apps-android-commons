@@ -8,7 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
-public class UnswipableViewPager extends ViewPager{
+public class UnswipableViewPager extends ViewPager {
+
     public UnswipableViewPager(@NonNull Context context) {
         super(context);
     }

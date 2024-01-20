@@ -103,12 +103,12 @@ public class ContributionViewHolder extends RecyclerView.ViewHolder {
                 imageRequest = ImageRequestBuilder.newBuilderWithSource(Uri.parse(imageSource))
                     .setProgressiveRenderingEnabled(true)
                     .build();
-            } else if(imageSource != null) {
+            } else if (imageSource != null) {
                 final File file = new File(imageSource);
                 imageRequest = ImageRequest.fromFile(file);
             }
 
-            if(imageRequest != null){
+            if (imageRequest != null) {
                 imageView.setImageRequest(imageRequest);
             }
         }
@@ -158,7 +158,7 @@ public class ContributionViewHolder extends RecyclerView.ViewHolder {
                 pauseResumeButton.setVisibility(View.VISIBLE);
                 imageOptions.setVisibility(View.VISIBLE);
                 setResume();
-                if(pausingPopUp.isShowing()){
+                if (pausingPopUp.isShowing()) {
                     pausingPopUp.hide();
                 }
                 break;

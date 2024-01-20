@@ -27,13 +27,13 @@ public class ContributionsPresenter implements UserActionListener {
     ContributionsPresenter(ContributionsRepository repository,
         @Named(CommonsApplicationModule.IO_THREAD) Scheduler ioThreadScheduler) {
         this.repository = repository;
-        this.ioThreadScheduler=ioThreadScheduler;
+        this.ioThreadScheduler = ioThreadScheduler;
     }
 
     @Override
     public void onAttachView(ContributionsContract.View view) {
         this.view = view;
-        compositeDisposable=new CompositeDisposable();
+        compositeDisposable = new CompositeDisposable();
     }
 
     @Override
@@ -49,6 +49,7 @@ public class ContributionsPresenter implements UserActionListener {
 
     /**
      * Delete a failed contribution from the local db
+     *
      * @param contribution
      */
     @Override

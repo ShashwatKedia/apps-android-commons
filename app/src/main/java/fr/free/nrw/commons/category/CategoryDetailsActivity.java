@@ -33,22 +33,26 @@ import org.wikipedia.page.PageTitle;
 
 /**
  * This activity displays details of a particular category
- * Its generic and simply takes the name of category name in its start intent to load all images, subcategories in
- * a particular category on wikimedia commons.
+ * Its generic and simply takes the name of category name in its start intent to load all images,
+ * subcategories in a particular category on wikimedia commons.
  */
 
 public class CategoryDetailsActivity extends BaseActivity
-        implements MediaDetailPagerFragment.MediaDetailProvider, CategoryImagesCallback {
+    implements MediaDetailPagerFragment.MediaDetailProvider, CategoryImagesCallback {
 
 
     private FragmentManager supportFragmentManager;
     private CategoriesMediaFragment categoriesMediaFragment;
     private MediaDetailPagerFragment mediaDetails;
     private String categoryName;
-    @BindView(R.id.mediaContainer) FrameLayout mediaContainer;
-    @BindView(R.id.tab_layout) TabLayout tabLayout;
-    @BindView(R.id.viewPager) ViewPager viewPager;
-    @BindView(R.id.toolbar) Toolbar toolbar;
+    @BindView(R.id.mediaContainer)
+    FrameLayout mediaContainer;
+    @BindView(R.id.tab_layout)
+    TabLayout tabLayout;
+    @BindView(R.id.viewPager)
+    ViewPager viewPager;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     ViewPagerAdapter viewPagerAdapter;
 
     @Override
@@ -118,10 +122,10 @@ public class CategoryDetailsActivity extends BaseActivity
             mediaDetails = MediaDetailPagerFragment.newInstance(false, true);
             FragmentManager supportFragmentManager = getSupportFragmentManager();
             supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.mediaContainer, mediaDetails)
-                    .addToBackStack(null)
-                    .commit();
+                .beginTransaction()
+                .replace(R.id.mediaContainer, mediaDetails)
+                .addToBackStack(null)
+                .commit();
             supportFragmentManager.executePendingTransactions();
         }
         mediaDetails.showImage(position);
@@ -130,7 +134,8 @@ public class CategoryDetailsActivity extends BaseActivity
 
     /**
      * Consumers should be simply using this method to use this activity.
-     * @param context  A Context of the application package implementing this class.
+     *
+     * @param context      A Context of the application package implementing this class.
      * @param categoryName Name of the category for displaying its details
      */
     public static void startYourself(Context context, String categoryName) {
@@ -141,8 +146,9 @@ public class CategoryDetailsActivity extends BaseActivity
 
     /**
      * This method is called mediaDetailPagerFragment. It returns the Media Object at that Index
-     * @param i It is the index of which media object is to be returned which is same as
-     *          current index of viewPager.
+     *
+     * @param i It is the index of which media object is to be returned which is same as current
+     *          index of viewPager.
      * @return Media Object
      */
     @Override
@@ -151,8 +157,9 @@ public class CategoryDetailsActivity extends BaseActivity
     }
 
     /**
-     * This method is called on from getCount of MediaDetailPagerFragment
-     * The viewpager will contain same number of media items as that of media elements in adapter.
+     * This method is called on from getCount of MediaDetailPagerFragment The viewpager will contain
+     * same number of media items as that of media elements in adapter.
+     *
      * @return Total Media count in the adapter
      */
     @Override
@@ -189,8 +196,8 @@ public class CategoryDetailsActivity extends BaseActivity
     }
 
     /**
-     * This method handles the logic on ItemSelect in toolbar menu
-     * Currently only 1 choice is available to open category details page in browser
+     * This method handles the logic on ItemSelect in toolbar menu Currently only 1 choice is
+     * available to open category details page in browser
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -215,7 +222,7 @@ public class CategoryDetailsActivity extends BaseActivity
      */
     @Override
     public void onBackPressed() {
-        if (supportFragmentManager.getBackStackEntryCount() == 1){
+        if (supportFragmentManager.getBackStackEntryCount() == 1) {
             tabLayout.setVisibility(View.VISIBLE);
             viewPager.setVisibility(View.VISIBLE);
             mediaContainer.setVisibility(View.GONE);
@@ -229,7 +236,7 @@ public class CategoryDetailsActivity extends BaseActivity
      */
     @Override
     public void viewPagerNotifyDataSetChanged() {
-        if (mediaDetails!=null){
+        if (mediaDetails != null) {
             mediaDetails.notifyDataSetChanged();
         }
     }

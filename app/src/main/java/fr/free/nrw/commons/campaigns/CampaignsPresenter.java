@@ -30,6 +30,7 @@ import static fr.free.nrw.commons.di.CommonsApplicationModule.MAIN_THREAD;
  */
 @Singleton
 public class CampaignsPresenter implements BasePresenter<ICampaignsView> {
+
     private final OkHttpJsonApiClient okHttpJsonApiClient;
     private final Scheduler mainThreadScheduler;
     private final Scheduler ioScheduler;
@@ -39,10 +40,12 @@ public class CampaignsPresenter implements BasePresenter<ICampaignsView> {
     private Campaign campaign;
 
     @Inject
-    public CampaignsPresenter(OkHttpJsonApiClient okHttpJsonApiClient, @Named(IO_THREAD)Scheduler ioScheduler, @Named(MAIN_THREAD)Scheduler mainThreadScheduler) {
+    public CampaignsPresenter(OkHttpJsonApiClient okHttpJsonApiClient,
+        @Named(IO_THREAD) Scheduler ioScheduler,
+        @Named(MAIN_THREAD) Scheduler mainThreadScheduler) {
         this.okHttpJsonApiClient = okHttpJsonApiClient;
-        this.mainThreadScheduler=mainThreadScheduler;
-        this.ioScheduler=ioScheduler;
+        this.mainThreadScheduler = mainThreadScheduler;
+        this.ioScheduler = ioScheduler;
     }
 
     @Override
@@ -50,7 +53,8 @@ public class CampaignsPresenter implements BasePresenter<ICampaignsView> {
         this.view = view;
     }
 
-    @Override public void onDetachView() {
+    @Override
+    public void onDetachView() {
         this.view = null;
         if (disposable != null) {
             disposable.dispose();
@@ -73,11 +77,13 @@ public class CampaignsPresenter implements BasePresenter<ICampaignsView> {
                 .subscribeOn(ioScheduler)
                 .subscribeWith(new SingleObserver<CampaignResponseDTO>() {
 
-                    @Override public void onSubscribe(Disposable d) {
+                    @Override
+                    public void onSubscribe(Disposable d) {
                         disposable = d;
                     }
 
-                    @Override public void onSuccess(CampaignResponseDTO campaignResponseDTO) {
+                    @Override
+                    public void onSuccess(CampaignResponseDTO campaignResponseDTO) {
                         List<Campaign> campaigns = campaignResponseDTO.getCampaigns();
                         if (campaigns == null || campaigns.isEmpty()) {
                             Timber.e("The campaigns list is empty");
@@ -87,9 +93,10 @@ public class CampaignsPresenter implements BasePresenter<ICampaignsView> {
                         Collections.sort(campaigns, (campaign, t1) -> {
                             Date date1, date2;
                             try {
-
-                                date1 = CommonsDateUtil.getIso8601DateFormatShort().parse(campaign.getStartDate());
-                                date2 = CommonsDateUtil.getIso8601DateFormatShort().parse(t1.getStartDate());
+                                date1 = CommonsDateUtil.getIso8601DateFormatShort()
+                                    .parse(campaign.getStartDate());
+                                date2 = CommonsDateUtil.getIso8601DateFormatShort()
+                                    .parse(t1.getStartDate());
                             } catch (ParseException e) {
                                 e.printStackTrace();
                                 return -1;
@@ -100,8 +107,10 @@ public class CampaignsPresenter implements BasePresenter<ICampaignsView> {
                         Date currentDate = new Date();
                         try {
                             for (Campaign aCampaign : campaigns) {
-                                campaignEndDate = CommonsDateUtil.getIso8601DateFormatShort().parse(aCampaign.getEndDate());
-                                campaignStartDate = CommonsDateUtil.getIso8601DateFormatShort().parse(aCampaign.getStartDate());
+                                campaignEndDate = CommonsDateUtil.getIso8601DateFormatShort()
+                                    .parse(aCampaign.getEndDate());
+                                campaignStartDate = CommonsDateUtil.getIso8601DateFormatShort()
+                                    .parse(aCampaign.getStartDate());
                                 if (campaignEndDate.compareTo(currentDate) >= 0
                                     && campaignStartDate.compareTo(currentDate) <= 0) {
                                     campaign = aCampaign;
@@ -114,7 +123,8 @@ public class CampaignsPresenter implements BasePresenter<ICampaignsView> {
                         view.showCampaigns(campaign);
                     }
 
-                    @Override public void onError(Throwable e) {
+                    @Override
+                    public void onError(Throwable e) {
                         Timber.e(e, "could not fetch campaigns");
                     }
                 });

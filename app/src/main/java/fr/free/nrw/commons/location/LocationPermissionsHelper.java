@@ -16,16 +16,20 @@ import fr.free.nrw.commons.utils.PermissionUtils;
  * Helper class to handle location permissions
  */
 public class LocationPermissionsHelper {
+
     Activity activity;
     LocationServiceManager locationManager;
     LocationPermissionCallback callback;
+
     public LocationPermissionsHelper(Activity activity, LocationServiceManager locationManager,
         LocationPermissionCallback callback) {
         this.activity = activity;
         this.locationManager = locationManager;
         this.callback = callback;
     }
+
     public static class Dialog {
+
         int dialogTitleResource;
         int dialogTextResource;
 
@@ -42,13 +46,13 @@ public class LocationPermissionsHelper {
      * @param locationOffDialog
      */
     public void handleLocationPermissions(Dialog locationAccessDialog,
-                                          Dialog locationOffDialog) {
+        Dialog locationOffDialog) {
         requestForLocationAccess(locationAccessDialog, locationOffDialog);
     }
 
     /**
-     * Ask for location permission if the user agrees on attaching location with pictures
-     * and the app does not have the access to location
+     * Ask for location permission if the user agrees on attaching location with pictures and the
+     * app does not have the access to location
      *
      * @param locationAccessDialog
      * @param locationOffDialog
@@ -57,12 +61,15 @@ public class LocationPermissionsHelper {
         Dialog locationAccessDialog,
         Dialog locationOffDialog
     ) {
-        if (PermissionUtils.hasPermission(activity, new String[]{permission.ACCESS_FINE_LOCATION})) {
+        if (PermissionUtils.hasPermission(activity,
+            new String[]{permission.ACCESS_FINE_LOCATION})) {
             callback.onLocationPermissionGranted();
         } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission.ACCESS_FINE_LOCATION)) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
+                permission.ACCESS_FINE_LOCATION)) {
                 if (locationAccessDialog != null && locationOffDialog != null) {
-                    DialogUtil.showAlertDialog(activity, activity.getString(locationAccessDialog.dialogTitleResource),
+                    DialogUtil.showAlertDialog(activity,
+                        activity.getString(locationAccessDialog.dialogTitleResource),
                         activity.getString(locationAccessDialog.dialogTextResource),
                         activity.getString(android.R.string.ok),
                         activity.getString(android.R.string.cancel),
@@ -74,12 +81,14 @@ public class LocationPermissionsHelper {
                                     new String[]{permission.ACCESS_FINE_LOCATION}, 1);
                             }
                         },
-                        () -> callback.onLocationPermissionDenied(activity.getString(R.string.in_app_camera_location_permission_denied)),
+                        () -> callback.onLocationPermissionDenied(
+                            activity.getString(R.string.in_app_camera_location_permission_denied)),
                         null,
                         false);
                 }
             } else {
-                ActivityCompat.requestPermissions(activity, new String[]{permission.ACCESS_FINE_LOCATION},
+                ActivityCompat.requestPermissions(activity,
+                    new String[]{permission.ACCESS_FINE_LOCATION},
                     RequestCodes.LOCATION);
             }
         }
@@ -99,7 +108,7 @@ public class LocationPermissionsHelper {
 
     /**
      * Open location source settings so that apps with location access can access it
-     *
+     * <p>
      * TODO: modify it to fix https://github.com/commons-app/apps-android-commons/issues/5255
      */
 
@@ -107,7 +116,7 @@ public class LocationPermissionsHelper {
         final Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         final PackageManager packageManager = activity.getPackageManager();
 
-        if (intent.resolveActivity(packageManager)!= null) {
+        if (intent.resolveActivity(packageManager) != null) {
             activity.startActivity(intent);
         }
     }
@@ -119,14 +128,17 @@ public class LocationPermissionsHelper {
      * @return
      */
     public boolean isLocationAccessToAppsTurnedOn() {
-        return (locationManager.isNetworkProviderEnabled() || locationManager.isGPSProviderEnabled());
+        return (locationManager.isNetworkProviderEnabled()
+            || locationManager.isGPSProviderEnabled());
     }
 
     /**
      * Handle onPermissionDenied within individual classes based on the requirements
      */
     public interface LocationPermissionCallback {
+
         void onLocationPermissionDenied(String toastMessage);
+
         void onLocationPermissionGranted();
     }
 }

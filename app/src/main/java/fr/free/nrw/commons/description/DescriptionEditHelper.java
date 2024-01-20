@@ -52,7 +52,7 @@ public class DescriptionEditHelper {
         final String summary = "Updating Description";
 
         return pageEditClient.edit(Objects.requireNonNull(media.getFilename()),
-            appendText, summary)
+                appendText, summary)
             .flatMapSingle(result -> Single.just(showDescriptionEditNotification(context,
                 media, result)))
             .firstOrError();
@@ -73,7 +73,7 @@ public class DescriptionEditHelper {
         final String summary = "Updating Caption";
 
         return pageEditClient.setCaptions(summary, Objects.requireNonNull(media.getFilename()),
-            language, value)
+                language, value)
             .flatMapSingle(result -> Single.just(showCaptionEditNotification(context,
                 media, result)))
             .firstOrError();
@@ -81,6 +81,7 @@ public class DescriptionEditHelper {
 
     /**
      * Update captions and shows notification about captions update
+     *
      * @param context to be added
      * @param media to be added
      * @param result to be added
@@ -97,7 +98,7 @@ public class DescriptionEditHelper {
             message = context.getString(R.string.caption_edit_helper_show_edit_message);
         } else {
             title += ": " + context.getString(R.string.caption_edit_helper_show_edit_title);
-            message = context.getString(R.string.caption_edit_helper_edit_message_else) ;
+            message = context.getString(R.string.caption_edit_helper_edit_message_else);
         }
 
         final String urlForFile = BuildConfig.COMMONS_URL + "/wiki/" + media.getFilename();
@@ -109,6 +110,7 @@ public class DescriptionEditHelper {
 
     /**
      * Update descriptions and shows notification about descriptions update
+     *
      * @param context to be added
      * @param media to be added
      * @param result to be added
@@ -125,7 +127,7 @@ public class DescriptionEditHelper {
             message = context.getString(R.string.description_edit_helper_show_edit_message);
         } else {
             title += ": " + context.getString(R.string.description_edit_helper_show_edit_title);
-            message = context.getString(R.string.description_edit_helper_edit_message_else) ;
+            message = context.getString(R.string.description_edit_helper_edit_message_else);
         }
 
         final String urlForFile = BuildConfig.COMMONS_URL + "/wiki/" + media.getFilename();
