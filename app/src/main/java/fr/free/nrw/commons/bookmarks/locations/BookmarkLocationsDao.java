@@ -30,7 +30,8 @@ public class BookmarkLocationsDao {
     private final Provider<ContentProviderClient> clientProvider;
 
     @Inject
-    public BookmarkLocationsDao(@Named("bookmarksLocation") Provider<ContentProviderClient> clientProvider) {
+    public BookmarkLocationsDao(
+        @Named("bookmarksLocation") Provider<ContentProviderClient> clientProvider) {
         this.clientProvider = clientProvider;
     }
 
@@ -46,11 +47,11 @@ public class BookmarkLocationsDao {
         ContentProviderClient db = clientProvider.get();
         try {
             cursor = db.query(
-                    BookmarkLocationsContentProvider.BASE_URI,
-                    Table.ALL_FIELDS,
-                    null,
-                    new String[]{},
-                    null);
+                BookmarkLocationsContentProvider.BASE_URI,
+                Table.ALL_FIELDS,
+                null,
+                new String[]{},
+                null);
             while (cursor != null && cursor.moveToNext()) {
                 items.add(fromCursor(cursor));
             }
@@ -107,7 +108,8 @@ public class BookmarkLocationsDao {
     private void deleteBookmarkLocation(Place bookmarkLocation) {
         ContentProviderClient db = clientProvider.get();
         try {
-            db.delete(BookmarkLocationsContentProvider.uriForName(bookmarkLocation.name), null, null);
+            db.delete(BookmarkLocationsContentProvider.uriForName(bookmarkLocation.name), null,
+                null);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
         } finally {
@@ -126,11 +128,11 @@ public class BookmarkLocationsDao {
         ContentProviderClient db = clientProvider.get();
         try {
             cursor = db.query(
-                    BookmarkLocationsContentProvider.BASE_URI,
-                    Table.ALL_FIELDS,
-                    Table.COLUMN_NAME + "=?",
-                    new String[]{bookmarkLocation.name},
-                    null);
+                BookmarkLocationsContentProvider.BASE_URI,
+                Table.ALL_FIELDS,
+                Table.COLUMN_NAME + "=?",
+                new String[]{bookmarkLocation.name},
+                null);
             if (cursor != null && cursor.moveToFirst()) {
                 return true;
             }
@@ -148,12 +150,15 @@ public class BookmarkLocationsDao {
 
     @NonNull
     Place fromCursor(final Cursor cursor) {
-        final LatLng location = new LatLng(cursor.getDouble(cursor.getColumnIndex(Table.COLUMN_LAT)),
-                cursor.getDouble(cursor.getColumnIndex(Table.COLUMN_LONG)), 1F);
+        final LatLng location = new LatLng(
+            cursor.getDouble(cursor.getColumnIndex(Table.COLUMN_LAT)),
+            cursor.getDouble(cursor.getColumnIndex(Table.COLUMN_LONG)), 1F);
 
         final Sitelinks.Builder builder = new Sitelinks.Builder();
-        builder.setWikipediaLink(cursor.getString(cursor.getColumnIndex(Table.COLUMN_WIKIPEDIA_LINK)));
-        builder.setWikidataLink(cursor.getString(cursor.getColumnIndex(Table.COLUMN_WIKIDATA_LINK)));
+        builder.setWikipediaLink(
+            cursor.getString(cursor.getColumnIndex(Table.COLUMN_WIKIPEDIA_LINK)));
+        builder.setWikidataLink(
+            cursor.getString(cursor.getColumnIndex(Table.COLUMN_WIKIDATA_LINK)));
         builder.setCommonsLink(cursor.getString(cursor.getColumnIndex(Table.COLUMN_COMMONS_LINK)));
 
         return new Place(
@@ -173,13 +178,19 @@ public class BookmarkLocationsDao {
         ContentValues cv = new ContentValues();
         cv.put(BookmarkLocationsDao.Table.COLUMN_NAME, bookmarkLocation.getName());
         cv.put(BookmarkLocationsDao.Table.COLUMN_LANGUAGE, bookmarkLocation.getLanguage());
-        cv.put(BookmarkLocationsDao.Table.COLUMN_DESCRIPTION, bookmarkLocation.getLongDescription());
+        cv.put(BookmarkLocationsDao.Table.COLUMN_DESCRIPTION,
+            bookmarkLocation.getLongDescription());
         cv.put(BookmarkLocationsDao.Table.COLUMN_CATEGORY, bookmarkLocation.getCategory());
-        cv.put(BookmarkLocationsDao.Table.COLUMN_LABEL_TEXT, bookmarkLocation.getLabel()!=null ? bookmarkLocation.getLabel().getText() : "");
-        cv.put(BookmarkLocationsDao.Table.COLUMN_LABEL_ICON, bookmarkLocation.getLabel()!=null ? bookmarkLocation.getLabel().getIcon() : null);
-        cv.put(BookmarkLocationsDao.Table.COLUMN_WIKIPEDIA_LINK, bookmarkLocation.siteLinks.getWikipediaLink().toString());
-        cv.put(BookmarkLocationsDao.Table.COLUMN_WIKIDATA_LINK, bookmarkLocation.siteLinks.getWikidataLink().toString());
-        cv.put(BookmarkLocationsDao.Table.COLUMN_COMMONS_LINK, bookmarkLocation.siteLinks.getCommonsLink().toString());
+        cv.put(BookmarkLocationsDao.Table.COLUMN_LABEL_TEXT,
+            bookmarkLocation.getLabel() != null ? bookmarkLocation.getLabel().getText() : "");
+        cv.put(BookmarkLocationsDao.Table.COLUMN_LABEL_ICON,
+            bookmarkLocation.getLabel() != null ? bookmarkLocation.getLabel().getIcon() : null);
+        cv.put(BookmarkLocationsDao.Table.COLUMN_WIKIPEDIA_LINK,
+            bookmarkLocation.siteLinks.getWikipediaLink().toString());
+        cv.put(BookmarkLocationsDao.Table.COLUMN_WIKIDATA_LINK,
+            bookmarkLocation.siteLinks.getWikidataLink().toString());
+        cv.put(BookmarkLocationsDao.Table.COLUMN_COMMONS_LINK,
+            bookmarkLocation.siteLinks.getCommonsLink().toString());
         cv.put(BookmarkLocationsDao.Table.COLUMN_LAT, bookmarkLocation.location.getLatitude());
         cv.put(BookmarkLocationsDao.Table.COLUMN_LONG, bookmarkLocation.location.getLongitude());
         cv.put(BookmarkLocationsDao.Table.COLUMN_PIC, bookmarkLocation.pic);
@@ -188,6 +199,7 @@ public class BookmarkLocationsDao {
     }
 
     public static class Table {
+
         public static final String TABLE_NAME = "bookmarksLocations";
 
         static final String COLUMN_NAME = "location_name";
@@ -207,40 +219,40 @@ public class BookmarkLocationsDao {
 
         // NOTE! KEEP IN SAME ORDER AS THEY ARE DEFINED UP THERE. HELPS HARD CODE COLUMN INDICES.
         public static final String[] ALL_FIELDS = {
-                COLUMN_NAME,
-                COLUMN_LANGUAGE,
-                COLUMN_DESCRIPTION,
-                COLUMN_CATEGORY,
-                COLUMN_LABEL_TEXT,
-                COLUMN_LABEL_ICON,
-                COLUMN_LAT,
-                COLUMN_LONG,
-                COLUMN_IMAGE_URL,
-                COLUMN_WIKIPEDIA_LINK,
-                COLUMN_WIKIDATA_LINK,
-                COLUMN_COMMONS_LINK,
-                COLUMN_PIC,
-                COLUMN_EXISTS,
+            COLUMN_NAME,
+            COLUMN_LANGUAGE,
+            COLUMN_DESCRIPTION,
+            COLUMN_CATEGORY,
+            COLUMN_LABEL_TEXT,
+            COLUMN_LABEL_ICON,
+            COLUMN_LAT,
+            COLUMN_LONG,
+            COLUMN_IMAGE_URL,
+            COLUMN_WIKIPEDIA_LINK,
+            COLUMN_WIKIDATA_LINK,
+            COLUMN_COMMONS_LINK,
+            COLUMN_PIC,
+            COLUMN_EXISTS,
         };
 
         static final String DROP_TABLE_STATEMENT = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
         static final String CREATE_TABLE_STATEMENT = "CREATE TABLE " + TABLE_NAME + " ("
-                + COLUMN_NAME + " STRING PRIMARY KEY,"
-                + COLUMN_LANGUAGE + " STRING,"
-                + COLUMN_DESCRIPTION + " STRING,"
-                + COLUMN_CATEGORY + " STRING,"
-                + COLUMN_LABEL_TEXT + " STRING,"
-                + COLUMN_LABEL_ICON + " INTEGER,"
-                + COLUMN_LAT + " DOUBLE,"
-                + COLUMN_LONG + " DOUBLE,"
-                + COLUMN_IMAGE_URL + " STRING,"
-                + COLUMN_WIKIPEDIA_LINK + " STRING,"
-                + COLUMN_WIKIDATA_LINK + " STRING,"
-                + COLUMN_COMMONS_LINK + " STRING,"
-                + COLUMN_PIC + " STRING,"
-                + COLUMN_EXISTS + " STRING"
-                + ");";
+            + COLUMN_NAME + " STRING PRIMARY KEY,"
+            + COLUMN_LANGUAGE + " STRING,"
+            + COLUMN_DESCRIPTION + " STRING,"
+            + COLUMN_CATEGORY + " STRING,"
+            + COLUMN_LABEL_TEXT + " STRING,"
+            + COLUMN_LABEL_ICON + " INTEGER,"
+            + COLUMN_LAT + " DOUBLE,"
+            + COLUMN_LONG + " DOUBLE,"
+            + COLUMN_IMAGE_URL + " STRING,"
+            + COLUMN_WIKIPEDIA_LINK + " STRING,"
+            + COLUMN_WIKIDATA_LINK + " STRING,"
+            + COLUMN_COMMONS_LINK + " STRING,"
+            + COLUMN_PIC + " STRING,"
+            + COLUMN_EXISTS + " STRING"
+            + ");";
 
         public static void onCreate(SQLiteDatabase db) {
             db.execSQL(CREATE_TABLE_STATEMENT);
@@ -252,7 +264,7 @@ public class BookmarkLocationsDao {
         }
 
         public static void onUpdate(final SQLiteDatabase db, int from, final int to) {
-            Timber.d("bookmarksLocations db is updated from:"+from+", to:"+to);
+            Timber.d("bookmarksLocations db is updated from:" + from + ", to:" + to);
             if (from == to) {
                 return;
             }
@@ -279,7 +291,7 @@ public class BookmarkLocationsDao {
                 //We are anyways switching to room, these things won't be necessary then
                 try {
                     db.execSQL("ALTER TABLE bookmarksLocations ADD COLUMN location_pic STRING;");
-                }catch (SQLiteException exception){
+                } catch (SQLiteException exception) {
                     Timber.e(exception);//
                 }
                 return;
@@ -292,17 +304,18 @@ public class BookmarkLocationsDao {
                     Timber.e(exception);
                 }
             }
-            if (from >= 13){
+            if (from >= 13) {
                 try {
-                    db.execSQL("ALTER TABLE bookmarksLocations ADD COLUMN location_language STRING;");
-                } catch (SQLiteException exception){
+                    db.execSQL(
+                        "ALTER TABLE bookmarksLocations ADD COLUMN location_language STRING;");
+                } catch (SQLiteException exception) {
                     Timber.e(exception);
                 }
             }
-            if (from >= 14){
+            if (from >= 14) {
                 try {
                     db.execSQL("ALTER TABLE bookmarksLocations ADD COLUMN location_exists STRING;");
-                } catch (SQLiteException exception){
+                } catch (SQLiteException exception) {
                     Timber.e(exception);
                 }
             }

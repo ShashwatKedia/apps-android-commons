@@ -54,7 +54,7 @@ public class BookmarkListRootFragment extends CommonsDaggerSupportFragment imple
             listFragment = new BookmarkPicturesFragment();
         } else {
             listFragment = new BookmarkLocationsFragment();
-            if(orderItem == 2) {
+            if (orderItem == 2) {
                 listFragment = new BookmarkItemsFragment();
             }
         }

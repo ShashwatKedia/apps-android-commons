@@ -25,13 +25,14 @@ import io.reactivex.Observable;
  */
 @Singleton
 public class SessionManager {
+
     private final Context context;
     private Account currentAccount; // Unlike a savings account...  ;-)
     private JsonKvStore defaultKvStore;
 
     @Inject
     public SessionManager(Context context,
-                          @Named("default_preferences") JsonKvStore defaultKvStore) {
+        @Named("default_preferences") JsonKvStore defaultKvStore) {
         this.context = context;
         this.currentAccount = null;
         this.defaultKvStore = defaultKvStore;
@@ -125,6 +126,7 @@ public class SessionManager {
     /**
      * 1. Clears existing accounts from account manager
      * 2. Calls MediaWikiApi's logout function to clear cookies
+     *
      * @return
      */
     public Completable logout() {
@@ -132,9 +134,9 @@ public class SessionManager {
         Account[] allAccounts = accountManager.getAccountsByType(BuildConfig.ACCOUNT_TYPE);
         return Completable.fromObservable(Observable.fromArray(allAccounts)
                 .map(a -> accountManager.removeAccount(a, null, null).getResult()))
-                .doOnComplete(() -> {
-                    currentAccount = null;
-                });
+            .doOnComplete(() -> {
+                currentAccount = null;
+            });
     }
 
     /**

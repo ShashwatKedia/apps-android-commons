@@ -26,16 +26,18 @@ import static fr.free.nrw.commons.bookmarks.locations.BookmarkLocationsDao.Table
 public class BookmarkLocationsContentProvider extends CommonsDaggerContentProvider {
 
     private static final String BASE_PATH = "bookmarksLocations";
-    public static final Uri BASE_URI = Uri.parse("content://" + BuildConfig.BOOKMARK_LOCATIONS_AUTHORITY + "/" + BASE_PATH);
+    public static final Uri BASE_URI = Uri.parse(
+        "content://" + BuildConfig.BOOKMARK_LOCATIONS_AUTHORITY + "/" + BASE_PATH);
 
     /**
-     * Append bookmark locations name to the base uri 
+     * Append bookmark locations name to the base uri
      */
     public static Uri uriForName(String name) {
         return Uri.parse(BASE_URI.toString() + "/" + name);
     }
 
-    @Inject DBOpenHelper dbOpenHelper;
+    @Inject
+    DBOpenHelper dbOpenHelper;
 
     @Override
     public String getType(@NonNull Uri uri) {
@@ -44,6 +46,7 @@ public class BookmarkLocationsContentProvider extends CommonsDaggerContentProvid
 
     /**
      * Queries the SQLite database for the bookmark locations
+     *
      * @param uri : contains the uri for bookmark locations
      * @param projection
      * @param selection : handles Where
@@ -53,19 +56,21 @@ public class BookmarkLocationsContentProvider extends CommonsDaggerContentProvid
     @SuppressWarnings("ConstantConditions")
     @Override
     public Cursor query(@NonNull Uri uri, String[] projection, String selection,
-                        String[] selectionArgs, String sortOrder) {
+        String[] selectionArgs, String sortOrder) {
         SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
         queryBuilder.setTables(TABLE_NAME);
 
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
-        Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
+        Cursor cursor = queryBuilder.query(db, projection, selection, selectionArgs, null, null,
+            sortOrder);
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
 
         return cursor;
     }
 
     /**
-     * Handles the update query of local SQLite Database 
+     * Handles the update query of local SQLite Database
+     *
      * @param uri : contains the uri for bookmark locations
      * @param contentValues : new values to be entered to db
      * @param selection : handles Where
@@ -74,18 +79,18 @@ public class BookmarkLocationsContentProvider extends CommonsDaggerContentProvid
     @SuppressWarnings("ConstantConditions")
     @Override
     public int update(@NonNull Uri uri, ContentValues contentValues, String selection,
-                      String[] selectionArgs) {
+        String[] selectionArgs) {
         SQLiteDatabase sqlDB = dbOpenHelper.getWritableDatabase();
         int rowsUpdated;
         if (TextUtils.isEmpty(selection)) {
             int id = Integer.valueOf(uri.getLastPathSegment());
             rowsUpdated = sqlDB.update(TABLE_NAME,
-                    contentValues,
-                    COLUMN_NAME + " = ?",
-                    new String[]{String.valueOf(id)});
+                contentValues,
+                COLUMN_NAME + " = ?",
+                new String[]{String.valueOf(id)});
         } else {
             throw new IllegalArgumentException(
-                    "Parameter `selection` should be empty when updating an ID");
+                "Parameter `selection` should be empty when updating an ID");
         }
         getContext().getContentResolver().notifyChange(uri, null);
         return rowsUpdated;
@@ -110,8 +115,8 @@ public class BookmarkLocationsContentProvider extends CommonsDaggerContentProvid
         SQLiteDatabase db = dbOpenHelper.getReadableDatabase();
         Timber.d("Deleting bookmark name %s", uri.getLastPathSegment());
         rows = db.delete(TABLE_NAME,
-                "location_name = ?",
-                new String[]{uri.getLastPathSegment()}
+            "location_name = ?",
+            new String[]{uri.getLastPathSegment()}
         );
         getContext().getContentResolver().notifyChange(uri, null);
         return rows;

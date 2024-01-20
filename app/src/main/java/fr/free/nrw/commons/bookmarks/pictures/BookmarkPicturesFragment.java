@@ -37,16 +37,21 @@ public class BookmarkPicturesFragment extends DaggerFragment {
     private GridViewAdapter gridAdapter;
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    @BindView(R.id.statusMessage) TextView statusTextView;
-    @BindView(R.id.loadingImagesProgressBar) ProgressBar progressBar;
-    @BindView(R.id.bookmarkedPicturesList) GridView gridView;
-    @BindView(R.id.parentLayout) RelativeLayout parentLayout;
+    @BindView(R.id.statusMessage)
+    TextView statusTextView;
+    @BindView(R.id.loadingImagesProgressBar)
+    ProgressBar progressBar;
+    @BindView(R.id.bookmarkedPicturesList)
+    GridView gridView;
+    @BindView(R.id.parentLayout)
+    RelativeLayout parentLayout;
 
     @Inject
     BookmarkPicturesController controller;
 
     /**
      * Create an instance of the fragment with the right bundle parameters
+     *
      * @return an instance of the fragment
      */
     public static BookmarkPicturesFragment newInstance() {
@@ -55,9 +60,9 @@ public class BookmarkPicturesFragment extends DaggerFragment {
 
     @Override
     public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
+        @NonNull LayoutInflater inflater,
+        ViewGroup container,
+        Bundle savedInstanceState
     ) {
         View v = inflater.inflate(R.layout.fragment_bookmarks_pictures, container, false);
         ButterKnife.bind(this, v);
@@ -90,15 +95,15 @@ public class BookmarkPicturesFragment extends DaggerFragment {
             gridView.setVisibility(GONE);
             if (gridAdapter != null) {
                 gridAdapter.clear();
-                ((BookmarkListRootFragment)getParentFragment()).viewPagerNotifyDataSetChanged();
+                ((BookmarkListRootFragment) getParentFragment()).viewPagerNotifyDataSetChanged();
             }
             initList();
         }
     }
 
     /**
-     * Checks for internet connection and then initializes
-     * the recycler view with bookmarked pictures
+     * Checks for internet connection and then initializes the recycler view with bookmarked
+     * pictures
      */
     @SuppressLint("CheckResult")
     private void initList() {
@@ -111,9 +116,9 @@ public class BookmarkPicturesFragment extends DaggerFragment {
         statusTextView.setVisibility(GONE);
 
         compositeDisposable.add(controller.loadBookmarkedPictures()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::handleSuccess, this::handleError));
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(this::handleSuccess, this::handleError));
     }
 
     /**
@@ -131,14 +136,15 @@ public class BookmarkPicturesFragment extends DaggerFragment {
 
     /**
      * Logs and handles API error scenario
+     *
      * @param throwable
      */
     private void handleError(Throwable throwable) {
         Timber.e(throwable, "Error occurred while loading images inside a category");
-        try{
+        try {
             ViewUtil.showShortSnackbar(parentLayout, R.string.error_loading_images);
             initErrorView();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -170,8 +176,9 @@ public class BookmarkPicturesFragment extends DaggerFragment {
     }
 
     /**
-     * Handles the success scenario
-     * On first load, it initializes the grid view. On subsequent loads, it adds items to the adapter
+     * Handles the success scenario On first load, it initializes the grid view. On subsequent
+     * loads, it adds items to the adapter
+     *
      * @param collection List of new Media to be displayed
      */
     private void handleSuccess(List<Media> collection) {
@@ -204,21 +211,23 @@ public class BookmarkPicturesFragment extends DaggerFragment {
 
     /**
      * Initializes the adapter with a list of Media objects
+     *
      * @param mediaList List of new Media to be displayed
      */
     private void setAdapter(List<Media> mediaList) {
         gridAdapter = new GridViewAdapter(
-                this.getContext(),
-                R.layout.layout_category_images,
-                mediaList
+            this.getContext(),
+            R.layout.layout_category_images,
+            mediaList
         );
         gridView.setAdapter(gridAdapter);
     }
 
     /**
-     * It return an instance of gridView adapter which helps in extracting media details
-     * used by the gridView
-     * @return  GridView Adapter
+     * It return an instance of gridView adapter which helps in extracting media details used by the
+     * gridView
+     *
+     * @return GridView Adapter
      */
     public ListAdapter getAdapter() {
         return gridView.getAdapter();

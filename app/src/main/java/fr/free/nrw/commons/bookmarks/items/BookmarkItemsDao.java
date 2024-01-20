@@ -33,6 +33,7 @@ public class BookmarkItemsDao {
 
     /**
      * Find all persisted items bookmarks on database
+     *
      * @return list of bookmarks
      */
     public List<DepictedItem> getAllBookmarksItems() {
@@ -58,6 +59,7 @@ public class BookmarkItemsDao {
 
     /**
      * Look for a bookmark in database and in order to insert or delete it
+     *
      * @param depictedItem : Bookmark object
      * @return boolean : is bookmark now favorite ?
      */
@@ -73,6 +75,7 @@ public class BookmarkItemsDao {
 
     /**
      * Add a Bookmark to database
+     *
      * @param depictedItem : Bookmark to add
      */
     private void addBookmarkItem(final DepictedItem depictedItem) {
@@ -88,6 +91,7 @@ public class BookmarkItemsDao {
 
     /**
      * Delete a bookmark from database
+     *
      * @param depictedItem : Bookmark to delete
      */
     private void deleteBookmarkItem(final DepictedItem depictedItem) {
@@ -103,6 +107,7 @@ public class BookmarkItemsDao {
 
     /**
      * Find a bookmark from database based on its name
+     *
      * @param depictedItemID : Bookmark to find
      * @return boolean : is bookmark in database ?
      */
@@ -131,6 +136,7 @@ public class BookmarkItemsDao {
 
     /**
      * Recives real data from cursor
+     *
      * @param cursor : Object for storing database data
      * @return DepictedItem
      */
@@ -172,7 +178,7 @@ public class BookmarkItemsDao {
     private List<CategoryItem> convertToCategoryItems(List<String> categoryNameList,
         List<String> categoryDescriptionList, List<String> categoryThumbnailList) {
         List<CategoryItem> categoryItems = new ArrayList<>();
-        for(int i=0; i<categoryNameList.size(); i++){
+        for (int i = 0; i < categoryNameList.size(); i++) {
             categoryItems.add(new CategoryItem(categoryNameList.get(i),
                 categoryDescriptionList.get(i),
                 categoryThumbnailList.get(i), false));
@@ -182,6 +188,7 @@ public class BookmarkItemsDao {
 
     /**
      * Converts string to List
+     *
      * @param listString comma separated single string from of list items
      * @return List of string
      */
@@ -192,6 +199,7 @@ public class BookmarkItemsDao {
 
     /**
      * Converts string to List
+     *
      * @param list list of items
      * @return string comma separated single string of items
      */
@@ -204,6 +212,7 @@ public class BookmarkItemsDao {
 
     /**
      * Takes data from DepictedItem and create a content value object
+     *
      * @param depictedItem depicted item
      * @return ContentValues
      */
@@ -246,6 +255,7 @@ public class BookmarkItemsDao {
      * Table of bookmarksItems data
      */
     public static final class Table {
+
         public static final String TABLE_NAME = "bookmarksItems";
         public static final String COLUMN_NAME = "item_name";
         public static final String COLUMN_DESCRIPTION = "item_description";
@@ -284,6 +294,7 @@ public class BookmarkItemsDao {
 
         /**
          * Creates table
+         *
          * @param db SQLiteDatabase
          */
         public static void onCreate(final SQLiteDatabase db) {
@@ -292,6 +303,7 @@ public class BookmarkItemsDao {
 
         /**
          * Deletes database
+         *
          * @param db SQLiteDatabase
          */
         public static void onDelete(final SQLiteDatabase db) {
@@ -301,9 +313,10 @@ public class BookmarkItemsDao {
 
         /**
          * Updates database
-         * @param db SQLiteDatabase
+         *
+         * @param db   SQLiteDatabase
          * @param from starting
-         * @param to end
+         * @param to   end
          */
         public static void onUpdate(final SQLiteDatabase db, int from, final int to) {
             if (from == to) {

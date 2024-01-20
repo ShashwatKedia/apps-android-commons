@@ -22,7 +22,8 @@ public class AccountUtil {
     @Nullable
     public static Account account(Context context) {
         try {
-            Account[] accounts = accountManager(context).getAccountsByType(BuildConfig.ACCOUNT_TYPE);
+            Account[] accounts = accountManager(context).getAccountsByType(
+                BuildConfig.ACCOUNT_TYPE);
             if (accounts.length > 0) {
                 return accounts[0];
             }

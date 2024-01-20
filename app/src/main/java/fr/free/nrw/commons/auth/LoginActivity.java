@@ -84,18 +84,18 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     private LoginTextWatcher textWatcher = new LoginTextWatcher();
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private Call<MwQueryResponse> loginToken;
-    final  String saveProgressDailog="ProgressDailog_state";
-    final String saveErrorMessage ="errorMessage";
-    final String saveUsername="username";
-    final  String savePassword="password";
+    final String saveProgressDailog = "ProgressDailog_state";
+    final String saveErrorMessage = "errorMessage";
+    final String saveUsername = "username";
+    final String savePassword = "password";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ApplicationlessInjection
-                .getInstance(this.getApplicationContext())
-                .getCommonsApplicationComponent()
-                .inject(this);
+            .getInstance(this.getApplicationContext())
+            .getCommonsApplicationComponent()
+            .inject(this);
 
         boolean isDarkTheme = systemThemeUtils.isDeviceInNightMode();
         setTheme(isDarkTheme ? R.style.DarkAppTheme : R.style.LightAppTheme);
@@ -124,9 +124,11 @@ public class LoginActivity extends AccountAuthenticatorActivity {
             binding.loginCredentials.setVisibility(View.GONE);
         }
     }
-    /** 
+
+    /**
      * Hides the keyboard if the user's focus is not on the password (hasFocus is false).
-     * @param view The keyboard
+     *
+     * @param view     The keyboard
      * @param hasFocus Set to true if the keyboard has focus
      */
     void onPasswordFocusChanged(View view, boolean hasFocus) {
@@ -151,14 +153,14 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
     protected void skipLogin() {
         new AlertDialog.Builder(this).setTitle(R.string.skip_login_title)
-                .setMessage(R.string.skip_login_message)
-                .setCancelable(false)
-                .setPositiveButton(R.string.yes, (dialog, which) -> {
-                    dialog.cancel();
-                    performSkipLogin();
-                })
-                .setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel())
-                .show();
+            .setMessage(R.string.skip_login_message)
+            .setCancelable(false)
+            .setPositiveButton(R.string.yes, (dialog, which) -> {
+                dialog.cancel();
+                performSkipLogin();
+            })
+            .setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel())
+            .show();
     }
 
     protected void forgotPassword() {
@@ -185,7 +187,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         super.onResume();
 
         if (sessionManager.getCurrentAccount() != null
-                && sessionManager.isUserLoggedIn()) {
+            && sessionManager.isUserLoggedIn()) {
             applicationKvStore.putBoolean("login_skipped", false);
             startMainActivity();
         }
@@ -211,7 +213,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         binding.loginPassword.removeTextChangedListener(textWatcher);
         binding.loginTwoFactor.removeTextChangedListener(textWatcher);
         delegate.onDestroy();
-        if(null!=loginClient) {
+        if (null != loginClient) {
             loginClient.cancel();
         }
         binding = null;
@@ -233,48 +235,49 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         progressDialog.show();
         loginToken = ServiceFactory.get(commonsWikiSite).getLoginToken();
         loginToken.enqueue(
-                new Callback<MwQueryResponse>() {
-                    @Override
-                    public void onResponse(Call<MwQueryResponse> call,
-                                           Response<MwQueryResponse> response) {
-                        loginClient.login(commonsWikiSite, username, password, null, twoFactorCode,
-                                response.body().query().loginToken(), Locale.getDefault().getLanguage(), new LoginCallback() {
-                                    @Override
-                                    public void success(@NonNull LoginResult result) {
-                                        Timber.d("Login Success");
-                                        onLoginSuccess(result);
-                                    }
+            new Callback<MwQueryResponse>() {
+                @Override
+                public void onResponse(Call<MwQueryResponse> call,
+                    Response<MwQueryResponse> response) {
+                    loginClient.login(commonsWikiSite, username, password, null, twoFactorCode,
+                        response.body().query().loginToken(), Locale.getDefault().getLanguage(),
+                        new LoginCallback() {
+                            @Override
+                            public void success(@NonNull LoginResult result) {
+                                Timber.d("Login Success");
+                                onLoginSuccess(result);
+                            }
 
-                                    @Override
-                                    public void twoFactorPrompt(@NonNull Throwable caught,
-                                                                @Nullable String token) {
-                                        Timber.d("Requesting 2FA prompt");
-                                        hideProgress();
-                                        askUserForTwoFactorAuth();
-                                    }
+                            @Override
+                            public void twoFactorPrompt(@NonNull Throwable caught,
+                                @Nullable String token) {
+                                Timber.d("Requesting 2FA prompt");
+                                hideProgress();
+                                askUserForTwoFactorAuth();
+                            }
 
-                                    @Override
-                                    public void passwordResetPrompt(@Nullable String token) {
-                                        Timber.d("Showing password reset prompt");
-                                        hideProgress();
-                                        showPasswordResetPrompt();
-                                    }
+                            @Override
+                            public void passwordResetPrompt(@Nullable String token) {
+                                Timber.d("Showing password reset prompt");
+                                hideProgress();
+                                showPasswordResetPrompt();
+                            }
 
-                                    @Override
-                                    public void error(@NonNull Throwable caught) {
-                                        Timber.e(caught);
-                                        hideProgress();
-                                        showMessageAndCancelDialog(caught.getLocalizedMessage());
-                                    }
-                                });
-                    }
+                            @Override
+                            public void error(@NonNull Throwable caught) {
+                                Timber.e(caught);
+                                hideProgress();
+                                showMessageAndCancelDialog(caught.getLocalizedMessage());
+                            }
+                        });
+                }
 
-                    @Override
-                    public void onFailure(Call<MwQueryResponse> call, Throwable t) {
-                        Timber.e(t);
-                        showMessageAndCancelDialog(t.getLocalizedMessage());
-                    }
-                });
+                @Override
+                public void onFailure(Call<MwQueryResponse> call, Throwable t) {
+                    Timber.e(t);
+                    showMessageAndCancelDialog(t.getLocalizedMessage());
+                }
+            });
 
     }
 
@@ -288,8 +291,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
 
 
     /**
-     * This function is called when user skips the login.
-     * It redirects the user to Explore Activity.
+     * This function is called when user skips the login. It redirects the user to Explore Activity.
      */
     private void performSkipLogin() {
         applicationKvStore.putBoolean("login_skipped", true);
@@ -363,7 +365,8 @@ public class LoginActivity extends AccountAuthenticatorActivity {
         binding.twoFactorContainer.setVisibility(VISIBLE);
         binding.loginTwoFactor.setVisibility(VISIBLE);
         binding.loginTwoFactor.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodManager imm = (InputMethodManager) getSystemService(
+            Context.INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         showMessageAndCancelDialog(R.string.login_failed_2fa_needed);
     }
@@ -388,7 +391,8 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     }
 
     public void startMainActivity() {
-        ActivityUtils.startActivityWithFlags(this, MainActivity.class, Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        ActivityUtils.startActivityWithFlags(this, MainActivity.class,
+            Intent.FLAG_ACTIVITY_SINGLE_TOP);
         finish();
     }
 
@@ -412,6 +416,7 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     }
 
     private class LoginTextWatcher implements TextWatcher {
+
         @Override
         public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
         }
@@ -439,32 +444,35 @@ public class LoginActivity extends AccountAuthenticatorActivity {
     protected void onSaveInstanceState(Bundle outState) {
         // if progressDialog is visible during the configuration change  then store state as  true else false so that
         // we maintain visibility of progressDailog after configuration change
-        if(progressDialog!=null&&progressDialog.isShowing()) {
-            outState.putBoolean(saveProgressDailog,true);
+        if (progressDialog != null && progressDialog.isShowing()) {
+            outState.putBoolean(saveProgressDailog, true);
         } else {
-            outState.putBoolean(saveProgressDailog,false);
+            outState.putBoolean(saveProgressDailog, false);
         }
-        outState.putString(saveErrorMessage,binding.errorMessage.getText().toString()); //Save the errorMessage
-        outState.putString(saveUsername,getUsername()); // Save the username
-        outState.putString(savePassword,getPassword()); // Save the password
+        outState.putString(saveErrorMessage,
+            binding.errorMessage.getText().toString()); //Save the errorMessage
+        outState.putString(saveUsername, getUsername()); // Save the username
+        outState.putString(savePassword, getPassword()); // Save the password
     }
+
     private String getUsername() {
         return binding.loginUsername.getText().toString();
     }
-    private String getPassword(){
-        return  binding.loginPassword.getText().toString();
-  }
+
+    private String getPassword() {
+        return binding.loginPassword.getText().toString();
+    }
 
     @Override
     protected void onRestoreInstanceState(final Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         binding.loginUsername.setText(savedInstanceState.getString(saveUsername));
         binding.loginPassword.setText(savedInstanceState.getString(savePassword));
-        if(savedInstanceState.getBoolean(saveProgressDailog)) {
+        if (savedInstanceState.getBoolean(saveProgressDailog)) {
             performLogin();
         }
-        String errorMessage=savedInstanceState.getString(saveErrorMessage);
-        if(sessionManager.isUserLoggedIn()) {
+        String errorMessage = savedInstanceState.getString(saveErrorMessage);
+        if (sessionManager.isUserLoggedIn()) {
             showMessage(R.string.login_success, R.color.primaryDarkColor);
         } else {
             showMessage(errorMessage, R.color.secondaryDarkColor);

@@ -19,6 +19,7 @@ public class BookmarkItemsController {
 
     /**
      * Load from DB the bookmarked items
+     *
      * @return a list of DepictedItem objects.
      */
     public List<DepictedItem> loadFavoritesItems() {

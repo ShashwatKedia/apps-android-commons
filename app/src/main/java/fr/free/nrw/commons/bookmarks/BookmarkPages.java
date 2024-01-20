@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
  * Data class for handling a bookmark fragment and it title
  */
 public class BookmarkPages {
+
     private Fragment page;
     private String title;
 
@@ -16,6 +17,7 @@ public class BookmarkPages {
 
     /**
      * Return the fragment
+     *
      * @return fragment object
      */
     public Fragment getPage() {
@@ -24,6 +26,7 @@ public class BookmarkPages {
 
     /**
      * Return the fragment title
+     *
      * @return title
      */
     public String getTitle() {

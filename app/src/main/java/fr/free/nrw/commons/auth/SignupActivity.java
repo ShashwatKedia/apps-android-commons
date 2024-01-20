@@ -35,6 +35,7 @@ public class SignupActivity extends BaseActivity {
     }
 
     private class MyWebViewClient extends WebViewClient {
+
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (url.equals(BuildConfig.SIGNUP_SUCCESS_REDIRECTION_URL)) {
@@ -42,7 +43,7 @@ public class SignupActivity extends BaseActivity {
                 Timber.d("Overriding URL %s", url);
 
                 Toast toast = Toast.makeText(SignupActivity.this,
-                        R.string.account_created, Toast.LENGTH_LONG);
+                    R.string.account_created, Toast.LENGTH_LONG);
                 toast.show();
                 // terminate on task completion.
                 finish();
@@ -69,12 +70,14 @@ public class SignupActivity extends BaseActivity {
      * https://issuetracker.google.com/issues/141132133
      * App tries to put light/dark theme to webview and crashes in the process
      * This code tries to prevent applying the theme when sdk is between api 21 to 25
+     *
      * @param overrideConfiguration
      */
     @Override
     public void applyOverrideConfiguration(final Configuration overrideConfiguration) {
         if (Build.VERSION.SDK_INT <= 25 &&
-            (getResources().getConfiguration().uiMode == getApplicationContext().getResources().getConfiguration().uiMode)) {
+            (getResources().getConfiguration().uiMode == getApplicationContext().getResources()
+                .getConfiguration().uiMode)) {
             return;
         }
         super.applyOverrideConfiguration(overrideConfiguration);

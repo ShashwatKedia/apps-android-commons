@@ -43,11 +43,11 @@ public class BookmarkPicturesDao {
         ContentProviderClient db = clientProvider.get();
         try {
             cursor = db.query(
-                    BookmarkPicturesContentProvider.BASE_URI,
-                    Table.ALL_FIELDS,
-                    null,
-                    new String[]{},
-                    null);
+                BookmarkPicturesContentProvider.BASE_URI,
+                Table.ALL_FIELDS,
+                null,
+                new String[]{},
+                null);
             while (cursor != null && cursor.moveToNext()) {
                 items.add(fromCursor(cursor));
             }
@@ -130,11 +130,11 @@ public class BookmarkPicturesDao {
         ContentProviderClient db = clientProvider.get();
         try {
             cursor = db.query(
-                    BookmarkPicturesContentProvider.BASE_URI,
-                    Table.ALL_FIELDS,
-                    Table.COLUMN_MEDIA_NAME + "=?",
-                    new String[]{bookmark.getMediaName()},
-                    null);
+                BookmarkPicturesContentProvider.BASE_URI,
+                Table.ALL_FIELDS,
+                Table.COLUMN_MEDIA_NAME + "=?",
+                new String[]{bookmark.getMediaName()},
+                null);
             if (cursor != null && cursor.moveToFirst()) {
                 return true;
             }
@@ -154,9 +154,9 @@ public class BookmarkPicturesDao {
     Bookmark fromCursor(Cursor cursor) {
         String fileName = cursor.getString(cursor.getColumnIndex(Table.COLUMN_MEDIA_NAME));
         return new Bookmark(
-                fileName,
-                cursor.getString(cursor.getColumnIndex(Table.COLUMN_CREATOR)),
-                BookmarkPicturesContentProvider.uriForName(fileName)
+            fileName,
+            cursor.getString(cursor.getColumnIndex(Table.COLUMN_CREATOR)),
+            BookmarkPicturesContentProvider.uriForName(fileName)
         );
     }
 
@@ -169,6 +169,7 @@ public class BookmarkPicturesDao {
 
 
     public static class Table {
+
         public static final String TABLE_NAME = "bookmarks";
 
         public static final String COLUMN_MEDIA_NAME = "media_name";
@@ -176,16 +177,16 @@ public class BookmarkPicturesDao {
 
         // NOTE! KEEP IN SAME ORDER AS THEY ARE DEFINED UP THERE. HELPS HARD CODE COLUMN INDICES.
         public static final String[] ALL_FIELDS = {
-                COLUMN_MEDIA_NAME,
-                COLUMN_CREATOR
+            COLUMN_MEDIA_NAME,
+            COLUMN_CREATOR
         };
 
         public static final String DROP_TABLE_STATEMENT = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
         public static final String CREATE_TABLE_STATEMENT = "CREATE TABLE " + TABLE_NAME + " ("
-                + COLUMN_MEDIA_NAME + " STRING PRIMARY KEY,"
-                + COLUMN_CREATOR + " STRING"
-                + ");";
+            + COLUMN_MEDIA_NAME + " STRING PRIMARY KEY,"
+            + COLUMN_CREATOR + " STRING"
+            + ");";
 
         public static void onCreate(SQLiteDatabase db) {
             db.execSQL(CREATE_TABLE_STATEMENT);

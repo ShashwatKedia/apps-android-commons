@@ -31,38 +31,51 @@ import kotlin.Unit;
 
 public class BookmarkLocationsFragment extends DaggerFragment {
 
-    @BindView(R.id.statusMessage) TextView statusTextView;
-    @BindView(R.id.loadingImagesProgressBar) ProgressBar progressBar;
-    @BindView(R.id.listView) RecyclerView recyclerView;
-    @BindView(R.id.parentLayout) RelativeLayout parentLayout;
+    @BindView(R.id.statusMessage)
+    TextView statusTextView;
+    @BindView(R.id.loadingImagesProgressBar)
+    ProgressBar progressBar;
+    @BindView(R.id.listView)
+    RecyclerView recyclerView;
+    @BindView(R.id.parentLayout)
+    RelativeLayout parentLayout;
 
-    @Inject BookmarkLocationsController controller;
-    @Inject ContributionController contributionController;
-    @Inject BookmarkLocationsDao bookmarkLocationDao;
-    @Inject CommonPlaceClickActions commonPlaceClickActions;
+    @Inject
+    BookmarkLocationsController controller;
+    @Inject
+    ContributionController contributionController;
+    @Inject
+    BookmarkLocationsDao bookmarkLocationDao;
+    @Inject
+    CommonPlaceClickActions commonPlaceClickActions;
     private PlaceAdapter adapter;
-    private ActivityResultLauncher<String[]> inAppCameraLocationPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
-        @Override
-        public void onActivityResult(Map<String, Boolean> result) {
-            boolean areAllGranted = true;
-            for(final boolean b : result.values()) {
-                areAllGranted = areAllGranted && b;
-            }
+    private ActivityResultLauncher<String[]> inAppCameraLocationPermissionLauncher = registerForActivityResult(
+        new ActivityResultContracts.RequestMultiplePermissions(),
+        new ActivityResultCallback<Map<String, Boolean>>() {
+            @Override
+            public void onActivityResult(Map<String, Boolean> result) {
+                boolean areAllGranted = true;
+                for (final boolean b : result.values()) {
+                    areAllGranted = areAllGranted && b;
+                }
 
-            if (areAllGranted) {
-                contributionController.locationPermissionCallback.onLocationPermissionGranted();
-            } else {
-                if (shouldShowRequestPermissionRationale(permission.ACCESS_FINE_LOCATION)) {
-                    contributionController.handleShowRationaleFlowCameraLocation(getActivity());
+                if (areAllGranted) {
+                    contributionController.locationPermissionCallback.onLocationPermissionGranted();
                 } else {
-                    contributionController.locationPermissionCallback.onLocationPermissionDenied(getActivity().getString(R.string.in_app_camera_location_permission_denied));
+                    if (shouldShowRequestPermissionRationale(permission.ACCESS_FINE_LOCATION)) {
+                        contributionController.handleShowRationaleFlowCameraLocation(getActivity());
+                    } else {
+                        contributionController.locationPermissionCallback.onLocationPermissionDenied(
+                            getActivity().getString(
+                                R.string.in_app_camera_location_permission_denied));
+                    }
                 }
             }
-        }
-    });
+        });
 
     /**
      * Create an instance of the fragment with the right bundle parameters
+     *
      * @return an instance of the fragment
      */
     public static BookmarkLocationsFragment newInstance() {
@@ -71,9 +84,9 @@ public class BookmarkLocationsFragment extends DaggerFragment {
 
     @Override
     public View onCreateView(
-            @NonNull LayoutInflater inflater,
-            ViewGroup container,
-            Bundle savedInstanceState
+        @NonNull LayoutInflater inflater,
+        ViewGroup container,
+        Bundle savedInstanceState
     ) {
         View v = inflater.inflate(R.layout.fragment_bookmarks_locations, container, false);
         ButterKnife.bind(this, v);

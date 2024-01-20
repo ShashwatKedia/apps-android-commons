@@ -43,6 +43,7 @@ public class BookmarkItemsContentProvider extends CommonsDaggerContentProvider {
 
     /**
      * Queries the SQLite database for the bookmark items
+     *
      * @param uri : contains the uri for bookmark items
      * @param projection : contains the all fields of the table
      * @param selection : handles Where
@@ -64,6 +65,7 @@ public class BookmarkItemsContentProvider extends CommonsDaggerContentProvider {
 
     /**
      * Handles the update query of local SQLite Database
+     *
      * @param uri : contains the uri for bookmark items
      * @param contentValues : new values to be entered to db
      * @param selection : handles Where
@@ -92,6 +94,7 @@ public class BookmarkItemsContentProvider extends CommonsDaggerContentProvider {
 
     /**
      * Handles the insertion of new bookmark items record to local SQLite Database
+     *
      * @param uri
      * @param contentValues
      * @return
@@ -107,6 +110,7 @@ public class BookmarkItemsContentProvider extends CommonsDaggerContentProvider {
 
     /**
      * Handles the deletion of new bookmark items record to local SQLite Database
+     *
      * @param uri
      * @param s
      * @param strings

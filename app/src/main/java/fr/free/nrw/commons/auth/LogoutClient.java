@@ -27,10 +27,11 @@ public class LogoutClient {
 
     /**
      * Fetches the  CSRF token and uses that to post the logout api call
+     *
      * @return
      */
     public Observable<MwPostResponse> postLogout() {
         return service.getCsrfToken().concatMap(tokenResponse -> service.postLogout(
-                Objects.requireNonNull(Objects.requireNonNull(tokenResponse.query()).csrfToken())));
+            Objects.requireNonNull(Objects.requireNonNull(tokenResponse.query()).csrfToken())));
     }
 }

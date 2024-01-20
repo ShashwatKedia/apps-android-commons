@@ -72,6 +72,7 @@ public class BookmarkItemsFragment extends DaggerFragment {
 
     /**
      * Get list of DepictedItem and sets to the adapter
+     *
      * @param context context
      */
     private void initList(final Context context) {

@@ -29,24 +29,26 @@ public class BookmarkPicturesController {
 
     /**
      * Loads the Media objects from the raw data stored in DB and the API.
+     *
      * @return a list of bookmarked Media object
      */
     Single<List<Media>> loadBookmarkedPictures() {
         List<Bookmark> bookmarks = bookmarkDao.getAllBookmarks();
         currentBookmarks = bookmarks;
         return Observable.fromIterable(bookmarks)
-                .flatMap((Function<Bookmark, ObservableSource<Media>>) this::getMediaFromBookmark)
-                .toList();
+            .flatMap((Function<Bookmark, ObservableSource<Media>>) this::getMediaFromBookmark)
+            .toList();
     }
 
     private Observable<Media> getMediaFromBookmark(Bookmark bookmark) {
         return mediaClient.getMedia(bookmark.getMediaName())
-                .toObservable()
+            .toObservable()
             .onErrorResumeNext(Observable.empty());
     }
 
     /**
      * Loads the Media objects from the raw data stored in DB and the API.
+     *
      * @return a list of bookmarked Media object
      */
     boolean needRefreshBookmarkedPictures() {

@@ -21,7 +21,9 @@ import static fr.free.nrw.commons.auth.AccountUtil.AUTH_TOKEN_TYPE;
  * Handles WikiMedia commons account Authentication
  */
 public class WikiAccountAuthenticator extends AbstractAccountAuthenticator {
-    private static final String[] SYNC_AUTHORITIES = {BuildConfig.CONTRIBUTION_AUTHORITY, BuildConfig.MODIFICATION_AUTHORITY};
+
+    private static final String[] SYNC_AUTHORITIES = {BuildConfig.CONTRIBUTION_AUTHORITY,
+        BuildConfig.MODIFICATION_AUTHORITY};
 
     @NonNull
     private final Context context;
@@ -32,7 +34,7 @@ public class WikiAccountAuthenticator extends AbstractAccountAuthenticator {
     }
 
     /**
-     * Provides Bundle with edited Account Properties 
+     * Provides Bundle with edited Account Properties
      */
     @Override
     public Bundle editProperties(AccountAuthenticatorResponse response, String accountType) {
@@ -43,9 +45,9 @@ public class WikiAccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle addAccount(@NonNull AccountAuthenticatorResponse response,
-                             @NonNull String accountType, @Nullable String authTokenType,
-                             @Nullable String[] requiredFeatures, @Nullable Bundle options)
-            throws NetworkErrorException {
+        @NonNull String accountType, @Nullable String authTokenType,
+        @Nullable String[] requiredFeatures, @Nullable Bundle options)
+        throws NetworkErrorException {
         // account type not supported returns bundle without loginActivity Intent, it just contains "test" key 
         if (!supportedAccountType(accountType)) {
             Bundle bundle = new Bundle();
@@ -58,8 +60,8 @@ public class WikiAccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle confirmCredentials(@NonNull AccountAuthenticatorResponse response,
-                                     @NonNull Account account, @Nullable Bundle options)
-            throws NetworkErrorException {
+        @NonNull Account account, @Nullable Bundle options)
+        throws NetworkErrorException {
         Bundle bundle = new Bundle();
         bundle.putString("test", "confirmCredentials");
         return bundle;
@@ -67,9 +69,9 @@ public class WikiAccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle getAuthToken(@NonNull AccountAuthenticatorResponse response,
-                               @NonNull Account account, @NonNull String authTokenType,
-                               @Nullable Bundle options)
-            throws NetworkErrorException {
+        @NonNull Account account, @NonNull String authTokenType,
+        @Nullable Bundle options)
+        throws NetworkErrorException {
         Bundle bundle = new Bundle();
         bundle.putString("test", "getAuthToken");
         return bundle;
@@ -84,9 +86,8 @@ public class WikiAccountAuthenticator extends AbstractAccountAuthenticator {
     @Nullable
     @Override
     public Bundle updateCredentials(@NonNull AccountAuthenticatorResponse response,
-                                    @NonNull Account account, @Nullable String authTokenType,
-                                    @Nullable Bundle options)
-            throws NetworkErrorException {
+        @NonNull Account account, @Nullable String authTokenType, @Nullable Bundle options)
+        throws NetworkErrorException {
         Bundle bundle = new Bundle();
         bundle.putString("test", "updateCredentials");
         return bundle;
@@ -95,8 +96,8 @@ public class WikiAccountAuthenticator extends AbstractAccountAuthenticator {
     @Nullable
     @Override
     public Bundle hasFeatures(@NonNull AccountAuthenticatorResponse response,
-                              @NonNull Account account, @NonNull String[] features)
-            throws NetworkErrorException {
+        @NonNull Account account, @NonNull String[] features)
+        throws NetworkErrorException {
         Bundle bundle = new Bundle();
         bundle.putBoolean(AccountManager.KEY_BOOLEAN_RESULT, false);
         return bundle;
@@ -107,8 +108,8 @@ public class WikiAccountAuthenticator extends AbstractAccountAuthenticator {
     }
 
     /**
-     * Provides a bundle containing a Parcel 
-     * the Parcel packs an Intent with LoginActivity and Authenticator response (requires valid account type)
+     * Provides a bundle containing a Parcel the Parcel packs an Intent with LoginActivity and
+     * Authenticator response (requires valid account type)
      */
     private Bundle addAccount(AccountAuthenticatorResponse response) {
         Intent intent = new Intent(context, LoginActivity.class);
@@ -122,11 +123,11 @@ public class WikiAccountAuthenticator extends AbstractAccountAuthenticator {
 
     @Override
     public Bundle getAccountRemovalAllowed(AccountAuthenticatorResponse response,
-                                           Account account) throws NetworkErrorException {
+        Account account) throws NetworkErrorException {
         Bundle result = super.getAccountRemovalAllowed(response, account);
 
         if (result.containsKey(AccountManager.KEY_BOOLEAN_RESULT)
-                && !result.containsKey(AccountManager.KEY_INTENT)) {
+            && !result.containsKey(AccountManager.KEY_INTENT)) {
             boolean allowed = result.getBoolean(AccountManager.KEY_BOOLEAN_RESULT);
 
             if (allowed) {
