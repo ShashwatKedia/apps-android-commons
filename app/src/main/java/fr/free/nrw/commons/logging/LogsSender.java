@@ -55,7 +55,8 @@ public abstract class LogsSender implements ReportSender {
     }
 
     /**
-     * Gets zipped log files and sends it via email. Can be modified to change the send log mechanism
+     * Gets zipped log files and sends it via email. Can be modified to change the send log
+     * mechanism
      *
      * @param context
      * @param report
@@ -95,7 +96,8 @@ public abstract class LogsSender implements ReportSender {
         emailIntent.putExtra(Intent.EXTRA_STREAM, logFileUri);
         emailIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         emailIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        context.startActivity(Intent.createChooser(emailIntent, context.getString(R.string.share_logs_using)));
+        context.startActivity(
+            Intent.createChooser(emailIntent, context.getString(R.string.share_logs_using)));
     }
 
     /**
@@ -116,8 +118,8 @@ public abstract class LogsSender implements ReportSender {
             File zipFile = new File(LogUtils.getLogZipDirectory(), logFileName);
             writeLogToZipFile(metaData, zipFile);
             return FileProvider
-                    .getUriForFile(context,
-                            context.getApplicationContext().getPackageName() + ".provider", zipFile);
+                .getUriForFile(context,
+                    context.getApplicationContext().getPackageName() + ".provider", zipFile);
         } catch (IOException e) {
             Timber.w(e, "Error in generating log file");
         }

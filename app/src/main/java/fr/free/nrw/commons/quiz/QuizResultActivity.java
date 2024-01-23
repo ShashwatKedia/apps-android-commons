@@ -27,7 +27,7 @@ import fr.free.nrw.commons.contributions.MainActivity;
 
 
 /**
- *  Displays the final score of quiz and congratulates the user
+ * Displays the final score of quiz and congratulates the user
  */
 public class QuizResultActivity extends AppCompatActivity {
 
@@ -45,14 +45,14 @@ public class QuizResultActivity extends AppCompatActivity {
 
         binding.quizResultNext.setOnClickListener(view -> launchContributionActivity());
 
-        if ( getIntent() != null) {
+        if (getIntent() != null) {
             Bundle extras = getIntent().getExtras();
             int score = extras.getInt("QuizResult");
             setScore(score);
-        }else{
+        } else {
             startActivityWithFlags(
-                    this, MainActivity.class, Intent.FLAG_ACTIVITY_CLEAR_TOP,
-                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                this, MainActivity.class, Intent.FLAG_ACTIVITY_CLEAR_TOP,
+                Intent.FLAG_ACTIVITY_SINGLE_TOP);
             super.onBackPressed();
         }
     }
@@ -65,35 +65,37 @@ public class QuizResultActivity extends AppCompatActivity {
 
     /**
      * to calculate and display percentage and score
+     *
      * @param score
      */
     public void setScore(int score) {
         int per = score * MULTIPLIER_TO_GET_PERCENTAGE;
         binding.resultProgressBar.setProgress(per);
-        binding.resultProgressBar.setProgressTextFormatPattern(score +" / " + NUMBER_OF_QUESTIONS);
-        String message = getResources().getString(R.string.congratulatory_message_quiz,per + "%");
+        binding.resultProgressBar.setProgressTextFormatPattern(score + " / " + NUMBER_OF_QUESTIONS);
+        String message = getResources().getString(R.string.congratulatory_message_quiz, per + "%");
         binding.congratulatoryMessage.setText(message);
     }
 
     /**
      * to go to Contibutions Activity
      */
-    public void launchContributionActivity(){
+    public void launchContributionActivity() {
         startActivityWithFlags(
-                this, MainActivity.class, Intent.FLAG_ACTIVITY_CLEAR_TOP,
-                Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            this, MainActivity.class, Intent.FLAG_ACTIVITY_CLEAR_TOP,
+            Intent.FLAG_ACTIVITY_SINGLE_TOP);
     }
 
     @Override
     public void onBackPressed() {
         startActivityWithFlags(
-                this, MainActivity.class, Intent.FLAG_ACTIVITY_CLEAR_TOP,
-                Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            this, MainActivity.class, Intent.FLAG_ACTIVITY_CLEAR_TOP,
+            Intent.FLAG_ACTIVITY_SINGLE_TOP);
         super.onBackPressed();
     }
 
     /**
      * Function to call intent to an activity
+     *
      * @param context
      * @param cls
      * @param flags
@@ -101,7 +103,7 @@ public class QuizResultActivity extends AppCompatActivity {
      */
     public static <T> void startActivityWithFlags(Context context, Class<T> cls, int... flags) {
         Intent intent = new Intent(context, cls);
-        for (int flag: flags) {
+        for (int flag : flags) {
             intent.addFlags(flag);
         }
         context.startActivity(intent);
@@ -109,6 +111,7 @@ public class QuizResultActivity extends AppCompatActivity {
 
     /**
      * to inflate menu
+     *
      * @param menu
      * @return
      */
@@ -121,6 +124,7 @@ public class QuizResultActivity extends AppCompatActivity {
 
     /**
      * if share option selected then take screenshot and launch alert
+     *
      * @param item
      * @return
      */
@@ -138,6 +142,7 @@ public class QuizResultActivity extends AppCompatActivity {
 
     /**
      * to store the screenshot of image in bitmap variable temporarily
+     *
      * @param view
      * @return
      */
@@ -151,11 +156,12 @@ public class QuizResultActivity extends AppCompatActivity {
 
     /**
      * share the screenshot through social media
+     *
      * @param bitmap
      */
     void shareScreen(Bitmap bitmap) {
         try {
-            File file = new File(this.getExternalCacheDir(),"screen.png");
+            File file = new File(this.getExternalCacheDir(), "screen.png");
             FileOutputStream fOut = new FileOutputStream(file);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
             fOut.flush();
@@ -173,6 +179,7 @@ public class QuizResultActivity extends AppCompatActivity {
 
     /**
      * It display the alertDialog with Image of screenshot
+     *
      * @param screenshot
      */
     public void showAlert(Bitmap screenshot) {
@@ -184,7 +191,8 @@ public class QuizResultActivity extends AppCompatActivity {
         TextView shareMessage = view.findViewById(R.id.alert_text);
         shareMessage.setText(R.string.quiz_result_share_message);
         alertadd.setView(view);
-        alertadd.setPositiveButton(R.string.about_translate_proceed, (dialog, which) -> shareScreen(screenshot));
+        alertadd.setPositiveButton(R.string.about_translate_proceed,
+            (dialog, which) -> shareScreen(screenshot));
         alertadd.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.cancel());
         alertadd.show();
     }

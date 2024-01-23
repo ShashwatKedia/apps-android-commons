@@ -57,9 +57,11 @@ import java.util.concurrent.Callable;
 import javax.inject.Inject;
 import timber.log.Timber;
 
-public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment implements ViewPager.OnPageChangeListener, MediaDetailFragment.Callback {
+public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment implements
+    ViewPager.OnPageChangeListener, MediaDetailFragment.Callback {
 
-    @Inject BookmarkPicturesDao bookmarkDao;
+    @Inject
+    BookmarkPicturesDao bookmarkDao;
 
     @Inject
     protected OkHttpJsonApiClient okHttpJsonApiClient;
@@ -69,7 +71,8 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
 
     private static CompositeDisposable compositeDisposable = new CompositeDisposable();
 
-    @BindView(R.id.mediaDetailsPager) ViewPager pager;
+    @BindView(R.id.mediaDetailsPager)
+    ViewPager pager;
     private boolean editable;
     private boolean isFeaturedImage;
     private boolean isWikipediaButtonDisplayed;
@@ -79,11 +82,12 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
     private boolean isFromFeaturedRootFragment;
     private int position;
 
-    private ArrayList<Integer> removedItems=new ArrayList<Integer>();
+    private ArrayList<Integer> removedItems = new ArrayList<Integer>();
 
-    public void clearRemoved(){
+    public void clearRemoved() {
         removedItems.clear();
     }
+
     public ArrayList<Integer> getRemovedItems() {
         return removedItems;
     }
@@ -92,9 +96,10 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
     /**
      * Use this factory method to create a new instance of this fragment using the provided
      * parameters.
-     * 
+     *
      * This method will create a new instance of MediaDetailPagerFragment and the arguments will be
      * saved to a bundle which will be later available in the {@link #onCreate(Bundle)}
+     *
      * @param editable
      * @param isFeaturedImage
      * @return
@@ -111,14 +116,13 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
     public MediaDetailPagerFragment() {
         // Required empty public constructor
     };
-   
 
     @Override
     public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container,
-                             Bundle savedInstanceState) {
+        ViewGroup container,
+        Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_media_detail_pager, container, false);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         pager.addOnPageChangeListener(this);
 
         adapter = new MediaDetailAdapter(getChildFragmentManager());
@@ -127,19 +131,18 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
         final ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-        else {
+        } else {
             throw new AssertionError("Action bar should not be null!");
         }
 
         // If fragment is associated with ProfileActivity, then hide the tabLayout
         if (getActivity() instanceof ProfileActivity) {
-            ((ProfileActivity)getActivity()).tabLayout.setVisibility(View.GONE);
+            ((ProfileActivity) getActivity()).tabLayout.setVisibility(View.GONE);
         }
 
         // Else if fragment is associated with MainActivity then hide that tab layout
         else if (getActivity() instanceof MainActivity) {
-            ((MainActivity)getActivity()).hideTabs();
+            ((MainActivity) getActivity()).hideTabs();
         }
 
         pager.setAdapter(adapter);
@@ -168,7 +171,7 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
         if (savedInstanceState != null) {
             editable = savedInstanceState.getBoolean("editable", false);
             isFeaturedImage = savedInstanceState.getBoolean("isFeaturedImage", false);
-            if(null != pager) {
+            if (null != pager) {
                 pager.setCurrentItem(savedInstanceState.getInt("current-page", 0), false);
             }
         }
@@ -204,14 +207,17 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
         switch (item.getItemId()) {
             case R.id.menu_bookmark_current_image:
                 boolean bookmarkExists = bookmarkDao.updateBookmark(bookmark);
-                Snackbar snackbar = bookmarkExists ? Snackbar.make(getView(), R.string.add_bookmark, Snackbar.LENGTH_LONG) : Snackbar.make(getView(), R.string.remove_bookmark, Snackbar.LENGTH_LONG);
+                Snackbar snackbar = bookmarkExists ? Snackbar.make(getView(), R.string.add_bookmark,
+                    Snackbar.LENGTH_LONG)
+                    : Snackbar.make(getView(), R.string.remove_bookmark, Snackbar.LENGTH_LONG);
                 snackbar.show();
                 updateBookmarkState(item);
                 return true;
             case R.id.menu_share_current_image:
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, m.getDisplayTitle() + " \n" + m.getPageTitle().getCanonicalUri());
+                shareIntent.putExtra(Intent.EXTRA_TEXT,
+                    m.getDisplayTitle() + " \n" + m.getPageTitle().getCanonicalUri());
                 startActivity(Intent.createChooser(shareIntent, "Share image via..."));
 
                 //Add media detail to backstack when the share button is clicked
@@ -256,12 +262,14 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
                 showReportDialog(m);
             case R.id.menu_view_set_white_background:
                 if (mediaDetailFragment != null) {
-                    mediaDetailFragment.onImageBackgroundChanged(ContextCompat.getColor(getContext(), R.color.white));
+                    mediaDetailFragment.onImageBackgroundChanged(
+                        ContextCompat.getColor(getContext(), R.color.white));
                 }
                 return true;
             case R.id.menu_view_set_black_background:
                 if (mediaDetailFragment != null) {
-                    mediaDetailFragment.onImageBackgroundChanged(ContextCompat.getColor(getContext(), R.color.black));
+                    mediaDetailFragment.onImageBackgroundChanged(
+                        ContextCompat.getColor(getContext(), R.color.black));
                 }
                 return true;
             default:
@@ -339,8 +347,9 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
     }
 
     /**
-     * Set the media as the device's wallpaper if the imageUrl is not null
-     * Fails silently if setting the wallpaper fails
+     * Set the media as the device's wallpaper if the imageUrl is not null Fails silently if setting
+     * the wallpaper fails
+     *
      * @param media
      */
     private void setWallpaper(Media media) {
@@ -353,6 +362,7 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
 
     /**
      * Set the media as user's leaderboard avatar
+     *
      * @param media
      */
     private void setAvatar(Media media) {
@@ -372,7 +382,7 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
             inflater.inflate(R.menu.fragment_image_detail, menu);
             if (pager != null) {
                 MediaDetailProvider provider = getMediaDetailProvider();
-                if(provider == null) {
+                if (provider == null) {
                     return;
                 }
                 final int position;
@@ -385,10 +395,13 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
                 Media m = provider.getMediaAtPosition(position);
                 if (m != null) {
                     // Enable default set of actions, then re-enable different set of actions only if it is a failed contrib
-                    menu.findItem(R.id.menu_browser_current_image).setEnabled(true).setVisible(true);
+                    menu.findItem(R.id.menu_browser_current_image).setEnabled(true)
+                        .setVisible(true);
                     menu.findItem(R.id.menu_share_current_image).setEnabled(true).setVisible(true);
-                    menu.findItem(R.id.menu_download_current_image).setEnabled(true).setVisible(true);
-                    menu.findItem(R.id.menu_bookmark_current_image).setEnabled(true).setVisible(true);
+                    menu.findItem(R.id.menu_download_current_image).setEnabled(true)
+                        .setVisible(true);
+                    menu.findItem(R.id.menu_bookmark_current_image).setEnabled(true)
+                        .setVisible(true);
                     menu.findItem(R.id.menu_set_as_wallpaper).setEnabled(true).setVisible(true);
                     if (m.getUser() != null) {
                         menu.findItem(R.id.menu_view_user_page).setEnabled(true).setVisible(true);
@@ -397,18 +410,19 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
                     try {
                         URL mediaUrl = new URL(m.getImageUrl());
                         this.handleBackgroundColorMenuItems(
-                            () -> BitmapFactory.decodeStream(mediaUrl.openConnection().getInputStream()),
+                            () -> BitmapFactory.decodeStream(
+                                mediaUrl.openConnection().getInputStream()),
                             menu
                         );
                     } catch (Exception e) {
                         Timber.e("Cant detect media transparency");
                     }
-                    
+
                     // Initialize bookmark object
                     bookmark = new Bookmark(
-                            m.getFilename(),
-                            m.getAuthor(),
-                            BookmarkPicturesContentProvider.uriForName(m.getFilename())
+                        m.getFilename(),
+                        m.getAuthor(),
+                        BookmarkPicturesContentProvider.uriForName(m.getFilename())
                     );
                     updateBookmarkState(menu.findItem(R.id.menu_bookmark_current_image));
                     final Integer contributionState = provider.getContributionStateAt(position);
@@ -418,15 +432,15 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
                             case Contribution.STATE_IN_PROGRESS:
                             case Contribution.STATE_QUEUED:
                                 menu.findItem(R.id.menu_browser_current_image).setEnabled(false)
-                                        .setVisible(false);
+                                    .setVisible(false);
                                 menu.findItem(R.id.menu_share_current_image).setEnabled(false)
-                                        .setVisible(false);
+                                    .setVisible(false);
                                 menu.findItem(R.id.menu_download_current_image).setEnabled(false)
-                                        .setVisible(false);
+                                    .setVisible(false);
                                 menu.findItem(R.id.menu_bookmark_current_image).setEnabled(false)
-                                        .setVisible(false);
+                                    .setVisible(false);
                                 menu.findItem(R.id.menu_set_as_wallpaper).setEnabled(false)
-                                        .setVisible(false);
+                                    .setVisible(false);
                                 break;
                             case Contribution.STATE_COMPLETED:
                                 // Default set of menu items works fine. Treat same as regular media object
@@ -435,15 +449,15 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
                     }
                 } else {
                     menu.findItem(R.id.menu_browser_current_image).setEnabled(false)
-                            .setVisible(false);
+                        .setVisible(false);
                     menu.findItem(R.id.menu_share_current_image).setEnabled(false)
-                            .setVisible(false);
+                        .setVisible(false);
                     menu.findItem(R.id.menu_download_current_image).setEnabled(false)
-                            .setVisible(false);
+                        .setVisible(false);
                     menu.findItem(R.id.menu_bookmark_current_image).setEnabled(false)
-                            .setVisible(false);
+                        .setVisible(false);
                     menu.findItem(R.id.menu_set_as_wallpaper).setEnabled(false)
-                            .setVisible(false);
+                        .setVisible(false);
                 }
 
                 if (!sessionManager.isUserLoggedIn()) {
@@ -455,8 +469,9 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
     }
 
     /**
-     * Decide wether or not we should display the background color menu items
-     * We display them if the image is transparent
+     * Decide wether or not we should display the background color menu items We display them if the
+     * image is transparent
+     *
      * @param getBitmap
      * @param menu
      */
@@ -467,25 +482,27 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(image -> {
                 if (image.hasAlpha()) {
-                    menu.findItem(R.id.menu_view_set_white_background).setVisible(true).setEnabled(true);
-                    menu.findItem(R.id.menu_view_set_black_background).setVisible(true).setEnabled(true);
+                    menu.findItem(R.id.menu_view_set_white_background).setVisible(true)
+                        .setEnabled(true);
+                    menu.findItem(R.id.menu_view_set_black_background).setVisible(true)
+                        .setEnabled(true);
                 }
             });
     }
 
     private void updateBookmarkState(MenuItem item) {
         boolean isBookmarked = bookmarkDao.findBookmark(bookmark);
-        if(isBookmarked) {
-            if(removedItems.contains(pager.getCurrentItem())) {
+        if (isBookmarked) {
+            if (removedItems.contains(pager.getCurrentItem())) {
                 removedItems.remove(new Integer(pager.getCurrentItem()));
             }
-        }
-        else {
-            if(!removedItems.contains(pager.getCurrentItem())) {
+        } else {
+            if (!removedItems.contains(pager.getCurrentItem())) {
                 removedItems.add(pager.getCurrentItem());
             }
         }
-        int icon = isBookmarked ? R.drawable.menu_ic_round_star_filled_24px : R.drawable.menu_ic_round_star_border_24px;
+        int icon = isBookmarked ? R.drawable.menu_ic_round_star_filled_24px
+            : R.drawable.menu_ic_round_star_border_24px;
         item.setIcon(icon);
     }
 
@@ -500,6 +517,7 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
 
     /**
      * This function waits for the item to load then sets the item to current item
+     *
      * @param position current item that to be shown
      */
     private void setViewPagerCurrentItem(int position) {
@@ -507,8 +525,8 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                while(currentItemNotShown[0]){
-                    if(adapter.getCount() > position){
+                while (currentItemNotShown[0]) {
+                    if (adapter.getCount() > position) {
                         pager.setCurrentItem(position, false);
                         currentItemNotShown[0] = false;
                     }
@@ -521,7 +539,7 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
     /**
      * The method notify the viewpager that number of items have changed.
      */
-    public void notifyDataSetChanged(){
+    public void notifyDataSetChanged() {
         if (null != adapter) {
             adapter.notifyDataSetChanged();
         }
@@ -529,7 +547,7 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
 
     @Override
     public void onPageScrolled(int i, float v, int i2) {
-        if(getActivity() == null) {
+        if (getActivity() == null) {
             Timber.d("Returning as activity is destroyed!");
             return;
         }
@@ -558,10 +576,11 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
      */
     @Override
     public void nominatingForDeletion(int index) {
-      provider.refreshNominatedMedia(index);
+        provider.refreshNominatedMedia(index);
     }
 
     public interface MediaDetailProvider {
+
         Media getMediaAtPosition(int i);
 
         int getTotalMediaCount();
@@ -588,16 +607,18 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
         public Fragment getItem(int i) {
             if (i == 0) {
                 // See bug https://code.google.com/p/android/issues/detail?id=27526
-                if(getActivity() == null) {
+                if (getActivity() == null) {
                     Timber.d("Skipping getItem. Returning as activity is destroyed!");
                     return null;
                 }
                 pager.postDelayed(() -> getActivity().invalidateOptionsMenu(), 5);
             }
             if (isFromFeaturedRootFragment) {
-                return MediaDetailFragment.forMedia(position+i, editable, isFeaturedImage, isWikipediaButtonDisplayed);
+                return MediaDetailFragment.forMedia(position + i, editable, isFeaturedImage,
+                    isWikipediaButtonDisplayed);
             } else {
-                return MediaDetailFragment.forMedia(i, editable, isFeaturedImage, isWikipediaButtonDisplayed);
+                return MediaDetailFragment.forMedia(i, editable, isFeaturedImage,
+                    isWikipediaButtonDisplayed);
             }
         }
 
@@ -612,6 +633,7 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
 
         /**
          * Get the currently displayed fragment.
+         *
          * @return
          */
         public Fragment getCurrentFragment() {
@@ -620,6 +642,7 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
 
         /**
          * If current fragment is of type MediaDetailFragment, return it, otherwise return null.
+         *
          * @return MediaDetailFragment
          */
         public MediaDetailFragment getCurrentMediaDetailFragment() {
@@ -633,6 +656,7 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
         /**
          * Called to inform the adapter of which item is currently considered to be the "primary",
          * that is the one show to the user as the current page.
+         *
          * @param container
          * @param position
          * @param object
@@ -641,8 +665,8 @@ public class MediaDetailPagerFragment extends CommonsDaggerSupportFragment imple
         public void setPrimaryItem(@NonNull final ViewGroup container, final int position,
             @NonNull final Object object) {
             // Update the current fragment if changed
-            if(getCurrentFragment() != object) {
-                mCurrentFragment = ((Fragment)object);
+            if (getCurrentFragment() != object) {
+                mCurrentFragment = ((Fragment) object);
             }
             super.setPrimaryItem(container, position, object);
         }

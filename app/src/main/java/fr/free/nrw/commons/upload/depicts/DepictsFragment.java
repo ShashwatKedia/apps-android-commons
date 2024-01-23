@@ -90,13 +90,15 @@ public class DepictsFragment extends UploadBaseFragment implements DepictsContra
 
     @Nullable
     @Override
-    public android.view.View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                                          @Nullable Bundle savedInstanceState) {
+    public android.view.View onCreateView(@NonNull LayoutInflater inflater,
+        @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.upload_depicts_fragment, container, false);
     }
 
     @Override
-    public void onViewCreated(@NonNull android.view.View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull android.view.View view,
+        @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         ButterKnife.bind(this, view);
@@ -116,8 +118,9 @@ public class DepictsFragment extends UploadBaseFragment implements DepictsContra
     private void init() {
 
         if (media == null) {
-            depictsTitle.setText(String.format(getString(R.string.step_count), callback.getIndexInViewFlipper(this) + 1,
-                    callback.getTotalNumberOfSteps(), getString(R.string.depicts_step_title)));
+            depictsTitle.setText(String.format(getString(R.string.step_count),
+                callback.getIndexInViewFlipper(this) + 1,
+                callback.getTotalNumberOfSteps(), getString(R.string.depicts_step_title)));
         } else {
             depictsTitle.setText(R.string.edit_depictions);
             depictsSubTitle.setVisibility(View.GONE);
@@ -139,8 +142,8 @@ public class DepictsFragment extends UploadBaseFragment implements DepictsContra
     }
 
     /**
-     * Removes the depicts subtitle If the activity is the instance of [UploadActivity] and
-     * if multiple files aren't selected.
+     * Removes the depicts subtitle If the activity is the instance of [UploadActivity] and if
+     * multiple files aren't selected.
      */
     private void setDepictsSubTitle() {
         final Activity activity = getActivity();
@@ -267,7 +270,7 @@ public class DepictsFragment extends UploadBaseFragment implements DepictsContra
      * Returns required context
      */
     @Override
-    public Context getFragmentContext(){
+    public Context getFragmentContext() {
         return requireContext();
     }
 
@@ -283,7 +286,7 @@ public class DepictsFragment extends UploadBaseFragment implements DepictsContra
      * Gets existing depictions IDs from media
      */
     @Override
-    public List<String> getExistingDepictions(){
+    public List<String> getExistingDepictions() {
         return (media == null) ? null : media.getDepictionIds();
     }
 
@@ -320,7 +323,7 @@ public class DepictsFragment extends UploadBaseFragment implements DepictsContra
      */
     @OnClick(R.id.depicts_next)
     public void onNextButtonClicked() {
-        if(media != null){
+        if (media != null) {
             presenter.updateDepictions(media);
         } else {
             presenter.verifyDepictions();
@@ -332,7 +335,7 @@ public class DepictsFragment extends UploadBaseFragment implements DepictsContra
      */
     @OnClick(R.id.depicts_previous)
     public void onPreviousButtonClicked() {
-        if(media != null){
+        if (media != null) {
             presenter.clearPreviousSelection();
             updateDepicts();
             goBackToPreviousScreen();
@@ -346,11 +349,11 @@ public class DepictsFragment extends UploadBaseFragment implements DepictsContra
      */
     private void addTextChangeListenerToSearchBox() {
         subscribe = RxTextView.textChanges(depictsSearch)
-                .doOnEach(v -> depictsSearchContainer.setError(null))
-                .takeUntil(RxView.detaches(depictsSearch))
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(filter -> searchForDepictions(filter.toString()), Timber::e);
+            .doOnEach(v -> depictsSearchContainer.setError(null))
+            .takeUntil(RxView.detaches(depictsSearch))
+            .debounce(500, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(filter -> searchForDepictions(filter.toString()), Timber::e);
     }
 
     /**
@@ -361,7 +364,6 @@ public class DepictsFragment extends UploadBaseFragment implements DepictsContra
     private void searchForDepictions(final String query) {
         presenter.searchForDepictions(query);
     }
-
 
 
     /**
@@ -396,7 +398,7 @@ public class DepictsFragment extends UploadBaseFragment implements DepictsContra
             });
 
             Objects.requireNonNull(
-                ((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar())
+                    ((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar())
                 .hide();
 
             if (getParentFragment().getParentFragment().getParentFragment()
@@ -416,7 +418,7 @@ public class DepictsFragment extends UploadBaseFragment implements DepictsContra
         super.onStop();
         if (media != null) {
             Objects.requireNonNull(
-                ((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar())
+                    ((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar())
                 .show();
         }
     }

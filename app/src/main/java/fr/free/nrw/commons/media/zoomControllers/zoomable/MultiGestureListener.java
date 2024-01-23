@@ -9,10 +9,10 @@ import java.util.List;
  * Gesture listener that allows multiple child listeners to be added and notified about gesture
  * events.
  *
- * NOTE: The order of the listeners is important. Listeners can consume gesture events. For
- * example, if one of the child listeners consumes {@link #onLongPress(MotionEvent)} (the listener
- * returned true), subsequent listeners will not be notified about the event any more since it has
- * been consumed.
+ * NOTE: The order of the listeners is important. Listeners can consume gesture events. For example,
+ * if one of the child listeners consumes {@link #onLongPress(MotionEvent)} (the listener returned
+ * true), subsequent listeners will not be notified about the event any more since it has been
+ * consumed.
  */
 public class MultiGestureListener extends GestureDetector.SimpleOnGestureListener {
 
@@ -61,7 +61,7 @@ public class MultiGestureListener extends GestureDetector.SimpleOnGestureListene
 
     @Override
     public synchronized boolean onScroll(
-            MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         final int size = mListeners.size();
         for (int i = 0; i < size; i++) {
             if (mListeners.get(i).onScroll(e1, e2, distanceX, distanceY)) {
@@ -73,7 +73,7 @@ public class MultiGestureListener extends GestureDetector.SimpleOnGestureListene
 
     @Override
     public synchronized boolean onFling(
-            MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         final int size = mListeners.size();
         for (int i = 0; i < size; i++) {
             if (mListeners.get(i).onFling(e1, e2, velocityX, velocityY)) {

@@ -50,7 +50,7 @@ public class MediaLicenseFragment extends UploadBaseFragment implements MediaLic
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
         binding = FragmentMediaLicenseBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
@@ -87,12 +87,12 @@ public class MediaLicenseFragment extends UploadBaseFragment implements MediaLic
     }
 
     /**
-     * Removes the tv Subtitle If the activity is the instance of [UploadActivity] and
-     * if multiple files aren't selected.
+     * Removes the tv Subtitle If the activity is the instance of [UploadActivity] and if multiple
+     * files aren't selected.
      */
     private void setTvSubTitle() {
         final Activity activity = getActivity();
-        if (activity instanceof  UploadActivity) {
+        if (activity instanceof UploadActivity) {
             final boolean isMultipleFileSelected = ((UploadActivity) activity).getIsMultipleFilesSelected();
             if (!isMultipleFileSelected) {
                 binding.tvSubtitle.setVisibility(View.GONE);
@@ -111,7 +111,8 @@ public class MediaLicenseFragment extends UploadBaseFragment implements MediaLic
         if (getActivity() == null) {
             return;
         }
-        adapter = new ArrayAdapter<>(getActivity().getApplicationContext(), android.R.layout.simple_spinner_dropdown_item);
+        adapter = new ArrayAdapter<>(getActivity().getApplicationContext(),
+            android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerLicenseList.setAdapter(adapter);
         binding.spinnerLicenseList.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -152,11 +153,11 @@ public class MediaLicenseFragment extends UploadBaseFragment implements MediaLic
     @Override
     public void updateLicenseSummary(String licenseSummary, int numberOfItems) {
         String licenseHyperLink = "<a href='" + Utils.licenseUrlFor(licenseSummary) + "'>" +
-                getString(Utils.licenseNameFor(licenseSummary)) + "</a><br>";
+            getString(Utils.licenseNameFor(licenseSummary)) + "</a><br>";
 
         setTextViewHTML(binding.tvShareLicenseSummary, getResources()
-                .getQuantityString(R.plurals.share_license_summary, numberOfItems,
-                        licenseHyperLink));
+            .getQuantityString(R.plurals.share_license_summary, numberOfItems,
+                licenseHyperLink));
     }
 
     private void setTextViewHTML(TextView textView, String text) {
@@ -205,9 +206,9 @@ public class MediaLicenseFragment extends UploadBaseFragment implements MediaLic
         /**
          * Show the wlm info message if the upload is a WLM upload
          */
-        if(callback.isWLMUpload() && presenter.isWLMSupportedForThisPlace()){
+        if (callback.isWLMUpload() && presenter.isWLMSupportedForThisPlace()) {
             binding.llInfoMonumentUpload.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             binding.llInfoMonumentUpload.setVisibility(View.GONE);
         }
     }

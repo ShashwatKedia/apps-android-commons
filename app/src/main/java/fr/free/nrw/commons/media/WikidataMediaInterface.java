@@ -14,16 +14,17 @@ public interface WikidataMediaInterface {
 
     /**
      * Fetches list of images from a depiction entity
+     *
      * @param query depictionEntityId ex. "haswbstatement:P180=Q9394"
      * @param srlimit the number of items to fetch
-     * @param sroffset number of depictions already fetched,
-     *                this is useful in implementing pagination
+     * @param sroffset number of depictions already fetched, this is useful in implementing
+     *                 pagination
      * @return Single<MwQueryResponse>
      */
     @GET("w/api.php?action=query&format=json&formatversion=2" + //Basic parameters
         "&generator=search&gsrnamespace=6" + //Search parameters
         MEDIA_PARAMS)
     Single<MwQueryResponse> fetchImagesForDepictedItem(@Query("gsrsearch") String query,
-        @Query("gsrlimit")String srlimit, @Query("gsroffset") String sroffset);
+        @Query("gsrlimit") String srlimit, @Query("gsroffset") String sroffset);
 
 }

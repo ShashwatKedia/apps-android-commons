@@ -28,10 +28,10 @@ public class UploadItem {
     private String fileCreatedDateString; //according to EXIF data
 
     /**
-     * Uri of uploadItem
-     * Uri points to image location or name, eg content://media/external/images/camera/10495 (Android 10)
+     * Uri of uploadItem Uri points to image location or name, eg
+     * content://media/external/images/camera/10495 (Android 10)
      */
-    private  Uri contentUri;
+    private Uri contentUri;
 
 
     @SuppressLint("CheckResult")
@@ -81,15 +81,20 @@ public class UploadItem {
 
     /**
      * getContentUri.
-     * @return Uri of uploadItem
-     * Uri points to image location or name, eg content://media/external/images/camera/10495 (Android 10)
+     *
+     * @return Uri of uploadItem Uri points to image location or name, eg
+     * content://media/external/images/camera/10495 (Android 10)
      */
-    public Uri getContentUri() { return contentUri; }
+    public Uri getContentUri() {
+        return contentUri;
+    }
 
-    public String getFileCreatedDateString() { return fileCreatedDateString; }
+    public String getFileCreatedDateString() {
+        return fileCreatedDateString;
+    }
 
     public void setImageQuality(final int imageQuality) {
-      this.imageQuality.onNext(imageQuality);
+        this.imageQuality.onNext(imageQuality);
     }
 
     /**
@@ -162,9 +167,8 @@ public class UploadItem {
     }
 
     /**
-     * Sets both the contentUri and mediaUri to the specified Uri.
-     * This method allows you to assign the same Uri to both the contentUri and mediaUri
-     * properties.
+     * Sets both the contentUri and mediaUri to the specified Uri. This method allows you to assign
+     * the same Uri to both the contentUri and mediaUri properties.
      *
      * @param uri The Uri to be set as both the contentUri and mediaUri.
      */

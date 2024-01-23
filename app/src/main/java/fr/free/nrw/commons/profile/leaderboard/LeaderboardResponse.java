@@ -10,85 +10,74 @@ import com.google.gson.annotations.SerializedName;
 public class LeaderboardResponse {
 
     /**
-     * Status Code returned from the API
-     * Example value - 200
+     * Status Code returned from the API Example value - 200
      */
     @SerializedName("status")
     @Expose
     private Integer status;
 
     /**
-     * Username returned from the API
-     * Example value - Syced
+     * Username returned from the API Example value - Syced
      */
     @SerializedName("username")
     @Expose
     private String username;
 
     /**
-     * Category count returned from the API
-     * Example value - 10
+     * Category count returned from the API Example value - 10
      */
     @SerializedName("category_count")
     @Expose
     private Integer categoryCount;
 
     /**
-     * Limit returned from the API
-     * Example value - 10
+     * Limit returned from the API Example value - 10
      */
     @SerializedName("limit")
     @Expose
     private int limit;
 
     /**
-     * Avatar returned from the API
-     * Example value - https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Gnome-stock_person.svg/200px-Gnome-stock_person.svg.png
+     * Avatar returned from the API Example value -
+     * https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Gnome-stock_person.svg/200px-Gnome-stock_person.svg.png
      */
     @SerializedName("avatar")
     @Expose
     private String avatar;
 
     /**
-     * Offset returned from the API
-     * Example value - 0
+     * Offset returned from the API Example value - 0
      */
     @SerializedName("offset")
     @Expose
     private int offset;
 
     /**
-     * Duration returned from the API
-     * Example value - yearly
+     * Duration returned from the API Example value - yearly
      */
     @SerializedName("duration")
     @Expose
     private String duration;
 
     /**
-     * Leaderboard list returned from the API
-     * Example value - [{
-     *             "username": "Fæ",
-     *             "category_count": 107147,
-     *             "avatar": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Gnome-stock_person.svg/200px-Gnome-stock_person.svg.png",
-     *             "rank": 1
-     *         }]
+     * Leaderboard list returned from the API Example value - [{ "username": "Fæ", "category_count":
+     * 107147, "avatar":
+     * "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Gnome-stock_person.svg/200px-Gnome-stock_person.svg.png",
+     * "rank": 1 }]
      */
     @SerializedName("leaderboard_list")
     @Expose
     private List<LeaderboardList> leaderboardList = null;
 
     /**
-     * Category returned from the API
-     * Example value - upload
+     * Category returned from the API Example value - upload
      */
     @SerializedName("category")
     @Expose
     private String category;
 
     /**
-     * Rank returned from the API
-     * Example value - 1
+     * Rank returned from the API Example value - 1
      */
     @SerializedName("rank")
     @Expose

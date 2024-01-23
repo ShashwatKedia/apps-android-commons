@@ -92,6 +92,7 @@ public class UploadController {
 
     /**
      * Make the Contribution object ready to be uploaded
+     *
      * @param contribution
      * @return
      */
@@ -105,13 +106,14 @@ public class UploadController {
         if (mimeType != null) {
             Timber.d("MimeType is: %s", mimeType);
             contribution.setMimeType(mimeType);
-            if(mimeType.startsWith("image/") && contribution.getDateCreated() == null){
+            if (mimeType.startsWith("image/") && contribution.getDateCreated() == null) {
                 contribution.setDateCreated(resolveDateTakenOrNow(contentResolver, contribution));
             }
         }
     }
 
-    private String resolveMimeType(final ContentResolver contentResolver, final Contribution contribution) {
+    private String resolveMimeType(final ContentResolver contentResolver,
+        final Contribution contribution) {
         final String mimeType = contribution.getMimeType();
         if (mimeType == null || TextUtils.isEmpty(mimeType) || mimeType.endsWith("*")) {
             return contentResolver.getType(contribution.getLocalUri());
@@ -119,12 +121,15 @@ public class UploadController {
         return mimeType;
     }
 
-    private long resolveDataLength(final ContentResolver contentResolver, final Contribution contribution) {
+    private long resolveDataLength(final ContentResolver contentResolver,
+        final Contribution contribution) {
         try {
             if (contribution.getDataLength() <= 0) {
-                Timber.d("UploadController/doInBackground, contribution.getLocalUri():%s", contribution.getLocalUri());
+                Timber.d("UploadController/doInBackground, contribution.getLocalUri():%s",
+                    contribution.getLocalUri());
                 final AssetFileDescriptor assetFileDescriptor = contentResolver
-                    .openAssetFileDescriptor(Uri.fromFile(new File(contribution.getLocalUri().getPath())), "r");
+                    .openAssetFileDescriptor(
+                        Uri.fromFile(new File(contribution.getLocalUri().getPath())), "r");
                 if (assetFileDescriptor != null) {
                     final long length = assetFileDescriptor.getLength();
                     return length != -1 ? length
@@ -137,9 +142,10 @@ public class UploadController {
         return contribution.getDataLength();
     }
 
-    private Date resolveDateTakenOrNow(final ContentResolver contentResolver, final Contribution contribution) {
+    private Date resolveDateTakenOrNow(final ContentResolver contentResolver,
+        final Contribution contribution) {
         Timber.d("local uri   %s", contribution.getLocalUri());
-        try(final Cursor cursor = dateTakenCursor(contentResolver, contribution)) {
+        try (final Cursor cursor = dateTakenCursor(contentResolver, contribution)) {
             if (cursor != null && cursor.getCount() != 0 && cursor.getColumnCount() != 0) {
                 cursor.moveToFirst();
                 final Date dateCreated = new Date(cursor.getLong(0));
@@ -151,7 +157,8 @@ public class UploadController {
         }
     }
 
-    private Cursor dateTakenCursor(final ContentResolver contentResolver, final Contribution contribution) {
+    private Cursor dateTakenCursor(final ContentResolver contentResolver,
+        final Contribution contribution) {
         return contentResolver.query(contribution.getLocalUri(),
             new String[]{MediaStore.Images.ImageColumns.DATE_TAKEN}, null, null, null);
     }

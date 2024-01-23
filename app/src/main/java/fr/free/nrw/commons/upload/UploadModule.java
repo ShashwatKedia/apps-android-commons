@@ -19,7 +19,7 @@ public abstract class UploadModule {
 
     @Binds
     public abstract UploadContract.UserActionListener bindHomePresenter(UploadPresenter
-                                                                                presenter);
+        presenter);
 
     @Binds
     public abstract CategoriesContract.UserActionListener bindsCategoriesPresenter(
@@ -27,17 +27,17 @@ public abstract class UploadModule {
 
     @Binds
     public abstract MediaLicenseContract.UserActionListener bindsMediaLicensePresenter(
-            MediaLicensePresenter
-                    presenter);
+        MediaLicensePresenter
+            presenter);
 
     @Binds
     public abstract UploadMediaDetailsContract.UserActionListener bindsUploadMediaPresenter(
-            UploadMediaPresenter
-                    presenter);
+        UploadMediaPresenter
+            presenter);
 
     @Binds
     public abstract DepictsContract.UserActionListener bindsDepictsPresenter(
-            DepictsPresenter
+        DepictsPresenter
             presenter
     );
 }

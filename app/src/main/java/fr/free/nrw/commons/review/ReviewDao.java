@@ -20,13 +20,13 @@ public interface ReviewDao {
     void insert(ReviewEntity reviewEntity);
 
     /**
-     * Checks if the image has already been reviewed/skipped by the user
-     * Returns true if the identifier exists in the reviewed images table
+     * Checks if the image has already been reviewed/skipped by the user Returns true if the
+     * identifier exists in the reviewed images table
      *
      * @param imageId
      * @return
      */
-    @Query( "SELECT EXISTS (SELECT * from `reviewed-images` where imageId = (:imageId))")
+    @Query("SELECT EXISTS (SELECT * from `reviewed-images` where imageId = (:imageId))")
     Boolean isReviewedAlready(String imageId);
 
 }

@@ -10,6 +10,7 @@ import fr.free.nrw.commons.BasePresenter;
 public interface MediaLicenseContract {
 
     interface View {
+
         void setLicenses(List<String> licenses);
 
         void setSelectedLicense(String license);
@@ -18,6 +19,7 @@ public interface MediaLicenseContract {
     }
 
     interface UserActionListener extends BasePresenter<View> {
+
         void getLicenses();
 
         void selectLicense(String licenseName);

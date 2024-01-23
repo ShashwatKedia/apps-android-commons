@@ -15,6 +15,7 @@ import io.reactivex.Observable;
 import io.reactivex.Single;
 
 public class UserClient {
+
     private final UserInterface userInterface;
 
     @Inject
@@ -29,28 +30,28 @@ public class UserClient {
      */
     public Single<Boolean> isUserBlockedFromCommons() {
         return userInterface.getUserBlockInfo()
-                .map(MwQueryResponse::query)
-                .map(MwQueryResult::userInfo)
-                .map(UserInfo::blockexpiry)
-                .map(blockExpiry -> {
-                    if (blockExpiry.isEmpty())
-                        return false;
-                    else if ("infinite".equals(blockExpiry))
-                        return true;
-                    else {
-                        Date endDate = DateUtil.iso8601DateParse(blockExpiry);
-                        Date current = new Date();
-                        return endDate.after(current);
-                    }
-                }).single(false);
+            .map(MwQueryResponse::query)
+            .map(MwQueryResult::userInfo)
+            .map(UserInfo::blockexpiry)
+            .map(blockExpiry -> {
+                if (blockExpiry.isEmpty()) {
+                    return false;
+                } else if ("infinite".equals(blockExpiry)) {
+                    return true;
+                } else {
+                    Date endDate = DateUtil.iso8601DateParse(blockExpiry);
+                    Date current = new Date();
+                    return endDate.after(current);
+                }
+            }).single(false);
     }
 
     public Observable<MwQueryLogEvent> logEvents(String user) {
         try {
             return userInterface.getUserLogEvents(user, Collections.emptyMap())
-                    .map(MwQueryResponse::query)
-                    .map(MwQueryResult::logevents)
-                    .flatMap(Observable::fromIterable);
+                .map(MwQueryResponse::query)
+                .map(MwQueryResult::logevents)
+                .flatMap(Observable::fromIterable);
         } catch (Throwable throwable) {
             return Observable.empty();
         }

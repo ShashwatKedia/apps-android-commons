@@ -13,6 +13,7 @@ import fr.free.nrw.commons.utils.SystemThemeUtils;
 import io.reactivex.disposables.CompositeDisposable;
 
 public abstract class BaseActivity extends CommonsDaggerAppCompatActivity {
+
     @Inject
     @Named("default_preferences")
     public JsonKvStore defaultKvStore;

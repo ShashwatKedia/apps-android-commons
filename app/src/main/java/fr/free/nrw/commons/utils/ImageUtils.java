@@ -55,14 +55,14 @@ public class ImageUtils {
      */
     public static final int IMAGE_GEOLOCATION_DIFFERENT = 1 << 3; //8
     /**
-     * The parameter FILE_FBMD is returned from the class ReadFBMD if the uploaded image contains FBMD data else returns IMAGE_OK
-     * ie. 10000
+     * The parameter FILE_FBMD is returned from the class ReadFBMD if the uploaded image contains
+     * FBMD data else returns IMAGE_OK ie. 10000
      */
     public static final int FILE_FBMD = 1 << 4;
     /**
-    * The parameter FILE_NO_EXIF is returned from the class EXIFReader if the uploaded image does not contains EXIF data else returns IMAGE_OK
-    * ie. 100000
-    */
+     * The parameter FILE_NO_EXIF is returned from the class EXIFReader if the uploaded image does
+     * not contains EXIF data else returns IMAGE_OK ie. 100000
+     */
     public static final int FILE_NO_EXIF = 1 << 5;
     public static final int IMAGE_OK = 0;
     public static final int IMAGE_KEEP = -1;
@@ -76,27 +76,27 @@ public class ImageUtils {
     private static ProgressDialog progressDialogAvatar;
 
     @IntDef(
-            flag = true,
-            value = {
-                    IMAGE_DARK,
-                    IMAGE_BLURRY,
-                    IMAGE_DUPLICATE,
-                    IMAGE_OK,
-                    IMAGE_KEEP,
-                    IMAGE_WAIT,
-                    EMPTY_CAPTION,
-                    FILE_NAME_EXISTS,
-                    NO_CATEGORY_SELECTED,
-                    IMAGE_GEOLOCATION_DIFFERENT
-            }
+        flag = true,
+        value = {
+            IMAGE_DARK,
+            IMAGE_BLURRY,
+            IMAGE_DUPLICATE,
+            IMAGE_OK,
+            IMAGE_KEEP,
+            IMAGE_WAIT,
+            EMPTY_CAPTION,
+            FILE_NAME_EXISTS,
+            NO_CATEGORY_SELECTED,
+            IMAGE_GEOLOCATION_DIFFERENT
+        }
     )
     @Retention(RetentionPolicy.SOURCE)
     public @interface Result {
+
     }
 
     /**
-     * @return IMAGE_OK if image is not too dark
-     * IMAGE_DARK if image is too dark
+     * @return IMAGE_OK if image is not too dark IMAGE_DARK if image is too dark
      */
     static @Result int checkIfImageIsTooDark(String imagePath) {
         long millis = System.currentTimeMillis();
@@ -113,16 +113,18 @@ public class ImageUtils {
         } catch (Exception e) {
             Timber.d(e, "Error while checking image darkness.");
         } finally {
-            Timber.d("Checking image darkness took " + (System.currentTimeMillis() - millis) + " ms.");
+            Timber.d(
+                "Checking image darkness took " + (System.currentTimeMillis() - millis) + " ms.");
         }
         return IMAGE_OK;
     }
 
     /**
-     * @param geolocationOfFileString Geolocation of image. If geotag doesn't exists, then this will be an empty string
+     * @param geolocationOfFileString Geolocation of image. If geotag doesn't exists, then this will
+     *                                be an empty string
      * @param latLng Location of wikidata item will be edited after upload
-     * @return false if image is neither dark nor blurry or if the input bitmapRegionDecoder provided is null
-     * true if geolocation of the image and wikidata item are different
+     * @return false if image is neither dark nor blurry or if the input bitmapRegionDecoder
+     * provided is null true if geolocation of the image and wikidata item are different
      */
     static boolean checkImageGeolocationIsDifferent(String geolocationOfFileString, LatLng latLng) {
         Timber.d("Comparing geolocation of file with nearby place location");
@@ -132,8 +134,9 @@ public class ImageUtils {
 
         String[] geolocationOfFile = geolocationOfFileString.split("\\|");
         Double distance = LengthUtils.computeDistanceBetween(
-                new LatLng(Double.parseDouble(geolocationOfFile[0]),Double.parseDouble(geolocationOfFile[1]),0)
-                , latLng);
+            new LatLng(Double.parseDouble(geolocationOfFile[0]),
+                Double.parseDouble(geolocationOfFile[1]), 0)
+            , latLng);
         // Distance is more than 1 km, means that geolocation is wrong
         return distance >= 1000;
     }
@@ -179,7 +182,8 @@ public class ImageUtils {
                     numberOfBrightPixels++;
                 }
 
-                if (numberOfBrightPixels >= brightPixelThreshold || numberOfMediumBrightnessPixels >= mediumBrightPixelThreshold) {
+                if (numberOfBrightPixels >= brightPixelThreshold
+                    || numberOfMediumBrightnessPixels >= mediumBrightPixelThreshold) {
                     return false;
                 }
             }
@@ -188,23 +192,23 @@ public class ImageUtils {
     }
 
     /**
-     * Downloads the image from the URL and sets it as the phone's wallpaper
-     * Fails silently if download or setting wallpaper fails.
+     * Downloads the image from the URL and sets it as the phone's wallpaper Fails silently if
+     * download or setting wallpaper fails.
      *
-     * @param context context
+     * @param context  context
      * @param imageUrl Url of the image
      */
     public static void setWallpaperFromImageUrl(Context context, Uri imageUrl) {
         showSettingWallpaperProgressBar(context);
         Timber.d("Trying to set wallpaper from url %s", imageUrl.toString());
         ImageRequest imageRequest = ImageRequestBuilder
-                .newBuilderWithSource(imageUrl)
-                .setAutoRotateEnabled(true)
-                .build();
+            .newBuilderWithSource(imageUrl)
+            .setAutoRotateEnabled(true)
+            .build();
 
         ImagePipeline imagePipeline = Fresco.getImagePipeline();
         final DataSource<CloseableReference<CloseableImage>>
-                dataSource = imagePipeline.fetchDecodedImage(imageRequest, context);
+            dataSource = imagePipeline.fetchDecodedImage(imageRequest, context);
 
         dataSource.subscribe(new BaseBitmapDataSubscriber() {
 
@@ -229,6 +233,7 @@ public class ImageUtils {
 
     /**
      * Calls the set avatar api to set the image url as user's avatar
+     *
      * @param context
      * @param url
      * @param username
@@ -247,7 +252,8 @@ public class ImageUtils {
                 .subscribe(
                     response -> {
                         if (response != null && response.getStatus().equals("200")) {
-                            ViewUtil.showLongToast(context, context.getString(R.string.avatar_set_successfully));
+                            ViewUtil.showLongToast(context,
+                                context.getString(R.string.avatar_set_successfully));
                             if (progressDialogAvatar != null && progressDialogAvatar.isShowing()) {
                                 progressDialogAvatar.dismiss();
                             }
@@ -255,15 +261,15 @@ public class ImageUtils {
                     },
                     t -> {
                         Timber.e(t, "Setting Avatar Failed");
-                        ViewUtil.showLongToast(context, context.getString(R.string.avatar_set_unsuccessfully));
+                        ViewUtil.showLongToast(context,
+                            context.getString(R.string.avatar_set_unsuccessfully));
                         if (progressDialogAvatar != null) {
                             progressDialogAvatar.cancel();
                         }
                     }
                 ));
-        }
-        catch (Exception e){
-            Timber.d(e+"success");
+        } catch (Exception e) {
+            Timber.d(e + "success");
             ViewUtil.showLongToast(context, context.getString(R.string.avatar_set_unsuccessfully));
             if (progressDialogAvatar != null) {
                 progressDialogAvatar.cancel();
@@ -282,7 +288,8 @@ public class ImageUtils {
             }
         } catch (IOException e) {
             Timber.e(e, "Error setting wallpaper");
-            ViewUtil.showLongToast(context, context.getString(R.string.wallpaper_set_unsuccessfully));
+            ViewUtil.showLongToast(context,
+                context.getString(R.string.wallpaper_set_unsuccessfully));
             if (progressDialogWallpaper != null) {
                 progressDialogWallpaper.cancel();
             }
@@ -290,54 +297,63 @@ public class ImageUtils {
     }
 
     private static void showSettingWallpaperProgressBar(Context context) {
-        progressDialogWallpaper = ProgressDialog.show(context, context.getString(R.string.setting_wallpaper_dialog_title),
-                context.getString(R.string.setting_wallpaper_dialog_message), true);
+        progressDialogWallpaper = ProgressDialog.show(context,
+            context.getString(R.string.setting_wallpaper_dialog_title),
+            context.getString(R.string.setting_wallpaper_dialog_message), true);
     }
 
     private static void showSettingAvatarProgressBar(Context context) {
-        progressDialogAvatar = ProgressDialog.show(context, context.getString(R.string.setting_avatar_dialog_title),
+        progressDialogAvatar = ProgressDialog.show(context,
+            context.getString(R.string.setting_avatar_dialog_title),
             context.getString(R.string.setting_avatar_dialog_message), true);
     }
 
     /**
-     * Result variable is a result of an or operation of all possible problems. Ie. if result
-     * is 0001 means IMAGE_DARK
-     * if result is 1100 IMAGE_DUPLICATE and IMAGE_GEOLOCATION_DIFFERENT
+     * Result variable is a result of an or operation of all possible problems. Ie. if result is
+     * 0001 means IMAGE_DARK if result is 1100 IMAGE_DUPLICATE and IMAGE_GEOLOCATION_DIFFERENT
      */
     public static String getErrorMessageForResult(Context context, @Result int result) {
         StringBuilder errorMessage = new StringBuilder();
-        if (result <= 0 ) {
+        if (result <= 0) {
             Timber.d("No issues to warn user is found");
         } else {
             Timber.d("Issues found to warn user");
 
             errorMessage.append(context.getResources().getString(R.string.upload_problem_exist));
 
-            if ((IMAGE_DARK & result) != 0 ) { // We are checking image dark bit to see if that bit is set or not
-                errorMessage.append("\n - ").append(context.getResources().getString(R.string.upload_problem_image_dark));
+            if ((IMAGE_DARK & result)
+                != 0) { // We are checking image dark bit to see if that bit is set or not
+                errorMessage.append("\n - ")
+                    .append(context.getResources().getString(R.string.upload_problem_image_dark));
             }
 
-            if ((IMAGE_BLURRY & result) != 0 ) {
-                errorMessage.append("\n - ").append(context.getResources().getString(R.string.upload_problem_image_blurry));
+            if ((IMAGE_BLURRY & result) != 0) {
+                errorMessage.append("\n - ")
+                    .append(context.getResources().getString(R.string.upload_problem_image_blurry));
             }
 
-            if ((IMAGE_DUPLICATE & result) != 0 ) {
-                errorMessage.append("\n - ").append(context.getResources().getString(R.string.upload_problem_image_duplicate));
+            if ((IMAGE_DUPLICATE & result) != 0) {
+                errorMessage.append("\n - ").append(
+                    context.getResources().getString(R.string.upload_problem_image_duplicate));
             }
 
-            if ((IMAGE_GEOLOCATION_DIFFERENT & result) != 0 ) {
-                errorMessage.append("\n - ").append(context.getResources().getString(R.string.upload_problem_different_geolocation));
+            if ((IMAGE_GEOLOCATION_DIFFERENT & result) != 0) {
+                errorMessage.append("\n - ").append(context.getResources()
+                    .getString(R.string.upload_problem_different_geolocation));
             }
 
             if ((FILE_FBMD & result) != 0) {
-                errorMessage.append("\n - ").append(context.getResources().getString(R.string.upload_problem_fbmd));
+                errorMessage.append("\n - ")
+                    .append(context.getResources().getString(R.string.upload_problem_fbmd));
             }
 
-            if ((FILE_NO_EXIF & result) != 0){
-                errorMessage.append("\n - ").append(context.getResources().getString(R.string.internet_downloaded));
+            if ((FILE_NO_EXIF & result) != 0) {
+                errorMessage.append("\n - ")
+                    .append(context.getResources().getString(R.string.internet_downloaded));
             }
 
-            errorMessage.append("\n\n").append(context.getResources().getString(R.string.upload_problem_do_you_continue));
+            errorMessage.append("\n\n")
+                .append(context.getResources().getString(R.string.upload_problem_do_you_continue));
         }
 
         return errorMessage.toString();
@@ -345,13 +361,15 @@ public class ImageUtils {
 
     /**
      * Adds red border to a bitmap
+     *
      * @param bitmap
      * @param borderSize
      * @param context
      * @return
      */
     public static Bitmap addRedBorder(Bitmap bitmap, int borderSize, Context context) {
-        Bitmap bmpWithBorder = Bitmap.createBitmap(bitmap.getWidth() + borderSize * 2, bitmap.getHeight() + borderSize * 2, bitmap.getConfig());
+        Bitmap bmpWithBorder = Bitmap.createBitmap(bitmap.getWidth() + borderSize * 2,
+            bitmap.getHeight() + borderSize * 2, bitmap.getConfig());
         Canvas canvas = new Canvas(bmpWithBorder);
         canvas.drawColor(ContextCompat.getColor(context, R.color.deleteRed));
         canvas.drawBitmap(bitmap, borderSize, borderSize, null);

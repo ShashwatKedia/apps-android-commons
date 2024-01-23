@@ -194,7 +194,7 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
 
         // If the image EXIF data contains the location, show the map icon with a green tick
         if (inAppPictureLocation != null ||
-                (uploadableFile != null && uploadableFile.hasLocation())) {
+            (uploadableFile != null && uploadableFile.hasLocation())) {
             Drawable mapTick = getResources().getDrawable(R.drawable.ic_map_tick_white_24dp);
             ibMap.setImageDrawable(mapTick);
         } else {
@@ -246,6 +246,7 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
 
     /**
      * show dialog with info
+     *
      * @param titleStringID
      * @param messageStringId
      */
@@ -256,7 +257,8 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
 
     @OnClick(R.id.btn_next)
     public void onNextButtonClicked() {
-        boolean isValidUploads = presenter.verifyImageQuality(callback.getIndexInViewFlipper(this), inAppPictureLocation);
+        boolean isValidUploads = presenter.verifyImageQuality(callback.getIndexInViewFlipper(this),
+            inAppPictureLocation);
         if (!isValidUploads) {
             startActivityWithFlags(
                 getActivity(), MainActivity.class, Intent.FLAG_ACTIVITY_CLEAR_TOP,
@@ -274,13 +276,14 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
         UploadMediaDetail uploadMediaDetail = new UploadMediaDetail();
         uploadMediaDetail.setManuallyAdded(true);//This was manually added by the user
         uploadMediaDetailAdapter.addDescription(uploadMediaDetail);
-        rvDescriptions.smoothScrollToPosition(uploadMediaDetailAdapter.getItemCount()-1);
+        rvDescriptions.smoothScrollToPosition(uploadMediaDetailAdapter.getItemCount() - 1);
     }
 
     @OnClick(R.id.edit_image)
     public void onEditButtonClicked() {
         presenter.onEditButtonClicked(callback.getIndexInViewFlipper(this));
     }
+
     @Override
     public void showSimilarImageFragment(String originalFilePath, String possibleFilePath,
         ImageCoordinates similarImageCoordinates) {
@@ -289,7 +292,8 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
             @Override
             public void onPositiveResponse() {
                 Timber.d("positive response from similar image fragment");
-                presenter.useSimilarPictureCoordinates(similarImageCoordinates, callback.getIndexInViewFlipper(UploadMediaDetailFragment.this));
+                presenter.useSimilarPictureCoordinates(similarImageCoordinates,
+                    callback.getIndexInViewFlipper(UploadMediaDetailFragment.this));
 
                 // set the description text when user selects to use coordinate from the other image
                 // which was taken within 20s
@@ -317,7 +321,9 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
     }
 
     /**
-     * Sets variables to Show popup if any nearby location needing pictures matches uploadable picture's GPS location
+     * Sets variables to Show popup if any nearby location needing pictures matches uploadable
+     * picture's GPS location
+     *
      * @param uploadItem
      * @param place
      */
@@ -342,6 +348,7 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
 
     /**
      * Shows nearby place found popup
+     *
      * @param place
      */
     @SuppressLint("StringFormatInvalid")
@@ -357,7 +364,8 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
                 place.getName()),
             () -> {
                 UploadActivity.nearbyPopupAnswers.put(place, true);
-                presenter.onUserConfirmedUploadIsOfPlace(place, callback.getIndexInViewFlipper(this));
+                presenter.onUserConfirmedUploadIsOfPlace(place,
+                    callback.getIndexInViewFlipper(this));
             },
             () -> {
                 UploadActivity.nearbyPopupAnswers.put(place, false);
@@ -472,7 +480,8 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
         DialogUtil.showAlertDialog(getActivity(),
             getString(R.string.upload_connection_error_alert_title),
             getString(R.string.upload_connection_error_alert_detail), getString(R.string.ok),
-            () -> {}, true);
+            () -> {
+            }, true);
     }
 
     @Override
@@ -484,11 +493,12 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
      * Launches the image editing activity to edit the specified UploadItem.
      *
      * @param uploadItem The UploadItem to be edited.
-     *
-     * This method is called to start the image editing activity for a specific UploadItem.
-     * It sets the UploadItem as the currently editable item, creates an intent to launch the
-     * EditActivity, and passes the image file path as an extra in the intent. The activity
-     * is started with a request code, allowing the result to be handled in onActivityResult.
+     *                   <p>
+     *                   This method is called to start the image editing activity for a specific
+     *                   UploadItem. It sets the UploadItem as the currently editable item, creates
+     *                   an intent to launch the EditActivity, and passes the image file path as an
+     *                   extra in the intent. The activity is started with a request code, allowing
+     *                   the result to be handled in onActivityResult.
      */
     @Override
     public void showEditActivity(UploadItem uploadItem) {
@@ -501,6 +511,7 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
     /**
      * Start Location picker activity. Show the location first then user can modify it by clicking
      * modify location button.
+     *
      * @param uploadItem current upload item
      */
     private void goToLocationPickerActivity(final UploadItem uploadItem) {
@@ -548,6 +559,7 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
 
     /**
      * Get the coordinates and update the existing coordinates.
+     *
      * @param requestCode code of request
      * @param resultCode code of result
      * @param data intent
@@ -593,13 +605,12 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
             } catch (Exception e) {
                 Timber.e(e);
             }
-        }
-        else if (requestCode == REQUEST_CODE_FOR_VOICE_INPUT) {
+        } else if (requestCode == REQUEST_CODE_FOR_VOICE_INPUT) {
             if (resultCode == RESULT_OK && data != null) {
                 ArrayList<String> result = data.getStringArrayListExtra(
                     RecognizerIntent.EXTRA_RESULTS);
                 uploadMediaDetailAdapter.handleSpeechResult(result.get(0));
-            }else {
+            } else {
                 Timber.e("Error %s", resultCode);
             }
         }
@@ -607,6 +618,7 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
 
     /**
      * Update the old coordinates with new one
+     *
      * @param latitude new latitude
      * @param longitude new longitude
      */
@@ -637,18 +649,18 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
     }
 
     /**
-     * if the media details that come in here are empty
-     * (empty caption AND empty description, with caption being the decider here)
-     * this method allows usage of nearby place caption and description if any
-     * else it takes the media details saved in prior for this picture
-     * @param uploadMediaDetails saved media details,
-     *                           ex: in case when "copy to subsequent media" button is clicked
-     *                           for a previous image
+     * if the media details that come in here are empty (empty caption AND empty description, with
+     * caption being the decider here) this method allows usage of nearby place caption and
+     * description if any else it takes the media details saved in prior for this picture
+     *
+     * @param uploadMediaDetails saved media details, ex: in case when "copy to subsequent media"
+     *                           button is clicked for a previous image
      * @return boolean whether the details are empty or not
      */
     private boolean listContainsEmptyDetails(List<UploadMediaDetail> uploadMediaDetails) {
-        for (UploadMediaDetail uploadDetail: uploadMediaDetails) {
-            if (!TextUtils.isEmpty(uploadDetail.getCaptionText()) && !TextUtils.isEmpty(uploadDetail.getDescriptionText())) {
+        for (UploadMediaDetail uploadDetail : uploadMediaDetails) {
+            if (!TextUtils.isEmpty(uploadDetail.getCaptionText()) && !TextUtils.isEmpty(
+                uploadDetail.getDescriptionText())) {
                 return false;
             }
         }
@@ -689,15 +701,17 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
 
     /**
      * show hide media detail based on
+     *
      * @param shouldExpand
      */
-    private void expandCollapseLlMediaDetail(boolean shouldExpand){
+    private void expandCollapseLlMediaDetail(boolean shouldExpand) {
         llContainerMediaDetail.setVisibility(shouldExpand ? View.VISIBLE : View.GONE);
         isExpanded = !isExpanded;
         ibExpandCollapse.setRotation(ibExpandCollapse.getRotation() + 180);
     }
 
-    @OnClick(R.id.ib_map) public void onIbMapClicked() {
+    @OnClick(R.id.ib_map)
+    public void onIbMapClicked() {
         presenter.onMapIconClicked(callback.getIndexInViewFlipper(this));
     }
 
@@ -720,9 +734,10 @@ public class UploadMediaDetailFragment extends UploadBaseFragment implements
 
 
     @OnClick(R.id.btn_copy_subsequent_media)
-    public void onButtonCopyTitleDescToSubsequentMedia(){
+    public void onButtonCopyTitleDescToSubsequentMedia() {
         presenter.copyTitleAndDescriptionToSubsequentMedia(callback.getIndexInViewFlipper(this));
-        Toast.makeText(getContext(), getResources().getString(R.string.copied_successfully), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), getResources().getString(R.string.copied_successfully),
+            Toast.LENGTH_SHORT).show();
     }
 
 }

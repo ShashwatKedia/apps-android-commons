@@ -22,7 +22,7 @@ public class ImageUtilsWrapper {
     public Single<Integer> checkImageGeolocationIsDifferent(String geolocationOfFileString,
         LatLng latLng) {
         return Single.fromCallable(
-            () -> ImageUtils.checkImageGeolocationIsDifferent(geolocationOfFileString, latLng))
+                () -> ImageUtils.checkImageGeolocationIsDifferent(geolocationOfFileString, latLng))
             .subscribeOn(Schedulers.computation())
             .map(isDifferent -> isDifferent ? ImageUtils.IMAGE_GEOLOCATION_DIFFERENT
                 : ImageUtils.IMAGE_OK);

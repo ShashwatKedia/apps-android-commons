@@ -3,6 +3,7 @@ package fr.free.nrw.commons.nearby;
 import com.mapbox.mapboxsdk.annotations.Marker;
 
 public class NearbyMarker extends Marker {
+
     private final Place place;
     private NearbyBaseMarker nearbyBaseMarker;
 

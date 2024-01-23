@@ -10,16 +10,18 @@ import android.widget.TextView;
 import androidx.viewpager.widget.PagerAdapter;
 
 public class WelcomePagerAdapter extends PagerAdapter {
+
     private static final int[] PAGE_LAYOUTS = new int[]{
-            R.layout.welcome_wikipedia,
-            R.layout.welcome_do_upload,
-            R.layout.welcome_dont_upload,
-            R.layout.welcome_image_example,
-            R.layout.welcome_final
+        R.layout.welcome_wikipedia,
+        R.layout.welcome_do_upload,
+        R.layout.welcome_dont_upload,
+        R.layout.welcome_image_example,
+        R.layout.welcome_final
     };
 
     /**
      * Gets total number of layouts
+     *
      * @return Number of layouts
      */
     @Override
@@ -29,7 +31,8 @@ public class WelcomePagerAdapter extends PagerAdapter {
 
     /**
      * Compares given view with provided object
-     * @param view Adapter view
+     *
+     * @param view   Adapter view
      * @param object Adapter object
      * @return Equality between view and object
      */
@@ -47,15 +50,17 @@ public class WelcomePagerAdapter extends PagerAdapter {
         if (position == PAGE_LAYOUTS.length - 1) {
             // Add link to more information
             TextView moreInfo = layout.findViewById(R.id.welcomeInfo);
-            Utils.setUnderlinedText(moreInfo, R.string.welcome_help_button_text, container.getContext());
+            Utils.setUnderlinedText(moreInfo, R.string.welcome_help_button_text,
+                container.getContext());
             moreInfo.setOnClickListener(view -> Utils.handleWebUrl(
-                    container.getContext(),
-                    Uri.parse("https://commons.wikimedia.org/wiki/Help:Contents")
+                container.getContext(),
+                Uri.parse("https://commons.wikimedia.org/wiki/Help:Contents")
             ));
 
             // Handle click of finishTutorialButton ("YES!" button) inside layout
             layout.findViewById(R.id.finishTutorialButton)
-                    .setOnClickListener(view -> ((WelcomeActivity) container.getContext()).finishTutorial());
+                .setOnClickListener(
+                    view -> ((WelcomeActivity) container.getContext()).finishTutorial());
         }
 
         container.addView(layout);
@@ -64,6 +69,7 @@ public class WelcomePagerAdapter extends PagerAdapter {
 
     /**
      * Provides a way to remove an item from container
+     *
      * @param container Adapter view group container
      * @param position Index of item
      * @param obj Adapter object

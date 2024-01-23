@@ -14,6 +14,7 @@ import fr.free.nrw.commons.kvstore.JsonKvStore;
 import okhttp3.OkHttpClient;
 
 public class CommonsAppAdapter extends AppAdapter {
+
     private final int DEFAULT_THUMB_SIZE = 640;
     private final String COOKIE_STORE_NAME = "cookie_store";
 
@@ -71,7 +72,7 @@ public class CommonsAppAdapter extends AppAdapter {
             return null;
         }
         return GsonUnmarshaller.unmarshal(SharedPreferenceCookieManager.class,
-                preferences.getString(COOKIE_STORE_NAME, null));
+            preferences.getString(COOKIE_STORE_NAME, null));
     }
 
     @Override

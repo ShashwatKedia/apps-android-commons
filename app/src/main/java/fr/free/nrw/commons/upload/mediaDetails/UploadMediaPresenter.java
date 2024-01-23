@@ -41,10 +41,10 @@ import timber.log.Timber;
 public class UploadMediaPresenter implements UserActionListener, SimilarImageInterface {
 
     private static final UploadMediaDetailsContract.View DUMMY = (UploadMediaDetailsContract.View) Proxy
-            .newProxyInstance(
-                    UploadMediaDetailsContract.View.class.getClassLoader(),
-                    new Class[]{UploadMediaDetailsContract.View.class},
-                    (proxy, method, methodArgs) -> null);
+        .newProxyInstance(
+            UploadMediaDetailsContract.View.class.getClassLoader(),
+            new Class[]{UploadMediaDetailsContract.View.class},
+            (proxy, method, methodArgs) -> null);
 
     private final UploadRepository repository;
     private UploadMediaDetailsContract.View view = DUMMY;
@@ -55,14 +55,16 @@ public class UploadMediaPresenter implements UserActionListener, SimilarImageInt
     private Scheduler ioScheduler;
     private Scheduler mainThreadScheduler;
 
-    private final List<String> WLM_SUPPORTED_COUNTRIES= Arrays.asList("am","at","az","br","hr","sv","fi","fr","de","gh","in","ie","il","mk","my","mt","pk","pe","pl","ru","rw","si","es","se","tw","ug","ua","us");
+    private final List<String> WLM_SUPPORTED_COUNTRIES = Arrays.asList("am", "at", "az", "br", "hr",
+        "sv", "fi", "fr", "de", "gh", "in", "ie", "il", "mk", "my", "mt", "pk", "pe", "pl", "ru",
+        "rw", "si", "es", "se", "tw", "ug", "ua", "us");
     private Map<String, String> countryNamesAndCodes = null;
 
     @Inject
     public UploadMediaPresenter(UploadRepository uploadRepository,
         @Named("default_preferences") JsonKvStore defaultKVStore,
-                                @Named(IO_THREAD) Scheduler ioScheduler,
-                                @Named(MAIN_THREAD) Scheduler mainThreadScheduler) {
+        @Named(IO_THREAD) Scheduler ioScheduler,
+        @Named(MAIN_THREAD) Scheduler mainThreadScheduler) {
         this.repository = uploadRepository;
         this.defaultKVStore = defaultKVStore;
         this.ioScheduler = ioScheduler;
@@ -82,19 +84,21 @@ public class UploadMediaPresenter implements UserActionListener, SimilarImageInt
     }
 
     /**
-     * Receives the corresponding uploadable file, processes it and return the view with and uplaod item
-     *  @param uploadableFile
+     * Receives the corresponding uploadable file, processes it and return the view with and uplaod
+     * item
+     *
+     * @param uploadableFile
      * @param place
      */
     @Override
     public void receiveImage(final UploadableFile uploadableFile, final Place place,
-                            LatLng inAppPictureLocation) {
+        LatLng inAppPictureLocation) {
         view.showProgress(true);
         compositeDisposable.add(
             repository
                 .preProcessImage(uploadableFile, place, this, inAppPictureLocation)
                 .map(uploadItem -> {
-                    if(place!=null && place.isMonument()){
+                    if (place != null && place.isMonument()) {
                         if (place.location != null) {
                             final String countryCode = reverseGeoCode(place.location);
                             if (countryCode != null && WLM_SUPPORTED_COUNTRIES
@@ -114,7 +118,7 @@ public class UploadMediaPresenter implements UserActionListener, SimilarImageInt
                         view.updateMediaDetails(uploadItem.getUploadMediaDetails());
                         final ImageCoordinates gpsCoords = uploadItem.getGpsCoords();
                         final boolean hasImageCoordinates =
-                          gpsCoords != null && gpsCoords.getImageCoordsExists();
+                            gpsCoords != null && gpsCoords.getImageCoordsExists();
                         view.showProgress(false);
                         if (hasImageCoordinates && place == null) {
                             checkNearbyPlaces(uploadItem);
@@ -124,21 +128,22 @@ public class UploadMediaPresenter implements UserActionListener, SimilarImageInt
     }
 
     @Nullable
-    private String reverseGeoCode(final LatLng latLng){
-        if(countryNamesAndCodes == null){
+    private String reverseGeoCode(final LatLng latLng) {
+        if (countryNamesAndCodes == null) {
             countryNamesAndCodes = getCountryNamesAndCodes();
         }
-        return countryNamesAndCodes.get(Coordinates2Country.country(latLng.getLatitude(), latLng.getLongitude()));
+        return countryNamesAndCodes.get(
+            Coordinates2Country.country(latLng.getLatitude(), latLng.getLongitude()));
     }
 
     /**
-     * Creates HashMap containing all ISO countries 2-letter codes provided by <code>Locale.getISOCountries()</code>
-     * and their english names
+     * Creates HashMap containing all ISO countries 2-letter codes provided by
+     * <code>Locale.getISOCountries()</code> and their english names
      *
-     * @return HashMap where Key is country english name and Value is 2-letter country code
-     * e.g. ["Germany":"DE", ...]
+     * @return HashMap where Key is country english name and Value is 2-letter country code e.g.
+     * ["Germany":"DE", ...]
      */
-    private Map<String, String> getCountryNamesAndCodes(){
+    private Map<String, String> getCountryNamesAndCodes() {
         final Map<String, String> result = new HashMap<>();
 
         final String[] isoCountries = Locale.getISOCountries();
@@ -155,21 +160,22 @@ public class UploadMediaPresenter implements UserActionListener, SimilarImageInt
 
     /**
      * This method checks for the nearest location that needs images and suggests it to the user.
+     *
      * @param uploadItem
      */
     private void checkNearbyPlaces(final UploadItem uploadItem) {
         final Disposable checkNearbyPlaces = Maybe.fromCallable(() -> repository
                 .checkNearbyPlaces(uploadItem.getGpsCoords().getDecLatitude(),
-                        uploadItem.getGpsCoords().getDecLongitude()))
-                .subscribeOn(ioScheduler)
-                .observeOn(mainThreadScheduler)
-                .subscribe(place -> {
-                        if (place != null) {
-                            view.onNearbyPlaceFound(uploadItem, place);
-                        }
-                    },
-                    throwable -> Timber.e(throwable, "Error occurred in processing images"));
-            compositeDisposable.add(checkNearbyPlaces);
+                    uploadItem.getGpsCoords().getDecLongitude()))
+            .subscribeOn(ioScheduler)
+            .observeOn(mainThreadScheduler)
+            .subscribe(place -> {
+                    if (place != null) {
+                        view.onNearbyPlaceFound(uploadItem, place);
+                    }
+                },
+                throwable -> Timber.e(throwable, "Error occurred in processing images"));
+        compositeDisposable.add(checkNearbyPlaces);
     }
 
     /**
@@ -179,62 +185,64 @@ public class UploadMediaPresenter implements UserActionListener, SimilarImageInt
      */
     @Override
     public boolean verifyImageQuality(int uploadItemIndex, LatLng inAppPictureLocation) {
-      final List<UploadItem> uploadItems = repository.getUploads();
-      if (uploadItems.size()==0) {
-          view.showProgress(false);
-          // No internationalization required for this error message because it's an internal error.
-          view.showMessage("Internal error: Zero upload items received by the Upload Media Detail Fragment. Sorry, please upload again.",R.color.color_error);
-          return false;
-      }
-      UploadItem uploadItem = uploadItems.get(uploadItemIndex);
+        final List<UploadItem> uploadItems = repository.getUploads();
+        if (uploadItems.size() == 0) {
+            view.showProgress(false);
+            // No internationalization required for this error message because it's an internal error.
+            view.showMessage(
+                "Internal error: Zero upload items received by the Upload Media Detail Fragment. Sorry, please upload again.",
+                R.color.color_error);
+            return false;
+        }
+        UploadItem uploadItem = uploadItems.get(uploadItemIndex);
 
-      if (uploadItem.getGpsCoords().getDecimalCoords() == null && inAppPictureLocation == null) {
-          final Runnable onSkipClicked = () -> {
-              view.showProgress(true);
-              compositeDisposable.add(
-                  repository
-                      .getImageQuality(uploadItem, inAppPictureLocation)
-                      .observeOn(mainThreadScheduler)
-                      .subscribe(imageResult -> {
-                              view.showProgress(false);
-                              handleImageResult(imageResult, uploadItem);
-                          },
-                          throwable -> {
-                              view.showProgress(false);
-                              if (throwable instanceof UnknownHostException) {
-                                  view.showConnectionErrorPopup();
-                              } else {
-                                  view.showMessage("" + throwable.getLocalizedMessage(),
-                                      R.color.color_error);
-                              }
-                              Timber.e(throwable, "Error occurred while handling image");
-                          })
-              );
-          };
-          view.displayAddLocationDialog(onSkipClicked);
-      } else {
-          view.showProgress(true);
-          compositeDisposable.add(
-              repository
-                  .getImageQuality(uploadItem, inAppPictureLocation)
-                  .observeOn(mainThreadScheduler)
-                  .subscribe(imageResult -> {
-                          view.showProgress(false);
-                          handleImageResult(imageResult, uploadItem);
-                      },
-                      throwable -> {
-                          view.showProgress(false);
-                          if (throwable instanceof UnknownHostException) {
-                              view.showConnectionErrorPopup();
-                          } else {
-                              view.showMessage("" + throwable.getLocalizedMessage(),
-                                  R.color.color_error);
-                          }
-                          Timber.e(throwable, "Error occurred while handling image");
-                      })
-          );
-      }
-      return true;
+        if (uploadItem.getGpsCoords().getDecimalCoords() == null && inAppPictureLocation == null) {
+            final Runnable onSkipClicked = () -> {
+                view.showProgress(true);
+                compositeDisposable.add(
+                    repository
+                        .getImageQuality(uploadItem, inAppPictureLocation)
+                        .observeOn(mainThreadScheduler)
+                        .subscribe(imageResult -> {
+                                view.showProgress(false);
+                                handleImageResult(imageResult, uploadItem);
+                            },
+                            throwable -> {
+                                view.showProgress(false);
+                                if (throwable instanceof UnknownHostException) {
+                                    view.showConnectionErrorPopup();
+                                } else {
+                                    view.showMessage("" + throwable.getLocalizedMessage(),
+                                        R.color.color_error);
+                                }
+                                Timber.e(throwable, "Error occurred while handling image");
+                            })
+                );
+            };
+            view.displayAddLocationDialog(onSkipClicked);
+        } else {
+            view.showProgress(true);
+            compositeDisposable.add(
+                repository
+                    .getImageQuality(uploadItem, inAppPictureLocation)
+                    .observeOn(mainThreadScheduler)
+                    .subscribe(imageResult -> {
+                            view.showProgress(false);
+                            handleImageResult(imageResult, uploadItem);
+                        },
+                        throwable -> {
+                            view.showProgress(false);
+                            if (throwable instanceof UnknownHostException) {
+                                view.showConnectionErrorPopup();
+                            } else {
+                                view.showMessage("" + throwable.getLocalizedMessage(),
+                                    R.color.color_error);
+                            }
+                            Timber.e(throwable, "Error occurred while handling image");
+                        })
+            );
+        }
+        return true;
     }
 
 
@@ -245,65 +253,67 @@ public class UploadMediaPresenter implements UserActionListener, SimilarImageInt
      */
     @Override
     public void copyTitleAndDescriptionToSubsequentMedia(int indexInViewFlipper) {
-      for(int i = indexInViewFlipper+1; i < repository.getCount(); i++){
-        final UploadItem subsequentUploadItem = repository.getUploads().get(i);
-        subsequentUploadItem.setMediaDetails(deepCopy(repository.getUploads().get(indexInViewFlipper).getUploadMediaDetails()));
-      }
+        for (int i = indexInViewFlipper + 1; i < repository.getCount(); i++) {
+            final UploadItem subsequentUploadItem = repository.getUploads().get(i);
+            subsequentUploadItem.setMediaDetails(
+                deepCopy(repository.getUploads().get(indexInViewFlipper).getUploadMediaDetails()));
+        }
     }
 
-  /**
-   * Fetches and set the caption and description of the item
-   *
-   * @param indexInViewFlipper
-   */
-  @Override
-  public void fetchTitleAndDescription(int indexInViewFlipper) {
-    final UploadItem currentUploadItem = repository.getUploads().get(indexInViewFlipper);
-    view.updateMediaDetails(currentUploadItem.getUploadMediaDetails());
-  }
-
-  @NotNull
-  private List<UploadMediaDetail> deepCopy(List<UploadMediaDetail> uploadMediaDetails) {
-    final ArrayList<UploadMediaDetail> newList = new ArrayList<>();
-    for (UploadMediaDetail uploadMediaDetail : uploadMediaDetails) {
-      newList.add(uploadMediaDetail.javaCopy());
+    /**
+     * Fetches and set the caption and description of the item
+     *
+     * @param indexInViewFlipper
+     */
+    @Override
+    public void fetchTitleAndDescription(int indexInViewFlipper) {
+        final UploadItem currentUploadItem = repository.getUploads().get(indexInViewFlipper);
+        view.updateMediaDetails(currentUploadItem.getUploadMediaDetails());
     }
-    return newList;
-  }
 
-  @Override
-  public void useSimilarPictureCoordinates(ImageCoordinates imageCoordinates, int uploadItemIndex) {
-    repository.useSimilarPictureCoordinates(imageCoordinates, uploadItemIndex);
-  }
+    @NotNull
+    private List<UploadMediaDetail> deepCopy(List<UploadMediaDetail> uploadMediaDetails) {
+        final ArrayList<UploadMediaDetail> newList = new ArrayList<>();
+        for (UploadMediaDetail uploadMediaDetail : uploadMediaDetails) {
+            newList.add(uploadMediaDetail.javaCopy());
+        }
+        return newList;
+    }
 
-  @Override
-  public void onMapIconClicked(int indexInViewFlipper) {
-    view.showExternalMap(repository.getUploads().get(indexInViewFlipper));
-  }
+    @Override
+    public void useSimilarPictureCoordinates(ImageCoordinates imageCoordinates,
+        int uploadItemIndex) {
+        repository.useSimilarPictureCoordinates(imageCoordinates, uploadItemIndex);
+    }
 
-  @Override
-  public void onEditButtonClicked(int indexInViewFlipper){
-      view.showEditActivity(repository.getUploads().get(indexInViewFlipper));
-  }
+    @Override
+    public void onMapIconClicked(int indexInViewFlipper) {
+        view.showExternalMap(repository.getUploads().get(indexInViewFlipper));
+    }
 
-  @Override
-  public void onUserConfirmedUploadIsOfPlace(Place place, int uploadItemPosition) {
-    final List<UploadMediaDetail> uploadMediaDetails = repository.getUploads()
-        .get(uploadItemPosition)
-        .getUploadMediaDetails();
-    UploadItem uploadItem = repository.getUploads()
-        .get(uploadItemPosition);
-    uploadItem.setPlace(place);
-    uploadMediaDetails.set(0, new UploadMediaDetail(place));
-    view.updateMediaDetails(uploadMediaDetails);
-  }
+    @Override
+    public void onEditButtonClicked(int indexInViewFlipper) {
+        view.showEditActivity(repository.getUploads().get(indexInViewFlipper));
+    }
 
-  /**
+    @Override
+    public void onUserConfirmedUploadIsOfPlace(Place place, int uploadItemPosition) {
+        final List<UploadMediaDetail> uploadMediaDetails = repository.getUploads()
+            .get(uploadItemPosition)
+            .getUploadMediaDetails();
+        UploadItem uploadItem = repository.getUploads()
+            .get(uploadItemPosition);
+        uploadItem.setPlace(place);
+        uploadMediaDetails.set(0, new UploadMediaDetail(place));
+        view.updateMediaDetails(uploadMediaDetails);
+    }
+
+    /**
      * handles image quality verifications
      *
-   * @param imageResult
-   * @param uploadItem
-   */
+     * @param imageResult
+     * @param uploadItem
+     */
     public void handleImageResult(Integer imageResult,
         UploadItem uploadItem) {
         if (imageResult == IMAGE_KEEP || imageResult == IMAGE_OK) {
@@ -349,6 +359,7 @@ public class UploadMediaPresenter implements UserActionListener, SimilarImageInt
 
     /**
      * notifies the user that a similar image exists
+     *
      * @param originalFilePath
      * @param possibleFilePath
      * @param similarImageCoordinates

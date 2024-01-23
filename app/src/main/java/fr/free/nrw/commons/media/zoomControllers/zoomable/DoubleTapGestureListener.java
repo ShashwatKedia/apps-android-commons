@@ -10,6 +10,7 @@ import android.view.MotionEvent;
  * @see ZoomableDraweeView#setTapListener(GestureDetector.SimpleOnGestureListener)
  */
 public class DoubleTapGestureListener extends GestureDetector.SimpleOnGestureListener {
+
     private static final int DURATION_MS = 300;
     private static final int DOUBLE_TAP_SCROLL_THRESHOLD = 20;
 
@@ -26,7 +27,7 @@ public class DoubleTapGestureListener extends GestureDetector.SimpleOnGestureLis
     @Override
     public boolean onDoubleTapEvent(MotionEvent e) {
         AbstractAnimatedZoomableController zc =
-                (AbstractAnimatedZoomableController) mDraweeView.getZoomableController();
+            (AbstractAnimatedZoomableController) mDraweeView.getZoomableController();
         PointF vp = new PointF(e.getX(), e.getY());
         PointF ip = zc.mapViewToImage(vp);
         switch (e.getActionMasked()) {
@@ -51,10 +52,12 @@ public class DoubleTapGestureListener extends GestureDetector.SimpleOnGestureLis
                     final float minScale = zc.getMinScaleFactor();
                     if (zc.getScaleFactor() < (maxScale + minScale) / 2) {
                         zc.zoomToPoint(
-                                maxScale, ip, vp, DefaultZoomableController.LIMIT_ALL, DURATION_MS, null);
+                            maxScale, ip, vp, DefaultZoomableController.LIMIT_ALL, DURATION_MS,
+                            null);
                     } else {
                         zc.zoomToPoint(
-                                minScale, ip, vp, DefaultZoomableController.LIMIT_ALL, DURATION_MS, null);
+                            minScale, ip, vp, DefaultZoomableController.LIMIT_ALL, DURATION_MS,
+                            null);
                     }
                 }
                 mDoubleTapScroll = false;
@@ -65,7 +68,7 @@ public class DoubleTapGestureListener extends GestureDetector.SimpleOnGestureLis
 
     private boolean shouldStartDoubleTapScroll(PointF viewPoint) {
         double dist =
-                Math.hypot(viewPoint.x - mDoubleTapViewPoint.x, viewPoint.y - mDoubleTapViewPoint.y);
+            Math.hypot(viewPoint.x - mDoubleTapViewPoint.x, viewPoint.y - mDoubleTapViewPoint.y);
         return dist > DOUBLE_TAP_SCROLL_THRESHOLD;
     }
 

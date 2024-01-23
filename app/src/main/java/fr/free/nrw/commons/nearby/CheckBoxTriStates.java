@@ -22,12 +22,14 @@ public class CheckBoxTriStates extends AppCompatCheckBox {
 
     static public final int CHECKED = 1;
 
-    private int state=UNKNOWN;
+    private int state = UNKNOWN;
 
     private Callback callback;
 
-    public interface Callback{
-        void filterByMarkerType(@Nullable List<Label> selectedLabels, int state, boolean b, boolean b1);
+    public interface Callback {
+
+        void filterByMarkerType(@Nullable List<Label> selectedLabels, int state, boolean b,
+            boolean b1);
     }
 
     public void setCallback(Callback callback) {
@@ -35,8 +37,8 @@ public class CheckBoxTriStates extends AppCompatCheckBox {
     }
 
     /**
-     * This is the listener set to the super class which is going to be evoke each
-     * time the check state has changed.
+     * This is the listener set to the super class which is going to be evoke each time the check
+     * state has changed.
      */
     private final OnCheckedChangeListener privateListener = new CompoundButton.OnCheckedChangeListener() {
 
@@ -44,7 +46,8 @@ public class CheckBoxTriStates extends AppCompatCheckBox {
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
             switch (state) {
                 case UNKNOWN:
-                    setState(UNCHECKED);;
+                    setState(UNCHECKED);
+                    ;
                     break;
                 case UNCHECKED:
                     setState(CHECKED);
@@ -82,10 +85,10 @@ public class CheckBoxTriStates extends AppCompatCheckBox {
     }
 
     public void setState(int state) {
-        if(this.state != state) {
+        if (this.state != state) {
             this.state = state;
 
-            if(this.clientListener != null) {
+            if (this.clientListener != null) {
                 this.clientListener.onCheckedChanged(this, this.isChecked());
             }
 
@@ -101,7 +104,7 @@ public class CheckBoxTriStates extends AppCompatCheckBox {
 
         // we never truly set the listener to the client implementation, instead we only hold
         // a reference to it and evoke it when needed.
-        if(this.privateListener != listener) {
+        if (this.privateListener != listener) {
             this.clientListener = listener;
         }
 

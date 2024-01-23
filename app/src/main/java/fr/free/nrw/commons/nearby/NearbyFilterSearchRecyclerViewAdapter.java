@@ -23,8 +23,8 @@ import fr.free.nrw.commons.nearby.presenter.NearbyParentFragmentPresenter;
 import java.util.Collections;
 
 public class NearbyFilterSearchRecyclerViewAdapter
-        extends RecyclerView.Adapter<NearbyFilterSearchRecyclerViewAdapter.RecyclerViewHolder>
-        implements Filterable {
+    extends RecyclerView.Adapter<NearbyFilterSearchRecyclerViewAdapter.RecyclerViewHolder>
+    implements Filterable {
 
     private final LayoutInflater inflater;
     private Context context;
@@ -42,20 +42,23 @@ public class NearbyFilterSearchRecyclerViewAdapter
         this.callback = callback;
     }
 
-    public NearbyFilterSearchRecyclerViewAdapter(Context context, ArrayList<Label> labels, RecyclerView recyclerView) {
+    public NearbyFilterSearchRecyclerViewAdapter(Context context, ArrayList<Label> labels,
+        RecyclerView recyclerView) {
         this.context = context;
         this.labels = labels;
         this.displayedLabels = labels;
         smoothScroller = new
-                LinearSmoothScroller(context) {
-                    @Override protected int getVerticalSnapPreference() {
-                        return LinearSmoothScroller.SNAP_TO_START;
-                    }
-                };
+            LinearSmoothScroller(context) {
+                @Override
+                protected int getVerticalSnapPreference() {
+                    return LinearSmoothScroller.SNAP_TO_START;
+                }
+            };
         inflater = LayoutInflater.from(context);
     }
 
     public class RecyclerViewHolder extends RecyclerView.ViewHolder {
+
         public TextView placeTypeLabel;
         public ImageView placeTypeIcon;
         public LinearLayout placeTypeLayout;
@@ -71,7 +74,9 @@ public class NearbyFilterSearchRecyclerViewAdapter
     @NonNull
     @Override
     public RecyclerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemView = inflater.inflate(callback.isDarkTheme() ? R.layout.nearby_search_list_item_dark : R.layout.nearby_search_list_item, parent, false);
+        View itemView = inflater.inflate(
+            callback.isDarkTheme() ? R.layout.nearby_search_list_item_dark
+                : R.layout.nearby_search_list_item, parent, false);
         return new RecyclerViewHolder(itemView);
     }
 
@@ -169,7 +174,7 @@ public class NearbyFilterSearchRecyclerViewAdapter
         notifyDataSetChanged();
     }
 
-    public interface  Callback {
+    public interface Callback {
 
         void setCheckboxUnknown();
 

@@ -11,20 +11,27 @@ import com.facebook.common.logging.FLog;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-/** Zoomable controller that calculates transformation based on touch events. */
+/**
+ * Zoomable controller that calculates transformation based on touch events.
+ */
 public class DefaultZoomableController
-        implements ZoomableController, TransformGestureDetector.Listener {
+    implements ZoomableController, TransformGestureDetector.Listener {
 
-    /** Interface for handling call backs when the image bounds are set. */
+    /**
+     * Interface for handling call backs when the image bounds are set.
+     */
     public interface ImageBoundsListener {
+
         void onImageBoundsSet(RectF imageBounds);
     }
 
     @IntDef(
-            flag = true,
-            value = {LIMIT_NONE, LIMIT_TRANSLATION_X, LIMIT_TRANSLATION_Y, LIMIT_SCALE, LIMIT_ALL})
+        flag = true,
+        value = {LIMIT_NONE, LIMIT_TRANSLATION_X, LIMIT_TRANSLATION_Y, LIMIT_SCALE, LIMIT_ALL})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface LimitFlag {}
+    public @interface LimitFlag {
+
+    }
 
     public static final int LIMIT_NONE = 0;
     public static final int LIMIT_TRANSLATION_X = 1;
@@ -76,7 +83,9 @@ public class DefaultZoomableController
         mGestureDetector.setListener(this);
     }
 
-    /** Rests the controller. */
+    /**
+     * Rests the controller.
+     */
     public void reset() {
         FLog.v(TAG, "reset");
         mGestureDetector.reset();
@@ -85,13 +94,17 @@ public class DefaultZoomableController
         onTransformChanged();
     }
 
-    /** Sets the zoomable listener. */
+    /**
+     * Sets the zoomable listener.
+     */
     @Override
     public void setListener(Listener listener) {
         mListener = listener;
     }
 
-    /** Sets whether the controller is enabled or not. */
+    /**
+     * Sets whether the controller is enabled or not.
+     */
     @Override
     public void setEnabled(boolean enabled) {
         mIsEnabled = enabled;
@@ -100,38 +113,52 @@ public class DefaultZoomableController
         }
     }
 
-    /** Gets whether the controller is enabled or not. */
+    /**
+     * Gets whether the controller is enabled or not.
+     */
     @Override
     public boolean isEnabled() {
         return mIsEnabled;
     }
 
-    /** Sets whether the rotation gesture is enabled or not. */
+    /**
+     * Sets whether the rotation gesture is enabled or not.
+     */
     public void setRotationEnabled(boolean enabled) {
         mIsRotationEnabled = enabled;
     }
 
-    /** Gets whether the rotation gesture is enabled or not. */
+    /**
+     * Gets whether the rotation gesture is enabled or not.
+     */
     public boolean isRotationEnabled() {
         return mIsRotationEnabled;
     }
 
-    /** Sets whether the scale gesture is enabled or not. */
+    /**
+     * Sets whether the scale gesture is enabled or not.
+     */
     public void setScaleEnabled(boolean enabled) {
         mIsScaleEnabled = enabled;
     }
 
-    /** Gets whether the scale gesture is enabled or not. */
+    /**
+     * Gets whether the scale gesture is enabled or not.
+     */
     public boolean isScaleEnabled() {
         return mIsScaleEnabled;
     }
 
-    /** Sets whether the translation gesture is enabled or not. */
+    /**
+     * Sets whether the translation gesture is enabled or not.
+     */
     public void setTranslationEnabled(boolean enabled) {
         mIsTranslationEnabled = enabled;
     }
 
-    /** Gets whether the translations gesture is enabled or not. */
+    /**
+     * Gets whether the translations gesture is enabled or not.
+     */
     public boolean isTranslationEnabled() {
         return mIsTranslationEnabled;
     }
@@ -145,7 +172,9 @@ public class DefaultZoomableController
         mMinScaleFactor = minScaleFactor;
     }
 
-    /** Gets the minimum scale factor allowed. */
+    /**
+     * Gets the minimum scale factor allowed.
+     */
     public float getMinScaleFactor() {
         return mMinScaleFactor;
     }
@@ -159,28 +188,38 @@ public class DefaultZoomableController
         mMaxScaleFactor = maxScaleFactor;
     }
 
-    /** Gets the maximum scale factor allowed. */
+    /**
+     * Gets the maximum scale factor allowed.
+     */
     public float getMaxScaleFactor() {
         return mMaxScaleFactor;
     }
 
-    /** Sets whether gesture zooms are enabled or not. */
+    /**
+     * Sets whether gesture zooms are enabled or not.
+     */
     public void setGestureZoomEnabled(boolean isGestureZoomEnabled) {
         mIsGestureZoomEnabled = isGestureZoomEnabled;
     }
 
-    /** Gets whether gesture zooms are enabled or not. */
+    /**
+     * Gets whether gesture zooms are enabled or not.
+     */
     public boolean isGestureZoomEnabled() {
         return mIsGestureZoomEnabled;
     }
 
-    /** Gets the current scale factor. */
+    /**
+     * Gets the current scale factor.
+     */
     @Override
     public float getScaleFactor() {
         return getMatrixScaleFactor(mActiveTransform);
     }
 
-    /** Sets the image bounds, in view-absolute coordinates. */
+    /**
+     * Sets the image bounds, in view-absolute coordinates.
+     */
     @Override
     public void setImageBounds(RectF imageBounds) {
         if (!imageBounds.equals(mImageBounds)) {
@@ -192,38 +231,52 @@ public class DefaultZoomableController
         }
     }
 
-    /** Gets the non-transformed image bounds, in view-absolute coordinates. */
+    /**
+     * Gets the non-transformed image bounds, in view-absolute coordinates.
+     */
     public RectF getImageBounds() {
         return mImageBounds;
     }
 
-    /** Gets the transformed image bounds, in view-absolute coordinates */
+    /**
+     * Gets the transformed image bounds, in view-absolute coordinates
+     */
     private RectF getTransformedImageBounds() {
         return mTransformedImageBounds;
     }
 
-    /** Sets the view bounds. */
+    /**
+     * Sets the view bounds.
+     */
     @Override
     public void setViewBounds(RectF viewBounds) {
         mViewBounds.set(viewBounds);
     }
 
-    /** Gets the view bounds. */
+    /**
+     * Gets the view bounds.
+     */
     public RectF getViewBounds() {
         return mViewBounds;
     }
 
-    /** Sets the image bounds listener. */
+    /**
+     * Sets the image bounds listener.
+     */
     public void setImageBoundsListener(@Nullable ImageBoundsListener imageBoundsListener) {
         mImageBoundsListener = imageBoundsListener;
     }
 
-    /** Gets the image bounds listener. */
+    /**
+     * Gets the image bounds listener.
+     */
     public @Nullable ImageBoundsListener getImageBoundsListener() {
         return mImageBoundsListener;
     }
 
-    /** Returns true if the zoomable transform is identity matrix. */
+    /**
+     * Returns true if the zoomable transform is identity matrix.
+     */
     @Override
     public boolean isIdentity() {
         return isMatrixIdentity(mActiveTransform, 1e-3f);
@@ -244,7 +297,8 @@ public class DefaultZoomableController
      * Gets the matrix that transforms image-absolute coordinates to view-absolute coordinates. The
      * zoomable transformation is taken into account.
      *
-     * <p>Internal matrix is exposed for performance reasons and is not to be modified by the callers.
+     * Internal matrix is exposed for performance reasons and is not to be modified by the
+     * callers.
      */
     @Override
     public Matrix getTransform() {
@@ -297,15 +351,17 @@ public class DefaultZoomableController
      */
     private void mapAbsoluteToRelative(float[] destPoints, float[] srcPoints, int numPoints) {
         for (int i = 0; i < numPoints; i++) {
-            destPoints[i * 2 + 0] = (srcPoints[i * 2 + 0] - mImageBounds.left) / mImageBounds.width();
-            destPoints[i * 2 + 1] = (srcPoints[i * 2 + 1] - mImageBounds.top) / mImageBounds.height();
+            destPoints[i * 2 + 0] =
+                (srcPoints[i * 2 + 0] - mImageBounds.left) / mImageBounds.width();
+            destPoints[i * 2 + 1] =
+                (srcPoints[i * 2 + 1] - mImageBounds.top) / mImageBounds.height();
         }
     }
 
     /**
      * Maps array of 2D points from image-relative to view-absolute coordinates. This does NOT take
-     * into account the zoomable transformation. Points are represented by float array of [x0, y0, x1,
-     * y1, ...].
+     * into account the zoomable transformation. Points are represented by float array of [x0, y0,
+     * x1, y1, ...].
      *
      * @param destPoints destination array (may be the same as source array)
      * @param srcPoints source array
@@ -319,8 +375,8 @@ public class DefaultZoomableController
     }
 
     /**
-     * Zooms to the desired scale and positions the image so that the given image point corresponds to
-     * the given view point.
+     * Zooms to the desired scale and positions the image so that the given image point corresponds
+     * to the given view point.
      *
      * @param scale desired scale, will be limited to {min, max} scale factor
      * @param imagePoint 2D point in image's relative coordinate system (i.e. 0 <= x, y <= 1)
@@ -333,8 +389,8 @@ public class DefaultZoomableController
     }
 
     /**
-     * Calculates the zoom transformation that would zoom to the desired scale and position the image
-     * so that the given image point corresponds to the given view point.
+     * Calculates the zoom transformation that would zoom to the desired scale and position the
+     * image so that the given image point corresponds to the given view point.
      *
      * @param outTransform the matrix to store the result to
      * @param scale desired scale, will be limited to {min, max} scale factor
@@ -344,11 +400,11 @@ public class DefaultZoomableController
      * @return whether or not the transform has been corrected due to limitation
      */
     protected boolean calculateZoomToPointTransform(
-            Matrix outTransform,
-            float scale,
-            PointF imagePoint,
-            PointF viewPoint,
-            @LimitFlag int limitFlags) {
+        Matrix outTransform,
+        float scale,
+        PointF imagePoint,
+        PointF viewPoint,
+        @LimitFlag int limitFlags) {
         float[] viewAbsolute = mTempValues;
         viewAbsolute[0] = imagePoint.x;
         viewAbsolute[1] = imagePoint.y;
@@ -357,25 +413,32 @@ public class DefaultZoomableController
         float distanceY = viewPoint.y - viewAbsolute[1];
         boolean transformCorrected = false;
         outTransform.setScale(scale, scale, viewAbsolute[0], viewAbsolute[1]);
-        transformCorrected |= limitScale(outTransform, viewAbsolute[0], viewAbsolute[1], limitFlags);
+        transformCorrected |= limitScale(outTransform, viewAbsolute[0], viewAbsolute[1],
+            limitFlags);
         outTransform.postTranslate(distanceX, distanceY);
         transformCorrected |= limitTranslation(outTransform, limitFlags);
         return transformCorrected;
     }
 
-    /** Sets a new zoom transformation. */
+    /**
+     * Sets a new zoom transformation.
+     */
     public void setTransform(Matrix newTransform) {
         FLog.v(TAG, "setTransform");
         mActiveTransform.set(newTransform);
         onTransformChanged();
     }
 
-    /** Gets the gesture detector. */
+    /**
+     * Gets the gesture detector.
+     */
     protected TransformGestureDetector getDetector() {
         return mGestureDetector;
     }
 
-    /** Notifies controller of the received touch event. */
+    /**
+     * Notifies controller of the received touch event.
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         FLog.v(TAG, "onTouchEvent: action: ", event.getAction());
@@ -437,7 +500,7 @@ public class DefaultZoomableController
             outTransform.postScale(scale, scale, detector.getPivotX(), detector.getPivotY());
         }
         transformCorrected |=
-                limitScale(outTransform, detector.getPivotX(), detector.getPivotY(), limitTypes);
+            limitScale(outTransform, detector.getPivotX(), detector.getPivotY(), limitTypes);
         if (mIsTranslationEnabled) {
             outTransform.postTranslate(detector.getTranslationX(), detector.getTranslationY());
         }
@@ -473,7 +536,7 @@ public class DefaultZoomableController
      * @return whether limiting has been applied or not
      */
     private boolean limitScale(
-            Matrix transform, float pivotX, float pivotY, @LimitFlag int limitTypes) {
+        Matrix transform, float pivotX, float pivotY, @LimitFlag int limitTypes) {
         if (!shouldLimit(limitTypes, LIMIT_SCALE)) {
             return false;
         }
@@ -505,15 +568,15 @@ public class DefaultZoomableController
         b.set(mImageBounds);
         transform.mapRect(b);
         float offsetLeft =
-                shouldLimit(limitTypes, LIMIT_TRANSLATION_X)
-                        ? getOffset(
-                        b.left, b.right, mViewBounds.left, mViewBounds.right, mImageBounds.centerX())
-                        : 0;
+            shouldLimit(limitTypes, LIMIT_TRANSLATION_X)
+                ? getOffset(
+                b.left, b.right, mViewBounds.left, mViewBounds.right, mImageBounds.centerX())
+                : 0;
         float offsetTop =
-                shouldLimit(limitTypes, LIMIT_TRANSLATION_Y)
-                        ? getOffset(
-                        b.top, b.bottom, mViewBounds.top, mViewBounds.bottom, mImageBounds.centerY())
-                        : 0;
+            shouldLimit(limitTypes, LIMIT_TRANSLATION_Y)
+                ? getOffset(
+                b.top, b.bottom, mViewBounds.top, mViewBounds.bottom, mImageBounds.centerY())
+                : 0;
         if (offsetLeft != 0 || offsetTop != 0) {
             transform.postTranslate(offsetLeft, offsetTop);
             return true;
@@ -536,12 +599,12 @@ public class DefaultZoomableController
     }
 
     /**
-     * Returns the offset necessary to make sure that: - the image is centered within the limit if the
-     * image is smaller than the limit - there is no empty space on left/right if the image is bigger
-     * than the limit
+     * Returns the offset necessary to make sure that: - the image is centered within the limit if
+     * the image is smaller than the limit - there is no empty space on left/right if the image is
+     * bigger than the limit
      */
     private float getOffset(
-            float imageStart, float imageEnd, float limitStart, float limitEnd, float limitCenter) {
+        float imageStart, float imageEnd, float limitStart, float limitEnd, float limitCenter) {
         float imageWidth = imageEnd - imageStart, limitWidth = limitEnd - limitStart;
         float limitInnerWidth = Math.min(limitCenter - limitStart, limitEnd - limitCenter) * 2;
         // center if smaller than limitInnerWidth
@@ -566,21 +629,25 @@ public class DefaultZoomableController
         return 0;
     }
 
-    /** Limits the value to the given min and max range. */
+    /**
+     * Limits the value to the given min and max range.
+     */
     private float limit(float value, float min, float max) {
         return Math.min(Math.max(min, value), max);
     }
 
     /**
-     * Gets the scale factor for the given matrix. This method assumes the equal scaling factor for X
-     * and Y axis.
+     * Gets the scale factor for the given matrix. This method assumes the equal scaling factor for
+     * X and Y axis.
      */
     private float getMatrixScaleFactor(Matrix transform) {
         transform.getValues(mTempValues);
         return mTempValues[Matrix.MSCALE_X];
     }
 
-    /** Same as {@code Matrix.isIdentity()}, but with tolerance {@code eps}. */
+    /**
+     * Same as {@code Matrix.isIdentity()}, but with tolerance {@code eps}.
+     */
     private boolean isMatrixIdentity(Matrix transform, float eps) {
         // Checks whether the given matrix is close enough to the identity matrix:
         //   1 0 0
@@ -602,12 +669,14 @@ public class DefaultZoomableController
         return true;
     }
 
-    /** Returns whether the scroll can happen in all directions. I.e. the image is not on any edge. */
+    /**
+     * Returns whether the scroll can happen in all directions. I.e. the image is not on any edge.
+     */
     private boolean canScrollInAllDirection() {
         return mTransformedImageBounds.left < mViewBounds.left - EPS
-                && mTransformedImageBounds.top < mViewBounds.top - EPS
-                && mTransformedImageBounds.right > mViewBounds.right + EPS
-                && mTransformedImageBounds.bottom > mViewBounds.bottom + EPS;
+            && mTransformedImageBounds.top < mViewBounds.top - EPS
+            && mTransformedImageBounds.right > mViewBounds.right + EPS
+            && mTransformedImageBounds.bottom > mViewBounds.bottom + EPS;
     }
 
     @Override

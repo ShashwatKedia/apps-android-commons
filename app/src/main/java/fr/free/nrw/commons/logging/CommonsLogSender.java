@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @Singleton
 public class CommonsLogSender extends LogsSender {
+
     private static final String LOGS_PRIVATE_EMAIL = "commons-app-android-private@googlegroups.com";
     private static final String LOGS_PRIVATE_EMAIL_SUBJECT = "Commons Android App (%s) Logs";
     private static final String BETA_LOGS_PRIVATE_EMAIL_SUBJECT = "Commons Beta Android App (%s) Logs";
@@ -27,14 +28,15 @@ public class CommonsLogSender extends LogsSender {
 
     @Inject
     public CommonsLogSender(SessionManager sessionManager,
-                            Context context) {
+        Context context) {
         super(sessionManager);
 
         this.sessionManager = sessionManager;
         this.context = context;
         boolean isBeta = ConfigUtils.isBetaFlavour();
         this.logFileName = isBeta ? "CommonsBetaAppLogs.zip" : "CommonsAppLogs.zip";
-        String emailSubjectFormat = isBeta ? BETA_LOGS_PRIVATE_EMAIL_SUBJECT : LOGS_PRIVATE_EMAIL_SUBJECT;
+        String emailSubjectFormat =
+            isBeta ? BETA_LOGS_PRIVATE_EMAIL_SUBJECT : LOGS_PRIVATE_EMAIL_SUBJECT;
         this.emailSubject = String.format(emailSubjectFormat, sessionManager.getUserName());
         this.emailBody = getExtraInfo();
         this.mailTo = LOGS_PRIVATE_EMAIL;
@@ -42,6 +44,7 @@ public class CommonsLogSender extends LogsSender {
 
     /**
      * Attach any extra meta information about user or device that might help in debugging
+     *
      * @return String with extra meta information useful for debugging
      */
     @Override
@@ -50,44 +53,43 @@ public class CommonsLogSender extends LogsSender {
 
         // Getting API Level
         builder.append("API level: ")
-                .append(DeviceInfoUtil.getAPILevel())
-                .append("\n");
+            .append(DeviceInfoUtil.getAPILevel())
+            .append("\n");
 
         // Getting Android Version
         builder.append("Android version: ")
-                .append(DeviceInfoUtil.getAndroidVersion())
-                .append("\n");
+            .append(DeviceInfoUtil.getAndroidVersion())
+            .append("\n");
 
         // Getting Device Manufacturer
         builder.append("Device manufacturer: ")
-                .append(DeviceInfoUtil.getDeviceManufacturer())
-                .append("\n");
+            .append(DeviceInfoUtil.getDeviceManufacturer())
+            .append("\n");
 
         // Getting Device Model
         builder.append("Device model: ")
-                .append(DeviceInfoUtil.getDeviceModel())
-                .append("\n");
+            .append(DeviceInfoUtil.getDeviceModel())
+            .append("\n");
 
         // Getting Device Name
         builder.append("Device: ")
-                .append(DeviceInfoUtil.getDevice())
-                .append("\n");
+            .append(DeviceInfoUtil.getDevice())
+            .append("\n");
 
         // Getting Network Type
         builder.append("Network type: ")
-                .append(DeviceInfoUtil.getConnectionType(context))
-                .append("\n");
+            .append(DeviceInfoUtil.getConnectionType(context))
+            .append("\n");
 
         // Getting App Version
         builder.append("App version name: ")
-                .append(ConfigUtils.getVersionNameWithSha(context))
-                .append("\n");
+            .append(ConfigUtils.getVersionNameWithSha(context))
+            .append("\n");
 
         // Getting Username
         builder.append("User name: ")
-                .append(sessionManager.getUserName())
-                .append("\n");
-
+            .append(sessionManager.getUserName())
+            .append("\n");
 
         return builder.toString();
     }

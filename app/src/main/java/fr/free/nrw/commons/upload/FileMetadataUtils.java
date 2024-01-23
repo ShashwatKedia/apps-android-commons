@@ -22,7 +22,6 @@ import static androidx.exifinterface.media.ExifInterface.TAG_SOFTWARE;
 
 /**
  * Support utils for EXIF metadata handling
- *
  */
 public class FileMetadataUtils {
 
@@ -41,8 +40,8 @@ public class FileMetadataUtils {
                 return new String[]{TAG_COPYRIGHT};
             case "Location":
                 return new String[]{TAG_GPS_LATITUDE, TAG_GPS_LATITUDE_REF,
-                        TAG_GPS_LONGITUDE, TAG_GPS_LONGITUDE_REF,
-                        TAG_GPS_ALTITUDE, TAG_GPS_ALTITUDE_REF};
+                    TAG_GPS_LONGITUDE, TAG_GPS_LONGITUDE_REF,
+                    TAG_GPS_ALTITUDE, TAG_GPS_ALTITUDE_REF};
             case "Camera Model":
                 return new String[]{TAG_MAKE, TAG_MODEL};
             case "Lens Model":

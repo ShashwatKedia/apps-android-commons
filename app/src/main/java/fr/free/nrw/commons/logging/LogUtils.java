@@ -9,6 +9,7 @@ import fr.free.nrw.commons.utils.ConfigUtils;
  * Returns the log directory
  */
 public final class LogUtils {
+
     private LogUtils() {
     }
 
@@ -20,9 +21,11 @@ public final class LogUtils {
     public static String getLogDirectory() {
         String dirPath;
         if (ConfigUtils.isBetaFlavour()) {
-            dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/logs/beta";
+            dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                + "/logs/beta";
         } else {
-            dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/logs/prod";
+            dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                + "/logs/prod";
         }
 
         FileUtils.recursivelyCreateDirs(dirPath);
@@ -37,9 +40,11 @@ public final class LogUtils {
     public static String getLogZipDirectory() {
         String dirPath;
         if (ConfigUtils.isBetaFlavour()) {
-            dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/logs/beta/zip";
+            dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                + "/logs/beta/zip";
         } else {
-            dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/logs/prod/zip";
+            dirPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+                + "/logs/prod/zip";
         }
 
         FileUtils.recursivelyCreateDirs(dirPath);

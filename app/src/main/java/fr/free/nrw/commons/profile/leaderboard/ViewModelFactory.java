@@ -8,8 +8,8 @@ import fr.free.nrw.commons.mwapi.OkHttpJsonApiClient;
 import javax.inject.Inject;
 
 /**
- * This class extends the ViewModelProvider.Factory and creates a ViewModelFactory class
- * for leaderboardListViewModel
+ * This class extends the ViewModelProvider.Factory and creates a ViewModelFactory class for
+ * leaderboardListViewModel
  */
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
@@ -18,7 +18,8 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
 
     @Inject
-    public ViewModelFactory(OkHttpJsonApiClient okHttpJsonApiClient, SessionManager sessionManager) {
+    public ViewModelFactory(OkHttpJsonApiClient okHttpJsonApiClient,
+        SessionManager sessionManager) {
         this.okHttpJsonApiClient = okHttpJsonApiClient;
         this.sessionManager = sessionManager;
     }
@@ -26,6 +27,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
     /**
      * Creats a new LeaderboardListViewModel
+     *
      * @param modelClass
      * @param <T>
      * @return

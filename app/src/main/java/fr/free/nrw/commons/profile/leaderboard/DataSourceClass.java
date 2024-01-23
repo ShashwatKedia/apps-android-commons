@@ -28,6 +28,7 @@ public class DataSourceClass extends PageKeyedDataSource<Integer, LeaderboardLis
 
     /**
      * Initialise the Data Source Class with API params
+     *
      * @param okHttpJsonApiClient
      * @param sessionManager
      * @param duration
@@ -35,7 +36,7 @@ public class DataSourceClass extends PageKeyedDataSource<Integer, LeaderboardLis
      * @param limit
      * @param offset
      */
-    public DataSourceClass(OkHttpJsonApiClient okHttpJsonApiClient,SessionManager sessionManager,
+    public DataSourceClass(OkHttpJsonApiClient okHttpJsonApiClient, SessionManager sessionManager,
         String duration, String category, int limit, int offset) {
         this.okHttpJsonApiClient = okHttpJsonApiClient;
         this.sessionManager = sessionManager;
@@ -56,6 +57,7 @@ public class DataSourceClass extends PageKeyedDataSource<Integer, LeaderboardLis
 
     /**
      * Loads the initial set of data from API
+     *
      * @param params
      * @param callback
      */
@@ -64,12 +66,12 @@ public class DataSourceClass extends PageKeyedDataSource<Integer, LeaderboardLis
         @NonNull LoadInitialCallback<Integer, LeaderboardList> callback) {
 
         compositeDisposable.add(okHttpJsonApiClient
-                .getLeaderboard(Objects.requireNonNull(sessionManager.getCurrentAccount()).name,
-                    duration, category, String.valueOf(limit), String.valueOf(offset))
-                .doOnSubscribe(disposable -> {
-                    compositeDisposable.add(disposable);
-                    progressLiveStatus.postValue(LOADING);
-                }).subscribe(
+            .getLeaderboard(Objects.requireNonNull(sessionManager.getCurrentAccount()).name,
+                duration, category, String.valueOf(limit), String.valueOf(offset))
+            .doOnSubscribe(disposable -> {
+                compositeDisposable.add(disposable);
+                progressLiveStatus.postValue(LOADING);
+            }).subscribe(
                 response -> {
                     if (response != null && response.getStatus() == 200) {
                         progressLiveStatus.postValue(LOADED);
@@ -86,6 +88,7 @@ public class DataSourceClass extends PageKeyedDataSource<Integer, LeaderboardLis
 
     /**
      * Loads any data before the inital page is loaded
+     *
      * @param params
      * @param callback
      */
@@ -97,6 +100,7 @@ public class DataSourceClass extends PageKeyedDataSource<Integer, LeaderboardLis
 
     /**
      * Loads the next set of data on scrolling with offset as the limit of the last set of data
+     *
      * @param params
      * @param callback
      */

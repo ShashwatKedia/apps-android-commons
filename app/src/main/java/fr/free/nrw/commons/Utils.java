@@ -42,6 +42,7 @@ public class Utils {
 
     /**
      * Generates licence name with given ID
+     *
      * @param license License ID
      * @return Name of license
      */
@@ -63,6 +64,7 @@ public class Utils {
 
     /**
      * Generates license url with given ID
+     *
      * @param license License ID
      * @return Url of license
      */
@@ -87,7 +89,9 @@ public class Utils {
     }
 
     /**
-     * Adds extension to filename. Converts to .jpg if system provides .jpeg, adds .jpg if no extension detected
+     * Adds extension to filename. Converts to .jpg if system provides .jpeg, adds .jpg if no
+     * extension detected
+     *
      * @param title File name
      * @param extension Correct extension
      * @return File with correct extension
@@ -101,15 +105,15 @@ public class Utils {
         }
         title = jpegPattern.matcher(title).replaceFirst(".jpg");
         if (extension != null && !title.toLowerCase(Locale.getDefault())
-                .endsWith("." + extension.toLowerCase(Locale.ENGLISH))) {
+            .endsWith("." + extension.toLowerCase(Locale.ENGLISH))) {
             title += "." + extension;
         }
 
         // If extension is still null, make it jpg. (Hotfix for https://github.com/commons-app/apps-android-commons/issues/228)
         // If title has an extension in it, if won't be true
-        if (extension == null && title.lastIndexOf(".")<=0) {
-           extension = "jpg";
-           title += "." + extension;
+        if (extension == null && title.lastIndexOf(".") <= 0) {
+            extension = "jpg";
+            title += "." + extension;
         }
 
         return title;
@@ -117,21 +121,23 @@ public class Utils {
 
     /**
      * Launches intent to rate app
+     *
      * @param context
      */
     public static void rateApp(Context context) {
         final String appPackageName = context.getPackageName();
         try {
-            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Urls.PLAY_STORE_PREFIX + appPackageName)));
-        }
-        catch (android.content.ActivityNotFoundException anfe) {
+            context.startActivity(
+                new Intent(Intent.ACTION_VIEW, Uri.parse(Urls.PLAY_STORE_PREFIX + appPackageName)));
+        } catch (android.content.ActivityNotFoundException anfe) {
             handleWebUrl(context, Uri.parse(Urls.PLAY_STORE_URL_PREFIX + appPackageName));
         }
     }
 
     /**
-     * Opens Custom Tab Activity with in-app browser for the specified URL.
-     * Launches intent for web URL
+     * Opens Custom Tab Activity with in-app browser for the specified URL. Launches intent for web
+     * URL
+     *
      * @param context
      * @param url
      */
@@ -139,7 +145,8 @@ public class Utils {
         Timber.d("Launching web url %s", url.toString());
         Intent browserIntent = new Intent(Intent.ACTION_VIEW, url);
         if (browserIntent.resolveActivity(context.getPackageManager()) == null) {
-            Toast toast = Toast.makeText(context, context.getString(R.string.no_web_browser), LENGTH_SHORT);
+            Toast toast = Toast.makeText(context, context.getString(R.string.no_web_browser),
+                LENGTH_SHORT);
             toast.show();
             return;
         }
@@ -151,7 +158,8 @@ public class Utils {
 
         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
         builder.setDefaultColorSchemeParams(color);
-        builder.setExitAnimations(context, android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+        builder.setExitAnimations(context, android.R.anim.slide_in_left,
+            android.R.anim.slide_out_right);
         CustomTabsIntent customTabsIntent = builder.build();
         // Clear previous browser tasks, so that back/exit buttons work as intended.
         customTabsIntent.intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -159,8 +167,9 @@ public class Utils {
     }
 
     /**
-     * Util function to handle geo coordinates
-     * It no longer depends on google maps and any app capable of handling the map intent can handle it
+     * Util function to handle geo coordinates It no longer depends on google maps and any app
+     * capable of handling the map intent can handle it
+     *
      * @param context
      * @param latLng
      */
@@ -192,11 +201,12 @@ public class Utils {
     }
 
     /*
-    *Copies the content to the clipboard
-    *
-    */
-    public static void copy(String label,String text, Context context){
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+     *Copies the content to the clipboard
+     *
+     */
+    public static void copy(String label, String text, Context context) {
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(
+            Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText(label, text);
         clipboard.setPrimaryClip(clip);
     }
@@ -208,7 +218,8 @@ public class Utils {
      * @param stringResourceName string resource name
      * @param context
      */
-    public static void setUnderlinedText(TextView textView, int stringResourceName, Context context) {
+    public static void setUnderlinedText(TextView textView, int stringResourceName,
+        Context context) {
         SpannableString content = new SpannableString(context.getString(stringResourceName));
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
         textView.setText(content);
@@ -216,6 +227,7 @@ public class Utils {
 
     /**
      * For now we are enabling the monuments only when the date lies between 1 Sept & 31 OCt
+     *
      * @param date
      * @return
      */
@@ -227,8 +239,9 @@ public class Utils {
     }
 
     /**
-     * Util function to get the start date of wlm monument
-     * For this release we are hardcoding it to be 1st September
+     * Util function to get the start date of wlm monument For this release we are hardcoding it to
+     * be 1st September
+     *
      * @return
      */
     public static String getWLMStartDate() {

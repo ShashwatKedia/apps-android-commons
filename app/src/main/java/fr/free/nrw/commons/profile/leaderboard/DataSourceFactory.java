@@ -78,11 +78,13 @@ public class DataSourceFactory extends DataSource.Factory<Integer, LeaderboardLi
 
     /**
      * Constructor for DataSourceFactory class
+     *
      * @param okHttpJsonApiClient client for OKhttp
      * @param compositeDisposable composite disposable
      * @param sessionManager sessionManager
      */
-    public DataSourceFactory(OkHttpJsonApiClient okHttpJsonApiClient, CompositeDisposable compositeDisposable,
+    public DataSourceFactory(OkHttpJsonApiClient okHttpJsonApiClient,
+        CompositeDisposable compositeDisposable,
         SessionManager sessionManager) {
         this.okHttpJsonApiClient = okHttpJsonApiClient;
         this.compositeDisposable = compositeDisposable;
@@ -99,11 +101,13 @@ public class DataSourceFactory extends DataSource.Factory<Integer, LeaderboardLi
 
     /**
      * Creates the new instance of data source class
+     *
      * @return
      */
     @Override
     public DataSource<Integer, LeaderboardList> create() {
-        DataSourceClass dataSourceClass = new DataSourceClass(okHttpJsonApiClient, sessionManager, duration, category, limit, offset);
+        DataSourceClass dataSourceClass = new DataSourceClass(okHttpJsonApiClient, sessionManager,
+            duration, category, limit, offset);
         liveData.postValue(dataSourceClass);
         return dataSourceClass;
     }

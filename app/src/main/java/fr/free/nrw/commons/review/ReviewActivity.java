@@ -68,10 +68,9 @@ public class ReviewActivity extends BaseActivity {
     @Inject
     DeleteHelper deleteHelper;
     /**
-     * Represent fragment for ReviewImage
-     * Use to call some methods of ReviewImage fragment
+     * Represent fragment for ReviewImage Use to call some methods of ReviewImage fragment
      */
-     private ReviewImageFragment reviewImageFragment;
+    private ReviewImageFragment reviewImageFragment;
 
     /**
      * Flag to check whether there are any non-hidden categories in the File
@@ -115,7 +114,7 @@ public class ReviewActivity extends BaseActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        
+
         reviewController = new ReviewController(deleteHelper, this);
 
         reviewPagerAdapter = new ReviewPagerAdapter(getSupportFragmentManager());
@@ -123,11 +122,13 @@ public class ReviewActivity extends BaseActivity {
         pagerIndicator.setViewPager(reviewPager);
         progressBar.setVisibility(View.VISIBLE);
 
-        Drawable d[]=btnSkipImage.getCompoundDrawablesRelative();
-        d[2].setColorFilter(getApplicationContext().getResources().getColor(R.color.button_blue), PorterDuff.Mode.SRC_IN);
+        Drawable d[] = btnSkipImage.getCompoundDrawablesRelative();
+        d[2].setColorFilter(getApplicationContext().getResources().getColor(R.color.button_blue),
+            PorterDuff.Mode.SRC_IN);
 
         if (savedInstanceState != null && savedInstanceState.getParcelable(SAVED_MEDIA) != null) {
-            updateImage(savedInstanceState.getParcelable(SAVED_MEDIA)); // Use existing media if we have one
+            updateImage(
+                savedInstanceState.getParcelable(SAVED_MEDIA)); // Use existing media if we have one
             setUpMediaDetailOnOrientation();
         } else {
             runRandomizer(); //Run randomizer whenever everything is ready so that a first random image will be added
@@ -139,12 +140,12 @@ public class ReviewActivity extends BaseActivity {
             runRandomizer();
         });
 
-        simpleDraweeView.setOnClickListener(view ->setUpMediaDetailFragment());
+        simpleDraweeView.setOnClickListener(view -> setUpMediaDetailFragment());
 
         btnSkipImage.setOnTouchListener((view, event) -> {
             if (event.getAction() == MotionEvent.ACTION_UP && event.getRawX() >= (
-                    btnSkipImage.getRight() - btnSkipImage
-                            .getCompoundDrawables()[2].getBounds().width())) {
+                btnSkipImage.getRight() - btnSkipImage
+                    .getCompoundDrawables()[2].getBounds().width())) {
                 showSkipImageInfo();
                 return true;
             }
@@ -165,9 +166,9 @@ public class ReviewActivity extends BaseActivity {
         reviewPager.setCurrentItem(0);
         // Finds non-hidden categories from Media instance
         compositeDisposable.add(reviewHelper.getRandomMedia()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::checkWhetherFileIsUsedInWikis));
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(this::checkWhetherFileIsUsedInWikis));
         return true;
     }
 
@@ -194,11 +195,11 @@ public class ReviewActivity extends BaseActivity {
      * Finds non-hidden categories and updates current image
      */
     private void findNonHiddenCategories(Media media) {
-        for(String key : media.getCategoriesHiddenStatus().keySet()) {
+        for (String key : media.getCategoriesHiddenStatus().keySet()) {
             Boolean value = media.getCategoriesHiddenStatus().get(key);
             // If non-hidden category is found then set hasNonHiddenCategories to true
             // so that category review cannot be skipped
-            if(!value) {
+            if (!value) {
                 hasNonHiddenCategories = true;
                 break;
             }
@@ -219,7 +220,8 @@ public class ReviewActivity extends BaseActivity {
         }
 
         //If The Media User and Current Session Username is same then Skip the Image
-        if (media.getUser() != null && media.getUser().equals(AccountUtil.getUserName(getApplicationContext()))) {
+        if (media.getUser() != null && media.getUser()
+            .equals(AccountUtil.getUserName(getApplicationContext()))) {
             runRandomizer();
             return;
         }
@@ -228,17 +230,19 @@ public class ReviewActivity extends BaseActivity {
 
         reviewController.onImageRefreshed(media); //file name is updated
         compositeDisposable.add(reviewHelper.getFirstRevisionOfFile(fileName)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(revision -> {
-                    reviewController.firstRevision = revision;
-                    reviewPagerAdapter.updateFileInformation();
-                    @SuppressLint({"StringFormatInvalid", "LocalSuppress"}) String caption = String.format(getString(R.string.review_is_uploaded_by), fileName, revision.getUser());
-                    imageCaption.setText(caption);
-                    progressBar.setVisibility(View.GONE);
-                    reviewImageFragment = getInstanceOfReviewImageFragment();
-                    reviewImageFragment.enableButtons();
-                }));
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(revision -> {
+                reviewController.firstRevision = revision;
+                reviewPagerAdapter.updateFileInformation();
+                @SuppressLint({"StringFormatInvalid",
+                    "LocalSuppress"}) String caption = String.format(
+                    getString(R.string.review_is_uploaded_by), fileName, revision.getUser());
+                imageCaption.setText(caption);
+                progressBar.setVisibility(View.GONE);
+                reviewImageFragment = getInstanceOfReviewImageFragment();
+                reviewImageFragment.enableButtons();
+            }));
         reviewPager.setCurrentItem(0);
     }
 
@@ -265,24 +269,24 @@ public class ReviewActivity extends BaseActivity {
         compositeDisposable.clear();
     }
 
-    public void showSkipImageInfo(){
+    public void showSkipImageInfo() {
         DialogUtil.showAlertDialog(ReviewActivity.this,
-                getString(R.string.skip_image).toUpperCase(),
-                getString(R.string.skip_image_explanation),
-                getString(android.R.string.ok),
-                "",
-                null,
-                null);
+            getString(R.string.skip_image).toUpperCase(),
+            getString(R.string.skip_image_explanation),
+            getString(android.R.string.ok),
+            "",
+            null,
+            null);
     }
 
     public void showReviewImageInfo() {
         DialogUtil.showAlertDialog(ReviewActivity.this,
-                getString(R.string.title_activity_review),
-                getString(R.string.review_image_explanation),
-                getString(android.R.string.ok),
-                "",
-                null,
-                null);
+            getString(R.string.title_activity_review),
+            getString(R.string.review_image_explanation),
+            getString(android.R.string.ok),
+            "",
+            null,
+            null);
     }
 
 
@@ -306,9 +310,10 @@ public class ReviewActivity extends BaseActivity {
     /**
      * this function return the instance of  reviewImageFragment
      */
-    public ReviewImageFragment getInstanceOfReviewImageFragment(){
+    public ReviewImageFragment getInstanceOfReviewImageFragment() {
         int currentItemOfReviewPager = reviewPager.getCurrentItem();
-        reviewImageFragment = (ReviewImageFragment) reviewPagerAdapter.instantiateItem(reviewPager, currentItemOfReviewPager);
+        reviewImageFragment = (ReviewImageFragment) reviewPagerAdapter.instantiateItem(reviewPager,
+            currentItemOfReviewPager);
         return reviewImageFragment;
     }
 
@@ -330,8 +335,8 @@ public class ReviewActivity extends BaseActivity {
     }
 
     /**
-     * handle the back pressed event of this activity
-     * this function call every time when back button is pressed
+     * handle the back pressed event of this activity this function call every time when back button
+     * is pressed
      */
     @Override
     public void onBackPressed() {

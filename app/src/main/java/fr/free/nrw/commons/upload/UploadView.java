@@ -20,7 +20,9 @@ public interface UploadView {
 
     @Retention(SOURCE)
     @IntDef({PLEASE_WAIT, TITLE_CARD, CATEGORIES, LICENSE})
-    @interface UploadPage {}
+    @interface UploadPage {
+
+    }
 
     int PLEASE_WAIT = 0;
 
@@ -54,7 +56,8 @@ public interface UploadView {
 
     void updateRightCardContent(boolean gpsPresent);
 
-    void updateBottomCardContent(int currentStep, int stepCount, UploadItem uploadItem, boolean isShowingItem);
+    void updateBottomCardContent(int currentStep, int stepCount, UploadItem uploadItem,
+        boolean isShowingItem);
 
     void updateLicenses(List<String> licenses, String selectedLicense);
 

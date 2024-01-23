@@ -26,15 +26,15 @@ public class PasteSensitiveTextInputEditText extends TextInputEditText {
     public boolean onTextContextMenuItem(int id) {
 
         // if not paste command, or formatting is allowed, return default
-        if(id != android.R.id.paste || formattingAllowed){
+        if (id != android.R.id.paste || formattingAllowed) {
             return super.onTextContextMenuItem(id);
         }
 
         // if its paste and formatting not allowed
         boolean proceeded;
-        if(VERSION.SDK_INT >= 23) {
+        if (VERSION.SDK_INT >= 23) {
             proceeded = super.onTextContextMenuItem(android.R.id.pasteAsPlainText);
-        }else {
+        } else {
             proceeded = super.onTextContextMenuItem(id);
             if (proceeded && getText() != null) {
                 // rewrite with plain text so formatting is lost
@@ -45,7 +45,7 @@ public class PasteSensitiveTextInputEditText extends TextInputEditText {
         return proceeded;
     }
 
-    private boolean extractFormattingAttribute(Context context, AttributeSet attrs){
+    private boolean extractFormattingAttribute(Context context, AttributeSet attrs) {
 
         boolean formatAllowed = true;
 
@@ -61,7 +61,7 @@ public class PasteSensitiveTextInputEditText extends TextInputEditText {
         return formatAllowed;
     }
 
-    public void setFormattingAllowed(boolean formattingAllowed){
+    public void setFormattingAllowed(boolean formattingAllowed) {
         this.formattingAllowed = formattingAllowed;
     }
 }

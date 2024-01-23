@@ -24,6 +24,7 @@ public class LeaderboardListViewModel extends ViewModel {
 
     /**
      * Constructor for a new LeaderboardListViewModel
+     *
      * @param okHttpJsonApiClient
      * @param sessionManager
      */
@@ -51,12 +52,14 @@ public class LeaderboardListViewModel extends ViewModel {
             .build();
 
         progressLoadStatus = Transformations
-            .switchMap(dataSourceFactory.getMutableLiveData(), DataSourceClass::getProgressLiveStatus);
+            .switchMap(dataSourceFactory.getMutableLiveData(),
+                DataSourceClass::getProgressLiveStatus);
 
     }
 
     /**
      * Refreshes the paged list with the new params and starts the loading of new data
+     *
      * @param duration
      * @param category
      * @param limit
@@ -72,6 +75,7 @@ public class LeaderboardListViewModel extends ViewModel {
 
     /**
      * Sets the new params for the paged list API calls
+     *
      * @param duration
      * @param category
      * @param limit

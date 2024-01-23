@@ -15,11 +15,14 @@ import fr.free.nrw.commons.theme.BaseActivity;
  * allows the user to change the settings
  */
 public class SettingsActivity extends BaseActivity {
+
     private AppCompatDelegate settingsDelegate;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
     /**
      * to be called when the activity starts
+     *
      * @param savedInstanceState the previously saved state
      */
     @Override
@@ -33,8 +36,10 @@ public class SettingsActivity extends BaseActivity {
     }
 
     // Get an action bar
+
     /**
      * takes care of actions taken after the creation has happened
+     *
      * @param savedInstanceState the saved state
      */
     @Override
@@ -54,6 +59,7 @@ public class SettingsActivity extends BaseActivity {
 
     /**
      * Handle action-bar clicks
+     *
      * @param item the selected item
      * @return true on success, false on failure
      */

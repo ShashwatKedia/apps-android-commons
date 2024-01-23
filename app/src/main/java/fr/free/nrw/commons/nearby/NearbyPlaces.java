@@ -27,6 +27,7 @@ public class NearbyPlaces {
     /**
      * Reads Wikidata query to check nearby wikidata items which needs picture, with a circular
      * search. As a point is center of a circle with a radius will be set later.
+     *
      * @param okHttpJsonApiClient
      */
     @Inject
@@ -36,6 +37,7 @@ public class NearbyPlaces {
 
     /**
      * Expands the radius as needed for the Wikidata query
+     *
      * @param curLatLng coordinates of search location
      * @param lang user's language
      * @param returnClosestResult true if only the nearest point is desired
@@ -44,7 +46,8 @@ public class NearbyPlaces {
      */
     List<Place> radiusExpander(final LatLng curLatLng, final String lang,
         final boolean returnClosestResult
-        , final boolean shouldQueryForMonuments, @Nullable final String customQuery) throws Exception {
+        , final boolean shouldQueryForMonuments, @Nullable final String customQuery)
+        throws Exception {
 
         final int minResults;
         final double maxRadius;
@@ -63,15 +66,16 @@ public class NearbyPlaces {
             radius = INITIAL_RADIUS;
         }
 
-            // Increase the radius gradually to find a satisfactory number of nearby places
-            while (radius <= maxRadius) {
-                places = getFromWikidataQuery(curLatLng, lang, radius, shouldQueryForMonuments, customQuery);
-                Timber.d("%d results at radius: %f", places.size(), radius);
-                if (places.size() >= minResults) {
-                    break;
-                }
-                radius *= RADIUS_MULTIPLIER;
+        // Increase the radius gradually to find a satisfactory number of nearby places
+        while (radius <= maxRadius) {
+            places = getFromWikidataQuery(curLatLng, lang, radius, shouldQueryForMonuments,
+                customQuery);
+            Timber.d("%d results at radius: %f", places.size(), radius);
+            if (places.size() >= minResults) {
+                break;
             }
+            radius *= RADIUS_MULTIPLIER;
+        }
         // make sure we will be able to send at least one request next time
         if (radius > maxRadius) {
             radius = maxRadius;
@@ -81,6 +85,7 @@ public class NearbyPlaces {
 
     /**
      * Runs the Wikidata query to populate the Places around search location
+     *
      * @param cur coordinates of search location
      * @param lang user's language
      * @param radius radius for search, as determined by radiusExpander()

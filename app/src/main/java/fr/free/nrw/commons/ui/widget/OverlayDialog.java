@@ -13,13 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
 /**
- * a formatted dialog fragment
- * This class is used by NearbyInfoDialog
+ * a formatted dialog fragment This class is used by NearbyInfoDialog
  */
 public abstract class OverlayDialog extends DialogFragment {
 
     /**
      * creates a DialogFragment with the correct style and theme
+     *
      * @param savedInstanceState bundle re-constructed from a previous saved state
      */
     @Override
@@ -30,7 +30,7 @@ public abstract class OverlayDialog extends DialogFragment {
 
     /**
      * When the view is created, sets the dialog layout to full screen
-     * 
+     *
      * @param view the view being used
      * @param savedInstanceState bundle re-constructed from a previous saved state
      */
@@ -55,7 +55,7 @@ public abstract class OverlayDialog extends DialogFragment {
 
     /**
      * builds custom dialog container
-     * 
+     *
      * @param savedInstanceState the previously saved state
      * @return the dialog
      */

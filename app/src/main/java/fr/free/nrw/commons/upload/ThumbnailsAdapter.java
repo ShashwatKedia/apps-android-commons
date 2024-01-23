@@ -29,7 +29,8 @@ import fr.free.nrw.commons.filepicker.UploadableFile;
  * The adapter class for image thumbnails to be shown while uploading.
  */
 class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.ViewHolder> {
-    public  static  Context context;
+
+    public static Context context;
     List<UploadableFile> uploadableFiles;
     private Callback callback;
 
@@ -40,11 +41,12 @@ class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.ViewHolde
 
     /**
      * Sets the data, the media files
+     *
      * @param uploadableFiles
      */
     public void setUploadableFiles(
-            List<UploadableFile> uploadableFiles) {
-        this.uploadableFiles=uploadableFiles;
+        List<UploadableFile> uploadableFiles) {
+        this.uploadableFiles = uploadableFiles;
         notifyDataSetChanged();
     }
 
@@ -52,7 +54,7 @@ class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.ViewHolde
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         return new ViewHolder(LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.item_upload_thumbnail, viewGroup, false));
+            .inflate(R.layout.item_upload_thumbnail, viewGroup, false));
     }
 
     @Override
@@ -81,6 +83,7 @@ class ThumbnailsAdapter extends RecyclerView.Adapter<ThumbnailsAdapter.ViewHolde
 
         /**
          * Binds a row item to the ViewHolder
+         *
          * @param position
          */
         public void bind(int position) {

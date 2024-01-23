@@ -7,39 +7,36 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * This class represents the leaderboard API response sub part of i.e. leaderboard list
- * The leaderboard list will contain the ranking of the users from 1 to n,
- * avatars, username and count in the selected category.
+ * This class represents the leaderboard API response sub part of i.e. leaderboard list The
+ * leaderboard list will contain the ranking of the users from 1 to n, avatars, username and count
+ * in the selected category.
  */
 public class LeaderboardList {
 
     /**
-     * Username of the user
-     * Example value - Syced
+     * Username of the user Example value - Syced
      */
     @SerializedName("username")
     @Expose
     private String username;
 
     /**
-     * Count in the category
-     * Example value - 10
+     * Count in the category Example value - 10
      */
     @SerializedName("category_count")
     @Expose
     private Integer categoryCount;
 
     /**
-     * URL of the avatar of user
-     * Example value = https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Gnome-stock_person.svg/200px-Gnome-stock_person.svg.png
+     * URL of the avatar of user Example value =
+     * https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Gnome-stock_person.svg/200px-Gnome-stock_person.svg.png
      */
     @SerializedName("avatar")
     @Expose
     private String avatar;
 
     /**
-     * Rank of the user
-     * Example value - 1
+     * Rank of the user Example value - 1
      */
     @SerializedName("rank")
     @Expose
@@ -122,6 +119,7 @@ public class LeaderboardList {
 
     /**
      * Returns true if two objects are equal, false otherwise
+     *
      * @param obj
      * @return
      */

@@ -432,10 +432,10 @@ public class NearbyParentFragment extends CommonsDaggerSupportFragment
         mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
-                if (clickedMarkerPlace != null){
+                if (clickedMarkerPlace != null) {
                     removeMarker(clickedMarkerPlace);
-                    addMarkerToMap(clickedMarkerPlace,isClickedMarkerBookmarked);
-                }else {
+                    addMarkerToMap(clickedMarkerPlace, isClickedMarkerBookmarked);
+                } else {
                     Timber.e("CLICKED MARKER IS NULL");
                 }
                 if (isListBottomSheetExpanded()) {
@@ -569,7 +569,8 @@ public class NearbyParentFragment extends CommonsDaggerSupportFragment
         rvNearbyList.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new PlaceAdapter(bookmarkLocationDao,
             place -> {
-                moveCameraToPosition(new GeoPoint(place.location.getLatitude(),place.location.getLongitude()));
+                moveCameraToPosition(
+                    new GeoPoint(place.location.getLatitude(), place.location.getLongitude()));
                 return Unit.INSTANCE;
             },
             (place, isBookmarked) -> {
@@ -1625,7 +1626,7 @@ public class NearbyParentFragment extends CommonsDaggerSupportFragment
      */
     public void updateMarker(final boolean isBookmarked, final Place place,
         @Nullable final fr.free.nrw.commons.location.LatLng curLatLng) {
-            addMarkerToMap(place, isBookmarked);
+        addMarkerToMap(place, isBookmarked);
     }
 
     /**
@@ -1647,13 +1648,13 @@ public class NearbyParentFragment extends CommonsDaggerSupportFragment
      * @return returns the drawable of marker according to the place information
      */
     private @DrawableRes int getIconFor(Place place, Boolean isBookmarked) {
-        if(nearestPlace!=null) {
-            if(place.name.equals(nearestPlace.name)) {
+        if (nearestPlace != null) {
+            if (place.name.equals(nearestPlace.name)) {
                 // Highlight nearest place only when user clicks on the home nearby banner
                 highlightNearestPlace(place);
-                return (isBookmarked?
-                        R.drawable.ic_custom_map_marker_purple_bookmarked:
-                        R.drawable.ic_custom_map_marker_purple);
+                return (isBookmarked ?
+                    R.drawable.ic_custom_map_marker_purple_bookmarked :
+                    R.drawable.ic_custom_map_marker_purple);
             }
         }
         if (place.isMonument()) {
@@ -1694,10 +1695,10 @@ public class NearbyParentFragment extends CommonsDaggerSupportFragment
                     hideBottomSheet();
                     if (clickedMarkerPlace != null) {
                         removeMarker(clickedMarkerPlace);
-                        addMarkerToMap(clickedMarkerPlace,isClickedMarkerBookmarked);
+                        addMarkerToMap(clickedMarkerPlace, isClickedMarkerBookmarked);
                     }
                     clickedMarkerPlace = place;
-                    isClickedMarkerBookmarked = isBookMarked ;
+                    isClickedMarkerBookmarked = isBookMarked;
                     bottomSheetDetailsBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                     return true;
                 }
@@ -1741,10 +1742,10 @@ public class NearbyParentFragment extends CommonsDaggerSupportFragment
                     hideBottomSheet();
                     if (clickedMarkerPlace != null) {
                         removeMarker(clickedMarkerPlace);
-                        addMarkerToMap(clickedMarkerPlace,isClickedMarkerBookmarked);
+                        addMarkerToMap(clickedMarkerPlace, isClickedMarkerBookmarked);
                     }
-                    clickedMarkerPlace = place ;
-                    isClickedMarkerBookmarked = false ;
+                    clickedMarkerPlace = place;
+                    isClickedMarkerBookmarked = false;
                     bottomSheetDetailsBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                     return true;
                 }
@@ -1758,19 +1759,22 @@ public class NearbyParentFragment extends CommonsDaggerSupportFragment
         mapView.getOverlays().add(overlay);
     }
 
-    private void removeMarker(Place place){
+    private void removeMarker(Place place) {
         List<Overlay> overlays = mapView.getOverlays();
-        for (int i = 0; i < overlays.size();i++){
-            if (overlays.get(i) instanceof ItemizedOverlayWithFocus){
-                ItemizedOverlayWithFocus item = (ItemizedOverlayWithFocus)overlays.get(i);
+        for (int i = 0; i < overlays.size(); i++) {
+            if (overlays.get(i) instanceof ItemizedOverlayWithFocus) {
+                ItemizedOverlayWithFocus item = (ItemizedOverlayWithFocus) overlays.get(i);
                 OverlayItem overlayItem = item.getItem(0);
-                fr.free.nrw.commons.location.LatLng diffLatLang = new fr.free.nrw.commons.location.LatLng(overlayItem.getPoint().getLatitude(),overlayItem.getPoint().getLongitude(),100);
-                if (place.location.getLatitude() == overlayItem.getPoint().getLatitude() && place.location.getLongitude() == overlayItem.getPoint().getLongitude()){
+                fr.free.nrw.commons.location.LatLng diffLatLang = new fr.free.nrw.commons.location.LatLng(
+                    overlayItem.getPoint().getLatitude(), overlayItem.getPoint().getLongitude(),
+                    100);
+                if (place.location.getLatitude() == overlayItem.getPoint().getLatitude()
+                    && place.location.getLongitude() == overlayItem.getPoint().getLongitude()) {
                     mapView.getOverlays().remove(i);
                     mapView.invalidate();
                     break;
                 }
-           }
+            }
         }
     }
 
@@ -2068,10 +2072,10 @@ public class NearbyParentFragment extends CommonsDaggerSupportFragment
         mapView.getOverlays().add(new MapEventsOverlay(new MapEventsReceiver() {
             @Override
             public boolean singleTapConfirmedHelper(GeoPoint p) {
-                if (clickedMarkerPlace != null){
+                if (clickedMarkerPlace != null) {
                     removeMarker(clickedMarkerPlace);
-                    addMarkerToMap(clickedMarkerPlace,isClickedMarkerBookmarked);
-                }else {
+                    addMarkerToMap(clickedMarkerPlace, isClickedMarkerBookmarked);
+                } else {
                     Timber.e("CLICKED MARKER IS NULL");
                 }
                 if (isListBottomSheetExpanded()) {

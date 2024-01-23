@@ -22,6 +22,7 @@ import timber.log.Timber;
  * Extends Timber's debug tree to write logs to a file
  */
 public class FileLoggingTree extends Timber.DebugTree implements LogLevelSettableTree {
+
     private final Logger logger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
     private int logLevel;
     private final String logFileName;
@@ -30,10 +31,10 @@ public class FileLoggingTree extends Timber.DebugTree implements LogLevelSettabl
     private final Executor executor;
 
     public FileLoggingTree(int logLevel,
-                           String logFileName,
-                           String logDirectory,
-                           int fileSizeInKb,
-                           Executor executor) {
+        String logFileName,
+        String logDirectory,
+        int fileSizeInKb,
+        Executor executor) {
         this.logLevel = logLevel;
         this.logFileName = logFileName;
         this.fileSize = fileSizeInKb;
@@ -43,6 +44,7 @@ public class FileLoggingTree extends Timber.DebugTree implements LogLevelSettabl
 
     /**
      * Can be overridden to change file's log level
+     *
      * @param logLevel
      */
     @Override
@@ -52,19 +54,22 @@ public class FileLoggingTree extends Timber.DebugTree implements LogLevelSettabl
 
     /**
      * Check and log any message
+     *
      * @param priority
      * @param tag
      * @param message
      * @param t
      */
     @Override
-    protected void log(final int priority, final String tag, @NonNull final String message, Throwable t) {
+    protected void log(final int priority, final String tag, @NonNull final String message,
+        Throwable t) {
         executor.execute(() -> logMessage(priority, tag, message));
 
     }
 
     /**
      * Log any message based on the priority
+     *
      * @param priority
      * @param tag
      * @param message
@@ -95,6 +100,7 @@ public class FileLoggingTree extends Timber.DebugTree implements LogLevelSettabl
 
     /**
      * Checks if a particular log line should be logged in the file or not
+     *
      * @param priority
      * @return
      */
@@ -106,6 +112,7 @@ public class FileLoggingTree extends Timber.DebugTree implements LogLevelSettabl
     /**
      * Configures the logger with a file size rolling policy (SizeBasedTriggeringPolicy)
      * https://github.com/tony19/logback-android/wiki
+     *
      * @param logDir
      */
     private void configureLogger(String logDir) {
@@ -139,7 +146,7 @@ public class FileLoggingTree extends Timber.DebugTree implements LogLevelSettabl
         rollingFileAppender.setTriggeringPolicy(triggeringPolicy);
         rollingFileAppender.start();
         ch.qos.logback.classic.Logger logger = (ch.qos.logback.classic.Logger)
-                LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
+            LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         logger.addAppender(rollingFileAppender);
     }
 }

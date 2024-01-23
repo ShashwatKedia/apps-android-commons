@@ -4,12 +4,16 @@ import fr.free.nrw.commons.location.LatLng;
 import timber.log.Timber;
 
 public class LocationUtils {
-    public static LatLng mapBoxLatLngToCommonsLatLng(com.mapbox.mapboxsdk.geometry.LatLng mapBoxLatLng) {
+
+    public static LatLng mapBoxLatLngToCommonsLatLng(
+        com.mapbox.mapboxsdk.geometry.LatLng mapBoxLatLng) {
         return new LatLng(mapBoxLatLng.getLatitude(), mapBoxLatLng.getLongitude(), 0);
     }
 
-    public static com.mapbox.mapboxsdk.geometry.LatLng commonsLatLngToMapBoxLatLng(LatLng commonsLatLng) {
-        return new com.mapbox.mapboxsdk.geometry.LatLng(commonsLatLng.getLatitude(), commonsLatLng.getLongitude());
+    public static com.mapbox.mapboxsdk.geometry.LatLng commonsLatLngToMapBoxLatLng(
+        LatLng commonsLatLng) {
+        return new com.mapbox.mapboxsdk.geometry.LatLng(commonsLatLng.getLatitude(),
+            commonsLatLng.getLongitude());
     }
 
     public static LatLng deriveUpdatedLocationFromSearchQuery(String customQuery) {
@@ -24,7 +28,8 @@ public class LocationUtils {
             Timber.e("Invalid suffix index - Seems like user has entered an invalid query");
             return latLng;
         }
-        String latLngString = customQuery.substring(indexOfPrefix+"Point(".length(), indexOfSuffix);
+        String latLngString = customQuery.substring(indexOfPrefix + "Point(".length(),
+            indexOfSuffix);
         if (latLngString.isEmpty()) {
             return null;
         }
@@ -37,7 +42,7 @@ public class LocationUtils {
         try {
             latLng = new LatLng(Double.parseDouble(latLngArray[1].trim()),
                 Double.parseDouble(latLngArray[0].trim()), 1f);
-        }catch (Exception e){
+        } catch (Exception e) {
             Timber.e("Error while parsing user entered lat long: %s", e);
         }
 

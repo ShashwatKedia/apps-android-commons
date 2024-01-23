@@ -70,7 +70,8 @@ public class FileUtils {
         try {
             ExifInterface exifInterface = new ExifInterface(filePath);
             ImageCoordinates imageObj = new ImageCoordinates(exifInterface, inAppPictureLocation);
-            if (imageObj.getDecimalCoords() != null) { // If image has geolocation information in its EXIF
+            if (imageObj.getDecimalCoords()
+                != null) { // If image has geolocation information in its EXIF
                 return imageObj.getDecimalCoords();
             } else {
                 return "";
@@ -132,14 +133,14 @@ public class FileUtils {
 
     public static String getMimeType(Context context, Uri uri) {
         String mimeType;
-        if (uri.getScheme()!=null && uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
+        if (uri.getScheme() != null && uri.getScheme().equals(ContentResolver.SCHEME_CONTENT)) {
             ContentResolver cr = context.getContentResolver();
             mimeType = cr.getType(uri);
         } else {
             String fileExtension = MimeTypeMap.getFileExtensionFromUrl(uri
-                    .toString());
+                .toString());
             mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
-                    fileExtension.toLowerCase());
+                fileExtension.toLowerCase());
         }
         return mimeType;
     }

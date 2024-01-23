@@ -45,7 +45,7 @@ public class WikiBaseClient {
     public Observable<Boolean> postEditEntityByFilename(final String filename, final String data) {
         return csrfToken()
             .switchMap(editToken -> wikiBaseInterface.postEditEntityByFilename(filename,
-                editToken, data)
+                    editToken, data)
                 .map(response -> (response.getSuccessVal() == 1)));
     }
 

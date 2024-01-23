@@ -25,8 +25,8 @@ import timber.log.Timber;
 public class UploadPresenter implements UploadContract.UserActionListener {
 
     private static final UploadContract.View DUMMY = (UploadContract.View) Proxy.newProxyInstance(
-            UploadContract.View.class.getClassLoader(),
-            new Class[]{UploadContract.View.class}, (proxy, method, methodArgs) -> null);
+        UploadContract.View.class.getClassLoader(),
+        new Class[]{UploadContract.View.class}, (proxy, method, methodArgs) -> null);
     private final UploadRepository repository;
     private final JsonKvStore defaultKvStore;
     private UploadContract.View view = DUMMY;
@@ -67,9 +67,10 @@ public class UploadPresenter implements UploadContract.UserActionListener {
             defaultKvStore.putInt(COUNTER_OF_CONSECUTIVE_UPLOADS_WITHOUT_COORDINATES, 0);
             view.showAlertDialog(
                 R.string.location_message,
-                () -> {defaultKvStore.putInt(
-                    COUNTER_OF_CONSECUTIVE_UPLOADS_WITHOUT_COORDINATES,
-                    0);
+                () -> {
+                    defaultKvStore.putInt(
+                        COUNTER_OF_CONSECUTIVE_UPLOADS_WITHOUT_COORDINATES,
+                        0);
                     processContributionsForSubmission();
                 });
         } else {
@@ -81,55 +82,56 @@ public class UploadPresenter implements UploadContract.UserActionListener {
         if (view.isLoggedIn()) {
             view.showProgress(true);
             repository.buildContributions()
-                    .observeOn(Schedulers.io())
-                    .subscribe(new Observer<Contribution>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-                            view.showProgress(false);
-                            if (defaultKvStore
-                                .getBoolean(CommonsApplication.IS_LIMITED_CONNECTION_MODE_ENABLED,
-                                    false)) {
-                                view.showMessage(R.string.uploading_queued);
-                            } else {
-                                view.showMessage(R.string.uploading_started);
-                            }
-
-                            compositeDisposable.add(d);
+                .observeOn(Schedulers.io())
+                .subscribe(new Observer<Contribution>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        view.showProgress(false);
+                        if (defaultKvStore
+                            .getBoolean(CommonsApplication.IS_LIMITED_CONNECTION_MODE_ENABLED,
+                                false)) {
+                            view.showMessage(R.string.uploading_queued);
+                        } else {
+                            view.showMessage(R.string.uploading_started);
                         }
 
-                        @Override
-                        public void onNext(Contribution contribution) {
-                            if (contribution.getDecimalCoords() == null) {
-                                final int recentCount = defaultKvStore.getInt(
-                                    COUNTER_OF_CONSECUTIVE_UPLOADS_WITHOUT_COORDINATES, 0);
-                                defaultKvStore.putInt(
-                                    COUNTER_OF_CONSECUTIVE_UPLOADS_WITHOUT_COORDINATES, recentCount + 1);
-                            } else {
-                                defaultKvStore.putInt(
-                                    COUNTER_OF_CONSECUTIVE_UPLOADS_WITHOUT_COORDINATES, 0);
-                            }
-                            repository.prepareMedia(contribution);
-                            contribution.setState(Contribution.STATE_QUEUED);
-                            repository.saveContribution(contribution);
-                        }
+                        compositeDisposable.add(d);
+                    }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            view.showMessage(R.string.upload_failed);
-                            repository.cleanup();
-                            view.returnToMainActivity();
-                            compositeDisposable.clear();
-                            Timber.e("failed to upload: " + e.getMessage());
+                    @Override
+                    public void onNext(Contribution contribution) {
+                        if (contribution.getDecimalCoords() == null) {
+                            final int recentCount = defaultKvStore.getInt(
+                                COUNTER_OF_CONSECUTIVE_UPLOADS_WITHOUT_COORDINATES, 0);
+                            defaultKvStore.putInt(
+                                COUNTER_OF_CONSECUTIVE_UPLOADS_WITHOUT_COORDINATES,
+                                recentCount + 1);
+                        } else {
+                            defaultKvStore.putInt(
+                                COUNTER_OF_CONSECUTIVE_UPLOADS_WITHOUT_COORDINATES, 0);
                         }
+                        repository.prepareMedia(contribution);
+                        contribution.setState(Contribution.STATE_QUEUED);
+                        repository.saveContribution(contribution);
+                    }
 
-                        @Override
-                        public void onComplete() {
-                            view.makeUploadRequest();
-                            repository.cleanup();
-                            view.returnToMainActivity();
-                            compositeDisposable.clear();
-                        }
-                    });
+                    @Override
+                    public void onError(Throwable e) {
+                        view.showMessage(R.string.upload_failed);
+                        repository.cleanup();
+                        view.returnToMainActivity();
+                        compositeDisposable.clear();
+                        Timber.e("failed to upload: " + e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        view.makeUploadRequest();
+                        repository.cleanup();
+                        view.returnToMainActivity();
+                        compositeDisposable.clear();
+                    }
+                });
         } else {
             view.askUserToLogIn();
         }
@@ -138,7 +140,8 @@ public class UploadPresenter implements UploadContract.UserActionListener {
     @Override
     public void deletePictureAtIndex(int index) {
         List<UploadableFile> uploadableFiles = view.getUploadableFiles();
-        if (index == uploadableFiles.size() - 1) {//If the next fragment to be shown is not one of the MediaDetailsFragment, lets hide the top card
+        if (index == uploadableFiles.size()
+            - 1) {//If the next fragment to be shown is not one of the MediaDetailsFragment, lets hide the top card
             view.showHideTopCard(false);
         }
         repository.deletePicture(uploadableFiles.get(index).getFilePath());

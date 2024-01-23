@@ -3,7 +3,9 @@ package fr.free.nrw.commons.media.zoomControllers.zoomable;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 
-/** Wrapper for SimpleOnGestureListener as GestureDetector does not allow changing its listener. */
+/**
+ * Wrapper for SimpleOnGestureListener as GestureDetector does not allow changing its listener.
+ */
 public class GestureListenerWrapper extends GestureDetector.SimpleOnGestureListener {
 
     private GestureDetector.SimpleOnGestureListener mDelegate;

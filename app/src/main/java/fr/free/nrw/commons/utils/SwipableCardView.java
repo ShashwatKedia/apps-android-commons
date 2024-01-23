@@ -16,6 +16,7 @@ import timber.log.Timber;
  * A card view which informs onSwipe events to its child
  */
 public abstract class SwipableCardView extends CardView {
+
     float x1, x2;
     private static final float MINIMUM_THRESHOLD_FOR_SWIPE = 100;
 

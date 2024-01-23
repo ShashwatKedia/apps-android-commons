@@ -28,6 +28,7 @@ public class RecentLanguagesContentProvider extends CommonsDaggerContentProvider
 
     /**
      * Append language code to the base uri
+     *
      * @param languageCode Code of a language
      */
     public static Uri uriForCode(final String languageCode) {
@@ -44,6 +45,7 @@ public class RecentLanguagesContentProvider extends CommonsDaggerContentProvider
 
     /**
      * Queries the SQLite database for the recently used languages
+     *
      * @param uri : contains the uri for recently used languages
      * @param projection : contains the all fields of the table
      * @param selection : handles Where
@@ -64,6 +66,7 @@ public class RecentLanguagesContentProvider extends CommonsDaggerContentProvider
 
     /**
      * Handles the update query of local SQLite Database
+     *
      * @param uri : contains the uri for recently used languages
      * @param contentValues : new values to be entered to db
      * @param selection : handles Where
@@ -91,6 +94,7 @@ public class RecentLanguagesContentProvider extends CommonsDaggerContentProvider
 
     /**
      * Handles the insertion of new recently used languages record to local SQLite Database
+     *
      * @param uri : contains the uri for recently used languages
      * @param contentValues : new values to be entered to db
      */
@@ -104,6 +108,7 @@ public class RecentLanguagesContentProvider extends CommonsDaggerContentProvider
 
     /**
      * Handles the deletion of new recently used languages record to local SQLite Database
+     *
      * @param uri : contains the uri for recently used languages
      */
     @Override

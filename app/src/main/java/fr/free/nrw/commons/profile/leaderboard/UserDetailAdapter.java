@@ -50,6 +50,7 @@ public class UserDetailAdapter extends RecyclerView.Adapter<UserDetailAdapter.Da
 
         /**
          * This method will return the Context
+         *
          * @return Context
          */
         public Context getContext() {
@@ -59,6 +60,7 @@ public class UserDetailAdapter extends RecyclerView.Adapter<UserDetailAdapter.Da
 
     /**
      * Overrides the onCreateViewHolder and sets the view with leaderboard user element layout
+     *
      * @param parent
      * @param viewType
      * @return
@@ -74,6 +76,7 @@ public class UserDetailAdapter extends RecyclerView.Adapter<UserDetailAdapter.Da
 
     /**
      * Overrides the onBindViewHolder Set the view at the specific position with the specific value
+     *
      * @param holder
      * @param position
      */

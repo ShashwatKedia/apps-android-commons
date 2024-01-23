@@ -37,7 +37,7 @@ public class Caption {
     }
 
     @SerializedName("value")
-    public String  getValue() {
+    public String getValue() {
         return value;
     }
 }

@@ -6,6 +6,7 @@ import androidx.annotation.VisibleForTesting;
 import org.wikipedia.dataclient.mwapi.MwResponse;
 
 public class MwParseResponse extends MwResponse {
+
     @Nullable
     private MwParseResult parse;
 

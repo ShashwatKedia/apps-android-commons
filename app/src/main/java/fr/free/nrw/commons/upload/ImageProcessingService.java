@@ -149,13 +149,15 @@ public class ImageProcessingService {
      * @param filePath file to be checked
      * @return IMAGE_GEOLOCATION_DIFFERENT or IMAGE_OK
      */
-    private Single<Integer> checkImageGeoLocation(Place place, String filePath, LatLng inAppPictureLocation) {
+    private Single<Integer> checkImageGeoLocation(Place place, String filePath,
+        LatLng inAppPictureLocation) {
         Timber.d("Checking for image geolocation %s", filePath);
         if (place == null || StringUtils.isBlank(place.getWikiDataEntityId())) {
             return Single.just(ImageUtils.IMAGE_OK);
         }
         return Single.fromCallable(() -> filePath)
-            .flatMap(path -> Single.just(fileUtilsWrapper.getGeolocationOfFile(path, inAppPictureLocation)))
+            .flatMap(path -> Single.just(
+                fileUtilsWrapper.getGeolocationOfFile(path, inAppPictureLocation)))
             .flatMap(geoLocation -> {
                 if (StringUtils.isBlank(geoLocation)) {
                     return Single.just(ImageUtils.IMAGE_OK);

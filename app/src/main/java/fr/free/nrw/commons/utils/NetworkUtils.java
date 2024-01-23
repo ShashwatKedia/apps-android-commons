@@ -34,7 +34,8 @@ public class NetworkUtils {
      * Detect network connection type
      */
     static NetworkConnectionType getNetworkType(Context context) {
-        TelephonyManager telephonyManager = (TelephonyManager) context.getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+        TelephonyManager telephonyManager = (TelephonyManager) context.getApplicationContext()
+            .getSystemService(Context.TELEPHONY_SERVICE);
         if (telephonyManager == null) {
             return NetworkConnectionType.UNKNOWN;
         }
@@ -83,7 +84,8 @@ public class NetworkUtils {
     @Nullable
     private static NetworkInfo getNetworkInfo(Context context) {
         ConnectivityManager connectivityManager =
-                (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            (ConnectivityManager) context.getApplicationContext()
+                .getSystemService(Context.CONNECTIVITY_SERVICE);
 
         if (connectivityManager == null) {
             return null;

@@ -19,40 +19,40 @@ public class QuizController {
     private final String URL_FOR_SCREENSHOT = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Social_media_app_mockup_screenshot.svg/500px-Social_media_app_mockup_screenshot.svg.png";
     private final String URL_FOR_EVENT = "https://upload.wikimedia.org/wikipedia/commons/5/51/HouseBuildingInNorthernVietnam.jpg";
 
-    public void initialize(Context context){
+    public void initialize(Context context) {
         QuizQuestion q1 = new QuizQuestion(1,
-                context.getString(R.string.quiz_question_string),
-                URL_FOR_SELFIE,
-                false,
-                context.getString(R.string.selfie_answer));
+            context.getString(R.string.quiz_question_string),
+            URL_FOR_SELFIE,
+            false,
+            context.getString(R.string.selfie_answer));
         quiz.add(q1);
 
         QuizQuestion q2 = new QuizQuestion(2,
-                context.getString(R.string.quiz_question_string),
-                URL_FOR_TAJ_MAHAL,
-                true,
-                context.getString(R.string.taj_mahal_answer));
+            context.getString(R.string.quiz_question_string),
+            URL_FOR_TAJ_MAHAL,
+            true,
+            context.getString(R.string.taj_mahal_answer));
         quiz.add(q2);
 
         QuizQuestion q3 = new QuizQuestion(3,
-                context.getString(R.string.quiz_question_string),
-                URL_FOR_BLURRY_IMAGE,
-                false,
-                context.getString(R.string.blurry_image_answer));
+            context.getString(R.string.quiz_question_string),
+            URL_FOR_BLURRY_IMAGE,
+            false,
+            context.getString(R.string.blurry_image_answer));
         quiz.add(q3);
 
         QuizQuestion q4 = new QuizQuestion(4,
-                context.getString(R.string.quiz_screenshot_question),
-                URL_FOR_SCREENSHOT,
-                false,
-                context.getString(R.string.screenshot_answer));
+            context.getString(R.string.quiz_screenshot_question),
+            URL_FOR_SCREENSHOT,
+            false,
+            context.getString(R.string.screenshot_answer));
         quiz.add(q4);
 
         QuizQuestion q5 = new QuizQuestion(5,
-                context.getString(R.string.quiz_question_string),
-                URL_FOR_EVENT,
-                true,
-                context.getString(R.string.construction_event_answer));
+            context.getString(R.string.quiz_question_string),
+            URL_FOR_EVENT,
+            true,
+            context.getString(R.string.construction_event_answer));
         quiz.add(q5);
 
     }

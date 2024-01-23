@@ -31,12 +31,13 @@ public class PlaceUtils {
 
     /**
      * Turns a Media list to a Place list by creating a new list in Place type
+     *
      * @param mediaList
      * @return
      */
-    public static List<Place> mediaToExplorePlace( List<Media> mediaList) {
+    public static List<Place> mediaToExplorePlace(List<Media> mediaList) {
         List<Place> explorePlaceList = new ArrayList<>();
-        for (Media media :mediaList) {
+        for (Media media : mediaList) {
             explorePlaceList.add(new Place(media.getFilename(),
                 media.getFallbackDescription(),
                 media.getCoordinates(),

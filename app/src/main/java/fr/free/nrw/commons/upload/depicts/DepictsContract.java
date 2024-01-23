@@ -14,6 +14,7 @@ import java.util.List;
 public interface DepictsContract {
 
     interface View {
+
         /**
          * Go to category screen
          */
@@ -89,7 +90,8 @@ public interface DepictsContract {
 
         /**
          * asks the repository to fetch depictions for the query
-         *  @param query
+         *
+         * @param query
          */
         void searchForDepictions(String query);
 
@@ -99,8 +101,7 @@ public interface DepictsContract {
         void selectPlaceDepictions();
 
         /**
-         * Check if depictions were selected
-         * from the depiction list
+         * Check if depictions were selected from the depiction list
          */
         void verifyDepictions();
 

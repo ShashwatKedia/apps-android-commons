@@ -96,8 +96,8 @@ public class WikidataEditService {
     }
 
     /**
-     * Takes depicts ID as a parameter and create a uploadable data with the Id
-     * and send the data for POST operation
+     * Takes depicts ID as a parameter and create a uploadable data with the Id and send the data
+     * for POST operation
      *
      * @param filename name of the file
      * @param depictedItems ID of the selected depict item
@@ -114,7 +114,7 @@ public class WikidataEditService {
         );
 
         return wikiBaseClient.postEditEntityByFilename(filename,
-            gson.toJson(data))
+                gson.toJson(data))
             .doOnNext(success -> {
                 if (success) {
                     Timber.d("DEPICTS property was set successfully for %s", filename);

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
  * Base presenter, enforcing contracts to atach and detach view
  */
 public interface BasePresenter<T> {
+
     /**
      * Until a view is attached, it is open to listen events from the presenter
      */

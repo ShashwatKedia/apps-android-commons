@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.widget.ListView;
 
 public class NearbyfilterSearchListView extends ListView {
+
     public NearbyfilterSearchListView(Context context) {
         super(context);
     }

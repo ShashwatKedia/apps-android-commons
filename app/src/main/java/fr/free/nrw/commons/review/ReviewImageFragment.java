@@ -58,12 +58,12 @@ public class ReviewImageFragment extends CommonsDaggerSupportFragment {
         if (media != null && media.getCategoriesHiddenStatus() != null && isAdded()) {
             // Filter category name attribute from all categories
             List<String> categories = new ArrayList<>();
-            for(String key : media.getCategoriesHiddenStatus().keySet()) {
+            for (String key : media.getCategoriesHiddenStatus().keySet()) {
                 String value = String.valueOf(key);
                 // Each category returned has a format like "Category:<some-category-name>"
                 // so remove the prefix "Category:"
                 int index = key.indexOf("Category:");
-                if(index == 0) {
+                if (index == 0) {
                     value = key.substring(9);
                 }
                 categories.add(value);
@@ -71,7 +71,8 @@ public class ReviewImageFragment extends CommonsDaggerSupportFragment {
             String catString = TextUtils.join(", ", categories);
             if (catString != null && !catString.equals("") && textViewQuestionContext != null) {
                 catString = "<b>" + catString + "</b>";
-                String stringToConvertHtml = String.format(getResources().getString(R.string.review_category_explanation), catString);
+                String stringToConvertHtml = String.format(
+                    getResources().getString(R.string.review_category_explanation), catString);
                 return Html.fromHtml(stringToConvertHtml).toString();
             }
         }
@@ -85,13 +86,13 @@ public class ReviewImageFragment extends CommonsDaggerSupportFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+        Bundle savedInstanceState) {
         position = getArguments().getInt("position");
         View layoutView = inflater.inflate(R.layout.fragment_review_image, container,
-                false);
+            false);
         ButterKnife.bind(this, layoutView);
 
-        String question, explanation=null, yesButtonText, noButtonText;
+        String question, explanation = null, yesButtonText, noButtonText;
 
         switch (position) {
             case SPAM:
@@ -100,7 +101,7 @@ public class ReviewImageFragment extends CommonsDaggerSupportFragment {
                 yesButtonText = getString(R.string.yes);
                 noButtonText = getString(R.string.no);
                 noButton.setOnClickListener(view -> getReviewActivity()
-                        .reviewController.reportSpam(requireActivity(), getReviewCallback()));
+                    .reviewController.reportSpam(requireActivity(), getReviewCallback()));
                 break;
             case COPYRIGHT:
                 enableButtons();
@@ -109,8 +110,8 @@ public class ReviewImageFragment extends CommonsDaggerSupportFragment {
                 yesButtonText = getString(R.string.yes);
                 noButtonText = getString(R.string.no);
                 noButton.setOnClickListener(view -> getReviewActivity()
-                        .reviewController
-                        .reportPossibleCopyRightViolation(requireActivity(), getReviewCallback()));
+                    .reviewController
+                    .reportPossibleCopyRightViolation(requireActivity(), getReviewCallback()));
                 break;
             case CATEGORY:
                 enableButtons();
@@ -120,8 +121,8 @@ public class ReviewImageFragment extends CommonsDaggerSupportFragment {
                 noButtonText = getString(R.string.no);
                 noButton.setOnClickListener(view -> {
                     getReviewActivity()
-                            .reviewController
-                            .reportWrongCategory(requireActivity(), getReviewCallback());
+                        .reviewController
+                        .reportWrongCategory(requireActivity(), getReviewCallback());
                     getReviewActivity().swipeToNext();
                 });
                 break;
@@ -132,7 +133,7 @@ public class ReviewImageFragment extends CommonsDaggerSupportFragment {
                 if (getReviewActivity().reviewController.firstRevision != null) {
                     user = getReviewActivity().reviewController.firstRevision.getUser();
                 } else {
-                    if(savedInstanceState != null) {
+                    if (savedInstanceState != null) {
                         user = savedInstanceState.getString(SAVED_USER);
                     }
                 }
@@ -183,7 +184,7 @@ public class ReviewImageFragment extends CommonsDaggerSupportFragment {
 
     private ReviewController.ReviewCallback getReviewCallback() {
         return new ReviewController
-                .ReviewCallback() {
+            .ReviewCallback() {
             @Override
             public void onSuccess() {
                 getReviewActivity().runRandomizer();
@@ -197,8 +198,7 @@ public class ReviewImageFragment extends CommonsDaggerSupportFragment {
     }
 
     /**
-     * This function is called when an image has
-     * been loaded to enable the review buttons.
+     * This function is called when an image has been loaded to enable the review buttons.
      */
     public void enableButtons() {
         yesButton.setEnabled(true);
@@ -208,8 +208,7 @@ public class ReviewImageFragment extends CommonsDaggerSupportFragment {
     }
 
     /**
-     * This function is called when an image is being loaded
-     * to disable the review buttons
+     * This function is called when an image is being loaded to disable the review buttons
      */
     public void disableButtons() {
         yesButton.setEnabled(false);

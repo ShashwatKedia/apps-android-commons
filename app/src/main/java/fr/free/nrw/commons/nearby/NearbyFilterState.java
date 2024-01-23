@@ -3,6 +3,7 @@ package fr.free.nrw.commons.nearby;
 import java.util.ArrayList;
 
 public class NearbyFilterState {
+
     private boolean existsSelected;
     private boolean needPhotoSelected;
     private boolean wlmSelected;

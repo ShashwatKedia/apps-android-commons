@@ -34,6 +34,7 @@ import timber.log.Timber;
 
 @Singleton
 public class ReviewController {
+
     private static final int NOTIFICATION_SEND_THANK = 0x102;
     private static final int NOTIFICATION_CHECK_CATEGORY = 0x101;
     protected static ArrayList<String> categories;
@@ -52,8 +53,10 @@ public class ReviewController {
     ReviewController(DeleteHelper deleteHelper, Context context) {
         this.deleteHelper = deleteHelper;
         CommonsApplication.createNotificationChannel(context.getApplicationContext());
-        notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationBuilder = new NotificationCompat.Builder(context, CommonsApplication.NOTIFICATION_CHANNEL_ID_ALL);
+        notificationManager = (NotificationManager) context.getSystemService(
+            Context.NOTIFICATION_SERVICE);
+        notificationBuilder = new NotificationCompat.Builder(context,
+            CommonsApplication.NOTIFICATION_CHANNEL_ID_ALL);
     }
 
     void onImageRefreshed(Media media) {
@@ -72,70 +75,76 @@ public class ReviewController {
     void reportSpam(@NonNull Activity activity, ReviewCallback reviewCallback) {
         Timber.d("Report spam for %s", media.getFilename());
         deleteHelper.askReasonAndExecute(media,
-                activity,
-                activity.getResources().getString(R.string.review_spam_report_question),
-                DeleteReason.SPAM,
-                reviewCallback);
+            activity,
+            activity.getResources().getString(R.string.review_spam_report_question),
+            DeleteReason.SPAM,
+            reviewCallback);
     }
 
-    void reportPossibleCopyRightViolation(@NonNull Activity activity, ReviewCallback reviewCallback) {
+    void reportPossibleCopyRightViolation(@NonNull Activity activity,
+        ReviewCallback reviewCallback) {
         Timber.d("Report spam for %s", media.getFilename());
         deleteHelper.askReasonAndExecute(media,
-                activity,
-                activity.getResources().getString(R.string.review_c_violation_report_question),
-                DeleteReason.COPYRIGHT_VIOLATION,
-                reviewCallback);
+            activity,
+            activity.getResources().getString(R.string.review_c_violation_report_question),
+            DeleteReason.COPYRIGHT_VIOLATION,
+            reviewCallback);
     }
 
     @SuppressLint("CheckResult")
     void reportWrongCategory(@NonNull Activity activity, ReviewCallback reviewCallback) {
         Context context = activity.getApplicationContext();
         ApplicationlessInjection
-                .getInstance(context)
-                .getCommonsApplicationComponent()
-                .inject(this);
+            .getInstance(context)
+            .getCommonsApplicationComponent()
+            .inject(this);
 
-        ViewUtil.showShortToast(context, context.getString(R.string.check_category_toast, media.getDisplayTitle()));
+        ViewUtil.showShortToast(context,
+            context.getString(R.string.check_category_toast, media.getDisplayTitle()));
 
         publishProgress(context, 0);
         String summary = context.getString(R.string.check_category_edit_summary);
         Observable.defer((Callable<ObservableSource<Boolean>>) () ->
                 pageEditClient.appendEdit(media.getFilename(), "\n{{subst:chc}}\n", summary))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((result) -> {
-                    publishProgress(context, 2);
-                    String message;
-                    String title;
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe((result) -> {
+                publishProgress(context, 2);
+                String message;
+                String title;
 
-                    if (result) {
-                        title = context.getString(R.string.check_category_success_title);
-                        message = context.getString(R.string.check_category_success_message, media.getDisplayTitle());
-                        reviewCallback.onSuccess();
-                    } else {
-                        title = context.getString(R.string.check_category_failure_title);
-                        message = context.getString(R.string.check_category_failure_message, media.getDisplayTitle());
-                        reviewCallback.onFailure();
-                    }
+                if (result) {
+                    title = context.getString(R.string.check_category_success_title);
+                    message = context.getString(R.string.check_category_success_message,
+                        media.getDisplayTitle());
+                    reviewCallback.onSuccess();
+                } else {
+                    title = context.getString(R.string.check_category_failure_title);
+                    message = context.getString(R.string.check_category_failure_message,
+                        media.getDisplayTitle());
+                    reviewCallback.onFailure();
+                }
 
-                    showNotification(title, message);
+                showNotification(title, message);
 
-                }, Timber::e);
+            }, Timber::e);
     }
 
     private void publishProgress(@NonNull Context context, int i) {
-        int[] messages = new int[]{R.string.getting_edit_token, R.string.check_category_adding_template};
+        int[] messages = new int[]{R.string.getting_edit_token,
+            R.string.check_category_adding_template};
         String message = "";
         if (0 < i && i < messages.length) {
             message = context.getString(messages[i]);
         }
 
-        notificationBuilder.setContentTitle(context.getString(R.string.check_category_notification_title, media.getDisplayTitle()))
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(message))
-                .setSmallIcon(R.drawable.ic_launcher)
-                .setProgress(messages.length, i, false)
-                .setOngoing(true);
+        notificationBuilder.setContentTitle(
+                context.getString(R.string.check_category_notification_title, media.getDisplayTitle()))
+            .setStyle(new NotificationCompat.BigTextStyle()
+                .bigText(message))
+            .setSmallIcon(R.drawable.ic_launcher)
+            .setProgress(messages.length, i, false)
+            .setOngoing(true);
         notificationManager.notify(NOTIFICATION_CHECK_CATEGORY, notificationBuilder.build());
     }
 
@@ -143,51 +152,56 @@ public class ReviewController {
     void sendThanks(@NonNull Activity activity) {
         Context context = activity.getApplicationContext();
         ApplicationlessInjection
-                .getInstance(context)
-                .getCommonsApplicationComponent()
-                .inject(this);
-        ViewUtil.showShortToast(context, context.getString(R.string.send_thank_toast, media.getDisplayTitle()));
+            .getInstance(context)
+            .getCommonsApplicationComponent()
+            .inject(this);
+        ViewUtil.showShortToast(context,
+            context.getString(R.string.send_thank_toast, media.getDisplayTitle()));
 
         if (firstRevision == null) {
             return;
         }
 
-        Observable.defer((Callable<ObservableSource<Boolean>>) () -> thanksClient.thank(firstRevision.getRevisionId()))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe((result) -> {
-                    displayThanksToast(context,result);
-                }, Timber::e);
+        Observable.defer((Callable<ObservableSource<Boolean>>) () -> thanksClient.thank(
+                firstRevision.getRevisionId()))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe((result) -> {
+                displayThanksToast(context, result);
+            }, Timber::e);
     }
 
     @SuppressLint("StringFormatInvalid")
-    private void displayThanksToast(final Context context, final boolean result){
+    private void displayThanksToast(final Context context, final boolean result) {
         final String message;
         final String title;
         if (result) {
             title = context.getString(R.string.send_thank_success_title);
-            message = context.getString(R.string.send_thank_success_message, media.getDisplayTitle());
+            message = context.getString(R.string.send_thank_success_message,
+                media.getDisplayTitle());
         } else {
             title = context.getString(R.string.send_thank_failure_title);
-            message = context.getString(R.string.send_thank_failure_message, media.getDisplayTitle());
+            message = context.getString(R.string.send_thank_failure_message,
+                media.getDisplayTitle());
         }
 
-        ViewUtil.showShortToast(context,message);
+        ViewUtil.showShortToast(context, message);
     }
 
     private void showNotification(String title, String message) {
         notificationBuilder.setDefaults(NotificationCompat.DEFAULT_ALL)
-                .setContentTitle(title)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(message))
-                .setSmallIcon(R.drawable.ic_launcher)
-                .setProgress(0, 0, false)
-                .setOngoing(false)
-                .setPriority(NotificationCompat.PRIORITY_HIGH);
+            .setContentTitle(title)
+            .setStyle(new NotificationCompat.BigTextStyle()
+                .bigText(message))
+            .setSmallIcon(R.drawable.ic_launcher)
+            .setProgress(0, 0, false)
+            .setOngoing(false)
+            .setPriority(NotificationCompat.PRIORITY_HIGH);
         notificationManager.notify(NOTIFICATION_SEND_THANK, notificationBuilder.build());
     }
 
     public interface ReviewCallback {
+
         void onSuccess();
 
         void onFailure();

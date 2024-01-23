@@ -14,7 +14,8 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
- * Retrofit calls for managing responses network calls of entity ids required for uploading depictions
+ * Retrofit calls for managing responses network calls of entity ids required for uploading
+ * depictions
  */
 
 public interface WikiBaseInterface {
@@ -23,8 +24,8 @@ public interface WikiBaseInterface {
     @FormUrlEncoded
     @POST(MW_API_PREFIX + "action=wbeditentity")
     Observable<MwPostResponse> postEditEntity(@NonNull @Field("id") String fileEntityId,
-                                              @NonNull @Field("token") String editToken,
-                                              @NonNull @Field("data") String data);
+        @NonNull @Field("token") String editToken,
+        @NonNull @Field("data") String data);
 
     /**
      * Uploads depicts for a file in the server

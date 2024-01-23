@@ -11,6 +11,7 @@ public abstract class WikidataEditListener {
     }
 
     public interface WikidataP18EditListener {
+
         void onWikidataEditSuccessful();
     }
 }

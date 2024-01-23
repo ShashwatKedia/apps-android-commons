@@ -49,12 +49,12 @@ public class UploadModel {
 
     @Inject
     UploadModel(@Named("licenses") final List<String> licenses,
-            @Named("default_preferences") final JsonKvStore store,
-            @Named("licenses_by_name") final Map<String, String> licensesByName,
-            final Context context,
-            final SessionManager sessionManager,
-            final FileProcessor fileProcessor,
-            final ImageProcessingService imageProcessingService) {
+        @Named("default_preferences") final JsonKvStore store,
+        @Named("licenses_by_name") final Map<String, String> licensesByName,
+        final Context context,
+        final SessionManager sessionManager,
+        final FileProcessor fileProcessor,
+        final ImageProcessingService imageProcessingService) {
         this.licenses = licenses;
         this.store = store;
         this.license = store.getString(Prefs.DEFAULT_LICENSE, Prefs.Licenses.CC_BY_SA_3);
@@ -90,10 +90,12 @@ public class UploadModel {
         final SimilarImageInterface similarImageInterface,
         LatLng inAppPictureLocation) {
         return Observable.just(
-            createAndAddUploadItem(uploadableFile, place, similarImageInterface, inAppPictureLocation));
+            createAndAddUploadItem(uploadableFile, place, similarImageInterface,
+                inAppPictureLocation));
     }
 
-    public Single<Integer> getImageQuality(final UploadItem uploadItem, LatLng inAppPictureLocation) {
+    public Single<Integer> getImageQuality(final UploadItem uploadItem,
+        LatLng inAppPictureLocation) {
         return imageProcessingService.validateImage(uploadItem, inAppPictureLocation);
     }
 
@@ -102,7 +104,7 @@ public class UploadModel {
         final SimilarImageInterface similarImageInterface,
         LatLng inAppPictureLocation) {
         final UploadableFile.DateTimeWithSource dateTimeWithSource = uploadableFile
-                .getFileCreatedDate(context);
+            .getFileCreatedDate(context);
         long fileCreatedDate = -1;
         String createdTimestampSource = "";
         String fileCreatedDateString = "";
@@ -113,14 +115,14 @@ public class UploadModel {
         }
         Timber.d("File created date is %d", fileCreatedDate);
         final ImageCoordinates imageCoordinates = fileProcessor
-                .processFileCoordinates(similarImageInterface, uploadableFile.getFilePath(),
-                    inAppPictureLocation);
+            .processFileCoordinates(similarImageInterface, uploadableFile.getFilePath(),
+                inAppPictureLocation);
         final UploadItem uploadItem = new UploadItem(
             Uri.parse(uploadableFile.getFilePath()),
-                uploadableFile.getMimeType(context), imageCoordinates, place, fileCreatedDate,
-                createdTimestampSource,
-                uploadableFile.getContentUri(),
-                fileCreatedDateString);
+            uploadableFile.getMimeType(context), imageCoordinates, place, fileCreatedDate,
+            createdTimestampSource,
+            uploadableFile.getContentUri(),
+            fileCreatedDateString);
 
         // If an uploadItem of the same uploadableFile has been created before, we return that.
         // This is to avoid multiple instances of uploadItem of same file passed around.
@@ -161,10 +163,12 @@ public class UploadModel {
     public Observable<Contribution> buildContributions() {
         return Observable.fromIterable(items).map(item ->
         {
-            String imageSHA1 = FileUtils.getSHA1(context.getContentResolver().openInputStream(item.getContentUri()));
+            String imageSHA1 = FileUtils.getSHA1(
+                context.getContentResolver().openInputStream(item.getContentUri()));
 
             final Contribution contribution = new Contribution(
-                item, sessionManager, newListOf(selectedDepictions), newListOf(selectedCategories), imageSHA1);
+                item, sessionManager, newListOf(selectedDepictions), newListOf(selectedCategories),
+                imageSHA1);
 
             contribution.setHasInvalidLocation(item.hasInvalidLocation());
 
@@ -242,7 +246,8 @@ public class UploadModel {
         return items != null ? new ArrayList<>(items) : new ArrayList<>();
     }
 
-    public void useSimilarPictureCoordinates(final ImageCoordinates imageCoordinates, final int uploadItemIndex) {
+    public void useSimilarPictureCoordinates(final ImageCoordinates imageCoordinates,
+        final int uploadItemIndex) {
         fileProcessor.prePopulateCategoriesAndDepictionsBy(imageCoordinates);
         items.get(uploadItemIndex).setGpsCoords(imageCoordinates);
     }

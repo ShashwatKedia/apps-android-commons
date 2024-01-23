@@ -50,7 +50,8 @@ public class MoreBottomSheetFragment extends BottomSheetDialogFragment {
 
     private TextView moreProfile;
 
-    @Inject @Named("default_preferences")
+    @Inject
+    @Named("default_preferences")
     JsonKvStore store;
 
     @Inject
@@ -66,7 +67,7 @@ public class MoreBottomSheetFragment extends BottomSheetDialogFragment {
             FragmentMoreBottomSheetBinding.inflate(inflater, container, false);
         moreProfile = binding.moreProfile;
 
-        if(store.getBoolean(CommonsApplication.IS_LIMITED_CONNECTION_MODE_ENABLED)){
+        if (store.getBoolean(CommonsApplication.IS_LIMITED_CONNECTION_MODE_ENABLED)) {
             binding.morePeerReview.setVisibility(View.GONE);
         }
 
@@ -96,16 +97,17 @@ public class MoreBottomSheetFragment extends BottomSheetDialogFragment {
      */
     private void setUserName() {
         BasicKvStore store = new BasicKvStore(this.getContext(), getUserName());
-        String level = store.getString("userAchievementsLevel","0");
+        String level = store.getString("userAchievementsLevel", "0");
         if (level.equals("0")) {
-            moreProfile.setText(getUserName() + " (" + getString(R.string.see_your_achievements) + ")");
-        }
-        else {
-            moreProfile.setText(getUserName() + " (" + getString(R.string.level) + " " + level + ")");
+            moreProfile.setText(
+                getUserName() + " (" + getString(R.string.see_your_achievements) + ")");
+        } else {
+            moreProfile.setText(
+                getUserName() + " (" + getString(R.string.level) + " " + level + ")");
         }
     }
 
-    private String getUserName(){
+    private String getUserName() {
         final AccountManager accountManager = AccountManager.get(getActivity());
         final Account[] allAccounts = accountManager.getAccountsByType(BuildConfig.ACCOUNT_TYPE);
         if (allAccounts.length != 0) {
@@ -143,10 +145,12 @@ public class MoreBottomSheetFragment extends BottomSheetDialogFragment {
      * uploads feedback data on the server
      */
     void uploadFeedback(final Feedback feedback) {
-        final FeedbackContentCreator feedbackContentCreator = new FeedbackContentCreator(getContext(), feedback);
+        final FeedbackContentCreator feedbackContentCreator = new FeedbackContentCreator(
+            getContext(), feedback);
 
         Single<Boolean> single =
-            pageEditClient.prependEdit("Commons:Mobile_app/Feedback", feedbackContentCreator.toString(), "Summary")
+            pageEditClient.prependEdit("Commons:Mobile_app/Feedback",
+                    feedbackContentCreator.toString(), "Summary")
                 .flatMapSingle(result -> Single.just(result))
                 .firstOrError();
 
@@ -155,7 +159,8 @@ public class MoreBottomSheetFragment extends BottomSheetDialogFragment {
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(aBoolean -> {
                 if (aBoolean) {
-                    Toast.makeText(getContext(), getString(R.string.thanks_feedback), Toast.LENGTH_SHORT)
+                    Toast.makeText(getContext(), getString(R.string.thanks_feedback),
+                            Toast.LENGTH_SHORT)
                         .show();
                 } else {
                     Toast.makeText(getContext(), getString(R.string.error_feedback),
@@ -176,8 +181,8 @@ public class MoreBottomSheetFragment extends BottomSheetDialogFragment {
     }
 
     /**
-     * This method collects the feedback message and starts the activity with implicit intent
-     * to available email client.
+     * This method collects the feedback message and starts the activity with implicit intent to
+     * available email client.
      */
     private void sendFeedback() {
         final String technicalInfo = commonsLogSender.getExtraInfo();

@@ -85,18 +85,21 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     private View separator;
     private ListView languageHistoryListView;
     private static final String GET_CONTENT_PICKER_HELP_URL = "https://commons-app.github.io/docs.html#get-content";
-    private ActivityResultLauncher<String[]> inAppCameraLocationPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), new ActivityResultCallback<Map<String, Boolean>>() {
-        @Override
-        public void onActivityResult(Map<String, Boolean> result) {
-            boolean areAllGranted = true;
-            for (final boolean b : result.values()) {
-                areAllGranted = areAllGranted && b;
+    private ActivityResultLauncher<String[]> inAppCameraLocationPermissionLauncher = registerForActivityResult(
+        new ActivityResultContracts.RequestMultiplePermissions(),
+        new ActivityResultCallback<Map<String, Boolean>>() {
+            @Override
+            public void onActivityResult(Map<String, Boolean> result) {
+                boolean areAllGranted = true;
+                for (final boolean b : result.values()) {
+                    areAllGranted = areAllGranted && b;
+                }
+                if (!areAllGranted && shouldShowRequestPermissionRationale(
+                    permission.ACCESS_FINE_LOCATION)) {
+                    contributionController.handleShowRationaleFlowCameraLocation(getActivity());
+                }
             }
-            if (!areAllGranted && shouldShowRequestPermissionRationale(permission.ACCESS_FINE_LOCATION)) {
-                contributionController.handleShowRationaleFlowCameraLocation(getActivity());
-            }
-        }
-    });
+        });
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -114,7 +117,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         MultiSelectListPreference multiSelectListPref = findPreference(Prefs.MANAGED_EXIF_TAGS);
         if (multiSelectListPref != null) {
             multiSelectListPref.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (newValue instanceof HashSet && !((HashSet) newValue).contains(getString(R.string.exif_tag_location))) {
+                if (newValue instanceof HashSet && !((HashSet) newValue).contains(
+                    getString(R.string.exif_tag_location))) {
                     defaultKvStore.putBoolean("has_user_manually_removed_location", true);
                 }
                 return true;
@@ -170,17 +174,19 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             Locale defLocale = new Locale(languageCode);
             descriptionLanguageListPreference.setSummary(defLocale.getDisplayLanguage(defLocale));
         }
-        descriptionLanguageListPreference.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                prepareAppLanguages(descriptionLanguageListPreference.getKey());
-                return true;
-            }
-        });
+        descriptionLanguageListPreference.setOnPreferenceClickListener(
+            new OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    prepareAppLanguages(descriptionLanguageListPreference.getKey());
+                    return true;
+                }
+            });
 
         Preference betaTesterPreference = findPreference("becomeBetaTester");
         betaTesterPreference.setOnPreferenceClickListener(preference -> {
-            Utils.handleWebUrl(getActivity(), Uri.parse(getResources().getString(R.string.beta_opt_in_link)));
+            Utils.handleWebUrl(getActivity(),
+                Uri.parse(getResources().getString(R.string.beta_opt_in_link)));
             return true;
         });
         Preference sendLogsPreference = findPreference("sendLogFile");
@@ -223,9 +229,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     /**
-     * On some devices, the new Photo Picker with GET_CONTENT takeover
-     * redacts location tags from EXIF metadata
-     *
+     * On some devices, the new Photo Picker with GET_CONTENT takeover redacts location tags from
+     * EXIF metadata
+     * <p>
      * Show warning to the user when ACTION_GET_CONTENT intent is enabled
      */
     private void showLocationLossWarning() {
@@ -235,7 +241,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             getString(R.string.location_loss_warning),
             getString(R.string.ok),
             getString(R.string.read_help_link),
-            () -> {},
+            () -> {
+            },
             () -> Utils.handleWebUrl(requireContext(), Uri.parse(GET_CONTENT_PICKER_HELP_URL)),
             null,
             true
@@ -268,12 +275,12 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     /**
-     * Prepare and Show language selection dialog box
-     * Uses previously saved language if there is any, if not uses phone locale as initial language.
-     * Disable default/already selected language from dialog box
-     * Get ListPreference key and act accordingly for each ListPreference.
-     * saves value chosen by user to shared preferences
-     * to remember later and recall MainActivity to reflect language changes
+     * Prepare and Show language selection dialog box Uses previously saved language if there is
+     * any, if not uses phone locale as initial language. Disable default/already selected language
+     * from dialog box Get ListPreference key and act accordingly for each ListPreference. saves
+     * value chosen by user to shared preferences to remember later and recall MainActivity to
+     * reflect language changes
+     *
      * @param keyListPreference
      */
     private void prepareAppLanguages(final String keyListPreference) {
@@ -310,8 +317,9 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.dialog_select_language);
         dialog.setCanceledOnTouchOutside(true);
-        dialog.getWindow().setLayout((int)(getActivity().getResources().getDisplayMetrics().widthPixels*0.90),
-            (int)(getActivity().getResources().getDisplayMetrics().heightPixels*0.90));
+        dialog.getWindow()
+            .setLayout((int) (getActivity().getResources().getDisplayMetrics().widthPixels * 0.90),
+                (int) (getActivity().getResources().getDisplayMetrics().heightPixels * 0.90));
         dialog.show();
 
         EditText editText = dialog.findViewById(R.id.search_language);
@@ -362,14 +370,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 recentLanguagesDao.addRecentLanguage(new Language(languageName, languageCode));
                 saveLanguageValue(languageCode, keyListPreference);
                 Locale defLocale = new Locale(languageCode);
-                if(keyListPreference.equals("appUiDefaultLanguagePref")) {
+                if (keyListPreference.equals("appUiDefaultLanguagePref")) {
                     appUiLanguageListPreference.setSummary(defLocale.getDisplayLanguage(defLocale));
                     setLocale(requireActivity(), languageCode);
                     getActivity().recreate();
                     final Intent intent = new Intent(getActivity(), MainActivity.class);
                     startActivity(intent);
-                }else {
-                    descriptionLanguageListPreference.setSummary(defLocale.getDisplayLanguage(defLocale));
+                } else {
+                    descriptionLanguageListPreference.setSummary(
+                        defLocale.getDisplayLanguage(defLocale));
                 }
                 dialog.dismiss();
             }
@@ -393,7 +402,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
             separator.setVisibility(View.GONE);
         } else {
             if (recentLanguages.size() > 5) {
-                for (int i = recentLanguages.size()-1; i >=5; i--) {
+                for (int i = recentLanguages.size() - 1; i >= 5; i--) {
                     recentLanguagesDao
                         .deleteRecentLanguage(recentLanguages.get(i).getLanguageCode());
                 }
@@ -413,7 +422,8 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     /**
      * Handles click event for recent language section
      */
-    private void onRecentLanguageClicked(String keyListPreference, Dialog dialog, AdapterView<?> adapterView,
+    private void onRecentLanguageClicked(String keyListPreference, Dialog dialog,
+        AdapterView<?> adapterView,
         int position) {
         final String recentLanguageCode = ((RecentLanguagesAdapter) adapterView.getAdapter())
             .getLanguageCode(position);
@@ -462,13 +472,15 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         activity.getBaseContext().getResources().updateConfiguration(configuration,
             activity.getBaseContext().getResources().getDisplayMetrics());
 
-        final SharedPreferences.Editor editor = activity.getSharedPreferences("Settings", MODE_PRIVATE).edit();
+        final SharedPreferences.Editor editor = activity.getSharedPreferences("Settings",
+            MODE_PRIVATE).edit();
         editor.putString("language", userSelectedValue);
         editor.apply();
     }
 
     /**
      * Save userselected language in List Preference
+     *
      * @param userSelectedValue
      * @param preferenceKey
      */
@@ -482,6 +494,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     /**
      * Gets current language code from shared preferences
+     *
      * @param preferenceKey
      * @return
      */

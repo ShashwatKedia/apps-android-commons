@@ -6,6 +6,7 @@ import android.text.TextWatcher;
 import androidx.annotation.NonNull;
 
 public class AbstractTextWatcher implements TextWatcher {
+
     private final TextChange textChange;
 
     public AbstractTextWatcher(@NonNull TextChange textChange) {
@@ -26,6 +27,7 @@ public class AbstractTextWatcher implements TextWatcher {
     }
 
     public interface TextChange {
+
         void onTextChanged(String value);
     }
 }

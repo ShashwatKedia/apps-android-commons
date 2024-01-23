@@ -18,8 +18,8 @@ import static androidx.core.app.NotificationCompat.DEFAULT_ALL;
 import static androidx.core.app.NotificationCompat.PRIORITY_HIGH;
 
 /**
- * Helper class that can be used to build a generic notification
- * Going forward all notifications should be built using this helper class
+ * Helper class that can be used to build a generic notification Going forward all notifications
+ * should be built using this helper class
  */
 @Singleton
 public class NotificationHelper {
@@ -35,14 +35,16 @@ public class NotificationHelper {
 
     @Inject
     public NotificationHelper(Context context) {
-        notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager) context.getSystemService(
+            Context.NOTIFICATION_SERVICE);
         notificationBuilder = new NotificationCompat
-                .Builder(context, CommonsApplication.NOTIFICATION_CHANNEL_ID_ALL)
-                .setOnlyAlertOnce(true);
+            .Builder(context, CommonsApplication.NOTIFICATION_CHANNEL_ID_ALL)
+            .setOnlyAlertOnce(true);
     }
 
     /**
      * Public interface to build and show a notification in the notification bar
+     *
      * @param context passed context
      * @param notificationTitle title of the notification
      * @param notificationMessage message to be displayed in the notification

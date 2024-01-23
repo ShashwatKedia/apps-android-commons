@@ -22,6 +22,7 @@ import timber.log.Timber;
  * Custom card view for nearby notification card view on main screen, above contributions list
  */
 public class NearbyNotificationCardView extends SwipableCardView {
+
     public Button permissionRequestButton;
     private LinearLayout contentLayout;
     private TextView notificationTitle;
@@ -46,7 +47,8 @@ public class NearbyNotificationCardView extends SwipableCardView {
         init();
     }
 
-    public NearbyNotificationCardView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public NearbyNotificationCardView(@NonNull Context context, @Nullable AttributeSet attrs,
+        int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         cardViewVisibilityState = CardViewVisibilityState.INVISIBLE;
         init();
@@ -75,7 +77,10 @@ public class NearbyNotificationCardView extends SwipableCardView {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         // If you don't setVisibility after getting layout params, then you will se an empty space in place of nearby NotificationCardView
-        if (getContext() instanceof MainActivity && ((MainActivity)getContext()).defaultKvStore.getBoolean("displayNearbyCardView", true) && this.cardViewVisibilityState == NearbyNotificationCardView.CardViewVisibilityState.READY) {
+        if (getContext() instanceof MainActivity
+            && ((MainActivity) getContext()).defaultKvStore.getBoolean("displayNearbyCardView",
+            true) && this.cardViewVisibilityState
+            == NearbyNotificationCardView.CardViewVisibilityState.READY) {
             setVisibility(VISIBLE);
         } else {
             setVisibility(GONE);
@@ -89,7 +94,8 @@ public class NearbyNotificationCardView extends SwipableCardView {
         });
     }
 
-    @Override public boolean onSwipe(View view) {
+    @Override
+    public boolean onSwipe(View view) {
         view.setVisibility(GONE);
         // Save shared preference for nearby card view accordingly
         ((MainActivity) getContext()).defaultKvStore.putBoolean("displayNearbyCardView", false);
@@ -114,6 +120,7 @@ public class NearbyNotificationCardView extends SwipableCardView {
 
     /**
      * Pass place information to views and set compass arrow direction
+     *
      * @param place Closes place where we will get information from
      * @param direction Direction in which compass arrow needs to be set
      */
@@ -202,9 +209,9 @@ public class NearbyNotificationCardView extends SwipableCardView {
      * Rotates the compass arrow in tandem with the rotation of device
      *
      * @param rotateDegree Degree by which device was rotated
-     * @param direction Direction in which arrow has to point
+     * @param direction    Direction in which arrow has to point
      */
-    public void rotateCompass(float rotateDegree, float direction){
-        notificationCompass.setRotation(-(rotateDegree-direction));
+    public void rotateCompass(float rotateDegree, float direction) {
+        notificationCompass.setRotation(-(rotateDegree - direction));
     }
 }

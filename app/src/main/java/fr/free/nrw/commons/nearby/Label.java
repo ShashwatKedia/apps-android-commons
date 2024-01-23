@@ -12,10 +12,9 @@ import java.util.Map;
 import fr.free.nrw.commons.R;
 
 /**
- * See https://github.com/commons-app/apps-android-commons/issues/250
- * Most common types of desc: building, house, cottage, farmhouse,
- * village, civil parish, church, railway station,
- * gatehouse, milestone, inn, secondary school, hotel
+ * See https://github.com/commons-app/apps-android-commons/issues/250 Most common types of desc:
+ * building, house, cottage, farmhouse, village, civil parish, church, railway station, gatehouse,
+ * milestone, inn, secondary school, hotel
  */
 public enum Label {
 
@@ -33,7 +32,8 @@ public enum Label {
     CITY("Q515", R.drawable.round_icon_city),
     UNIVERSITY("Q3918", R.drawable.round_icon_school), //added university
     SCHOOL("Q3914", R.drawable.round_icon_school), //changed from "secondary school" to school
-    EDUCATION("Q8434", R.drawable.round_icon_school), //changed from edu to education, there is no id for "edu"
+    EDUCATION("Q8434",
+        R.drawable.round_icon_school), //changed from edu to education, there is no id for "edu"
     ISLE("Q23442", R.drawable.round_icon_island),
     MOUNTAIN("Q8502", R.drawable.round_icon_mountain),
     AIRPORT("Q1248784", R.drawable.round_icon_airport),
@@ -47,7 +47,7 @@ public enum Label {
     UNKNOWN("?", R.drawable.round_icon_unknown);
 
     public static final Map<String, Label> TEXT_TO_DESCRIPTION
-            = new HashMap<>(Label.values().length);
+        = new HashMap<>(Label.values().length);
 
     static {
         for (Label label : values()) {
@@ -72,6 +72,7 @@ public enum Label {
 
     /**
      * Will be used for nearby filter, to determine if place type is selected or not
+     *
      * @param isSelected true if user selected the place type
      */
     public void setSelected(boolean isSelected) {

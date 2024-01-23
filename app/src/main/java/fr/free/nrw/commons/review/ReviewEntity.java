@@ -9,6 +9,7 @@ import androidx.room.PrimaryKey;
  */
 @Entity(tableName = "reviewed-images")
 public class ReviewEntity {
+
     @PrimaryKey
     @NonNull
     String imageId;

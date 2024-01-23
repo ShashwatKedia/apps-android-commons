@@ -14,12 +14,13 @@ public class UiUtils {
 
     /**
      * Draws a vectorial image onto a bitmap.
+     *
      * @param vectorDrawable vectorial image
      * @return bitmap representation of the vectorial image
      */
     public static Bitmap getBitmap(VectorDrawableCompat vectorDrawable) {
         Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(),
-                vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+            vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         vectorDrawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         vectorDrawable.draw(canvas);
@@ -28,6 +29,7 @@ public class UiUtils {
 
     /**
      * Converts dp unit to equivalent pixels.
+     *
      * @param dp density independent pixels
      * @param context Context to access display metrics
      * @return px equivalent to dp value
@@ -38,18 +40,17 @@ public class UiUtils {
     }
 
     /**
-     * Creates a series of points that create a circle on the map.
-     * Takes the center latitude, center longitude of the circle,
-     * the radius in meter and the number of nodes of the circle.
+     * Creates a series of points that create a circle on the map. Takes the center latitude, center
+     * longitude of the circle, the radius in meter and the number of nodes of the circle.
      *
      * @return List List of LatLng points of the circle.
      */
     public static List<com.mapbox.mapboxsdk.geometry.LatLng> createCircleArray(
-            double centerLat, double centerLong, float radius, int nodes) {
+        double centerLat, double centerLong, float radius, int nodes) {
         List<com.mapbox.mapboxsdk.geometry.LatLng> circle = new ArrayList<>();
         float radiusKilometer = radius / 1000;
         double radiusLong = radiusKilometer
-                / (111.320 * Math.cos(centerLat * Math.PI / 180));
+            / (111.320 * Math.cos(centerLat * Math.PI / 180));
         double radiusLat = radiusKilometer / 110.574;
 
         for (int i = 0; i < nodes; i++) {

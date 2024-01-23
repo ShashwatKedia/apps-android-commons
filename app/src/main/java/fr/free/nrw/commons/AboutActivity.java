@@ -63,11 +63,16 @@ public class AboutActivity extends BaseActivity {
         binding.aboutVersion.setText(ConfigUtils.getVersionNameWithSha(getApplicationContext()));
 
         Utils.setUnderlinedText(binding.aboutFaq, R.string.about_faq, getApplicationContext());
-        Utils.setUnderlinedText(binding.aboutRateUs, R.string.about_rate_us, getApplicationContext());
-        Utils.setUnderlinedText(binding.aboutUserGuide, R.string.user_guide, getApplicationContext());
-        Utils.setUnderlinedText(binding.aboutPrivacyPolicy, R.string.about_privacy_policy, getApplicationContext());
-        Utils.setUnderlinedText(binding.aboutTranslate, R.string.about_translate, getApplicationContext());
-        Utils.setUnderlinedText(binding.aboutCredits, R.string.about_credits, getApplicationContext());
+        Utils.setUnderlinedText(binding.aboutRateUs, R.string.about_rate_us,
+            getApplicationContext());
+        Utils.setUnderlinedText(binding.aboutUserGuide, R.string.user_guide,
+            getApplicationContext());
+        Utils.setUnderlinedText(binding.aboutPrivacyPolicy, R.string.about_privacy_policy,
+            getApplicationContext());
+        Utils.setUnderlinedText(binding.aboutTranslate, R.string.about_translate,
+            getApplicationContext());
+        Utils.setUnderlinedText(binding.aboutCredits, R.string.about_credits,
+            getApplicationContext());
 
         /*
           To set listeners, we can create a separate method and use lambda syntax.
@@ -115,7 +120,7 @@ public class AboutActivity extends BaseActivity {
         Utils.handleWebUrl(this, Uri.parse(Urls.WEBSITE_URL));
     }
 
-    public void launchRatings(View view){
+    public void launchRatings(View view) {
         Utils.rateApp(this);
     }
 
@@ -146,7 +151,8 @@ public class AboutActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.share_app_icon:
-                String shareText = String.format(getString(R.string.share_text), Urls.PLAY_STORE_URL_PREFIX + this.getPackageName());
+                String shareText = String.format(getString(R.string.share_text),
+                    Urls.PLAY_STORE_URL_PREFIX + this.getPackageName());
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
                 sendIntent.putExtra(Intent.EXTRA_TEXT, shareText);
@@ -159,18 +165,22 @@ public class AboutActivity extends BaseActivity {
     }
 
     public void launchTranslate(View view) {
-        @NonNull List<String> sortedLocalizedNamesRef = CommonsApplication.getInstance().getLanguageLookUpTable().getCanonicalNames();
+        @NonNull List<String> sortedLocalizedNamesRef = CommonsApplication.getInstance()
+            .getLanguageLookUpTable().getCanonicalNames();
         Collections.sort(sortedLocalizedNamesRef);
         final ArrayAdapter<String> languageAdapter = new ArrayAdapter<>(AboutActivity.this,
-                android.R.layout.simple_spinner_dropdown_item, sortedLocalizedNamesRef);
+            android.R.layout.simple_spinner_dropdown_item, sortedLocalizedNamesRef);
         final Spinner spinner = new Spinner(AboutActivity.this);
-        spinner.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        spinner.setLayoutParams(
+            new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT));
         spinner.setAdapter(languageAdapter);
         spinner.setGravity(17);
-        spinner.setPadding(50,0,0,0);
+        spinner.setPadding(50, 0, 0, 0);
 
         Runnable positiveButtonRunnable = () -> {
-            String langCode = CommonsApplication.getInstance().getLanguageLookUpTable().getCodes().get(spinner.getSelectedItemPosition());
+            String langCode = CommonsApplication.getInstance().getLanguageLookUpTable().getCodes()
+                .get(spinner.getSelectedItemPosition());
             Utils.handleWebUrl(AboutActivity.this, Uri.parse(Urls.TRANSLATE_WIKI_URL + langCode));
         };
         DialogUtil.showAlertDialog(this,
@@ -179,7 +189,8 @@ public class AboutActivity extends BaseActivity {
             getString(R.string.about_translate_proceed),
             getString(R.string.about_translate_cancel),
             positiveButtonRunnable,
-            () -> {},
+            () -> {
+            },
             spinner,
             true);
     }

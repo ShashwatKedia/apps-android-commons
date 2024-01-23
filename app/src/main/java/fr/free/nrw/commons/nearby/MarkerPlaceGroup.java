@@ -7,6 +7,7 @@ import com.mapbox.mapboxsdk.annotations.Marker;
  * of bookmark
  */
 public class MarkerPlaceGroup {
+
     private Marker marker; // Marker item from the map
     private boolean isBookmarked; // True if user bookmarked the place
     private Place place; // Place of the location displayed by the marker

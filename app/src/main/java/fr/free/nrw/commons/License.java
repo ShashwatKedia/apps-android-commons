@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
  * represents Licence object
  */
 public class License {
+
     private String key;
     private String template;
     private String url;
@@ -14,11 +15,10 @@ public class License {
     /**
      * Constructs a new instance of License.
      *
-     * @param key       license key
-     * @param template  license template
-     * @param url       license URL
-     * @param name      licence name
-     *
+     * @param key      license key
+     * @param template license template
+     * @param url      license URL
+     * @param name     licence name
      * @throws RuntimeException if License.key or Licence.template is null
      */
     public License(String key, String template, String url, String name) {
@@ -36,6 +36,7 @@ public class License {
 
     /**
      * Gets the license key.
+     *
      * @return license key as a String.
      */
     public String getKey() {
@@ -44,6 +45,7 @@ public class License {
 
     /**
      * Gets the license template.
+     *
      * @return license template as a String.
      */
     public String getTemplate() {
@@ -52,6 +54,7 @@ public class License {
 
     /**
      * Gets the license name. If name is null, return license key.
+     *
      * @return license name as string. if name null, license key as String
      */
     public String getName() {

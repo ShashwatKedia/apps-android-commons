@@ -46,13 +46,13 @@ public class QuizActivity extends AppCompatActivity {
     /**
      * to move to next question and check whether answer is selected or not
      */
-    public void setNextQuestion(){
-        if ( questionIndex <= quiz.size() && (isPositiveAnswerChecked || isNegativeAnswerChecked)) {
+    public void setNextQuestion() {
+        if (questionIndex <= quiz.size() && (isPositiveAnswerChecked || isNegativeAnswerChecked)) {
             evaluateScore();
         }
     }
 
-    public void notKnowAnswer(){
+    public void notKnowAnswer() {
         customAlert("Information", quiz.get(questionIndex).getAnswerMessage());
     }
 
@@ -86,11 +86,11 @@ public class QuizActivity extends AppCompatActivity {
                 quiz.get(questionIndex).getQuestionNumber()
         );
         binding.question.questionImage.setHierarchy(GenericDraweeHierarchyBuilder
-                .newInstance(getResources())
-                .setFailureImage(VectorDrawableCompat.create(getResources(),
-                        R.drawable.ic_error_outline_black_24dp, getTheme()))
-                .setProgressBarImage(new ProgressBarDrawable())
-                .build());
+            .newInstance(getResources())
+            .setFailureImage(VectorDrawableCompat.create(getResources(),
+                R.drawable.ic_error_outline_black_24dp, getTheme()))
+            .setProgressBarImage(new ProgressBarDrawable())
+            .build());
 
         binding.question.questionImage.setImageURI(quiz.get(questionIndex).getUrl());
         isPositiveAnswerChecked = false;
@@ -110,7 +110,7 @@ public class QuizActivity extends AppCompatActivity {
      */
     public void evaluateScore() {
         if ((quiz.get(questionIndex).isAnswer() && isPositiveAnswerChecked) ||
-                (!quiz.get(questionIndex).isAnswer() && isNegativeAnswerChecked) ){
+            (!quiz.get(questionIndex).isAnswer() && isNegativeAnswerChecked)) {
             customAlert(getResources().getString(R.string.correct),
                 quiz.get(questionIndex).getAnswerMessage());
             score++;
@@ -122,6 +122,7 @@ public class QuizActivity extends AppCompatActivity {
 
     /**
      * to display explanation after each answer, update questionIndex and move to next question
+     *
      * @param title the alert title
      * @param Message the alert message
      */

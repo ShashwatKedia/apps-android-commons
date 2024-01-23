@@ -50,7 +50,8 @@ class PageContentsCreator {
             .append(media.getAuthor()).append("]]\n");
 
         final String templatizedCreatedDate = getTemplatizedCreatedDate(
-            contribution.getDateCreatedString(), contribution.getDateCreated(), contribution.getDateCreatedSource());
+            contribution.getDateCreatedString(), contribution.getDateCreated(),
+            contribution.getDateCreatedSource());
         if (!StringUtils.isBlank(templatizedCreatedDate)) {
             buffer.append("|date=").append(templatizedCreatedDate);
         }
@@ -63,9 +64,11 @@ class PageContentsCreator {
             buffer.append("{{Location|").append(decimalCoords).append("}}").append("\n");
         }
 
-        if (contribution.getWikidataPlace() != null && contribution.getWikidataPlace().isMonumentUpload()) {
+        if (contribution.getWikidataPlace() != null && contribution.getWikidataPlace()
+            .isMonumentUpload()) {
             buffer.append(String.format(Locale.ENGLISH, "{{Wiki Loves Monuments %d|1= %s}}\n",
-                Utils.getWikiLovesMonumentsYear(Calendar.getInstance()), contribution.getCountryCode()));
+                Utils.getWikiLovesMonumentsYear(Calendar.getInstance()),
+                contribution.getCountryCode()));
         }
 
         buffer.append("== {{int:license-header}} ==\n")
@@ -91,12 +94,13 @@ class PageContentsCreator {
      * @param dateCreatedSource
      * @return
      */
-    private String getTemplatizedCreatedDate(String dateCreatedString, Date dateCreated, String dateCreatedSource) {
+    private String getTemplatizedCreatedDate(String dateCreatedString, Date dateCreated,
+        String dateCreatedSource) {
         if (dateCreated != null) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             return String.format(Locale.ENGLISH,
                 isExif(dateCreatedSource) ? TEMPLATE_DATE_ACC_TO_EXIF : TEMPLATE_DATA_OTHER_SOURCE,
-                isExif(dateCreatedSource) ? dateCreatedString: dateFormat.format(dateCreated)
+                isExif(dateCreatedSource) ? dateCreatedString : dateFormat.format(dateCreated)
             ) + "\n";
         }
         return "";

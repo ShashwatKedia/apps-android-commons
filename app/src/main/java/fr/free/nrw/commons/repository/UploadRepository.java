@@ -56,7 +56,7 @@ public class UploadRepository {
         this.categoriesModel = categoriesModel;
         this.nearbyPlaces = nearbyPlaces;
         this.depictModel = depictModel;
-        this.contributionDao=contributionDao;
+        this.contributionDao = contributionDao;
     }
 
     /**
@@ -93,7 +93,7 @@ public class UploadRepository {
     }
 
     /**
-     *Prepare for a fresh upload
+     * Prepare for a fresh upload
      */
     public void cleanup() {
         uploadModel.cleanUp();
@@ -265,6 +265,7 @@ public class UploadRepository {
     public void setSelectedExistingDepictions(final List<String> selectedExistingDepictions) {
         uploadModel.setSelectedExistingDepictions(selectedExistingDepictions);
     }
+
     /**
      * Search all depictions from
      *
@@ -277,8 +278,8 @@ public class UploadRepository {
     }
 
     /**
-     * Gets the depiction for each unique {@link Place} associated with an {@link UploadItem}
-     * from {@link #getUploads()}
+     * Gets the depiction for each unique {@link Place} associated with an {@link UploadItem} from
+     * {@link #getUploads()}
      *
      * @return a single that provides the depictions
      */
@@ -294,8 +295,8 @@ public class UploadRepository {
     }
 
     /**
-     * Gets the category for each unique {@link Place} associated with an {@link UploadItem}
-     * from {@link #getUploads()}
+     * Gets the category for each unique {@link Place} associated with an {@link UploadItem} from
+     * {@link #getUploads()}
      *
      * @return a single that provides the categories
      */
@@ -315,9 +316,9 @@ public class UploadRepository {
      * from the server
      *
      * @param depictionsQIDs IDs of Depiction
-     * @return Flowable<List<DepictedItem>>
+     * @return Flowable<List < DepictedItem>>
      */
-    public Flowable<List<DepictedItem>> getDepictions(final List<String> depictionsQIDs){
+    public Flowable<List<DepictedItem>> getDepictions(final List<String> depictionsQIDs) {
         final String ids = joinQIDs(depictionsQIDs);
         return depictModel.getDepictions(ids).toFlowable();
     }
@@ -345,6 +346,7 @@ public class UploadRepository {
 
     /**
      * Returns nearest place matching the passed latitude and longitude
+     *
      * @param decLatitude
      * @param decLongitude
      * @return
@@ -354,17 +356,18 @@ public class UploadRepository {
         try {
             final List<Place> fromWikidataQuery = nearbyPlaces.getFromWikidataQuery(new LatLng(
                     decLatitude, decLongitude, 0.0f),
-                    Locale.getDefault().getLanguage(),
-                    NEARBY_RADIUS_IN_KILO_METERS, false, null);
+                Locale.getDefault().getLanguage(),
+                NEARBY_RADIUS_IN_KILO_METERS, false, null);
             return (fromWikidataQuery != null && fromWikidataQuery.size() > 0) ? fromWikidataQuery
                 .get(0) : null;
-        }catch (final Exception e) {
+        } catch (final Exception e) {
             Timber.e("Error fetching nearby places: %s", e.getMessage());
             return null;
         }
     }
 
-    public void useSimilarPictureCoordinates(ImageCoordinates imageCoordinates, int uploadItemIndex) {
+    public void useSimilarPictureCoordinates(ImageCoordinates imageCoordinates,
+        int uploadItemIndex) {
         uploadModel.useSimilarPictureCoordinates(imageCoordinates, uploadItemIndex);
     }
 
@@ -394,9 +397,9 @@ public class UploadRepository {
      * Takes category names and Gets CategoryItem from the server
      *
      * @param categories names of Category
-     * @return Observable<List<CategoryItem>>
+     * @return Observable<List < CategoryItem>>
      */
-    public Observable<List<CategoryItem>> getCategories(final List<String> categories){
+    public Observable<List<CategoryItem>> getCategories(final List<String> categories) {
         return categoriesModel.getCategoriesByName(categories);
     }
 }

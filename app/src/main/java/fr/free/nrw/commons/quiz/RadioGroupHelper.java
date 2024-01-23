@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Used to group to or more radio buttons to ensure
- * that at a particular time only one of them is selected
+ * Used to group to or more radio buttons to ensure that at a particular time only one of them is
+ * selected
  */
 public class RadioGroupHelper {
 
@@ -18,6 +18,7 @@ public class RadioGroupHelper {
 
     /**
      * Constructor to group radio buttons
+     *
      * @param radios
      */
     public RadioGroupHelper(RadioButton... radios) {
@@ -29,15 +30,17 @@ public class RadioGroupHelper {
 
     /**
      * Constructor to group radio buttons
+     *
      * @param activity
      * @param radiosIDs
      */
     public RadioGroupHelper(Activity activity, int... radiosIDs) {
-        this(activity.findViewById(android.R.id.content),radiosIDs);
+        this(activity.findViewById(android.R.id.content), radiosIDs);
     }
 
     /**
      * Constructor to group radio buttons
+     *
      * @param rootView
      * @param radiosIDs
      */
@@ -48,7 +51,7 @@ public class RadioGroupHelper {
         }
     }
 
-    private void add(CompoundButton button){
+    private void add(CompoundButton button) {
         this.radioButtons.add(button);
         button.setOnClickListener(onClickListener);
     }
@@ -58,7 +61,9 @@ public class RadioGroupHelper {
      */
     View.OnClickListener onClickListener = v -> {
         for (CompoundButton rb : radioButtons) {
-            if (rb != v) rb.setChecked(false);
+            if (rb != v) {
+                rb.setChecked(false);
+            }
         }
     };
 }

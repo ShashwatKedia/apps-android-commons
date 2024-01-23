@@ -5,11 +5,13 @@ import android.text.Spanned;
 import java.util.regex.Pattern;
 
 /**
- * An {@link InputFilter} class that removes characters blocklisted in Wikimedia titles. The list
- * of blocklisted characters is linked below.
+ * An {@link InputFilter} class that removes characters blocklisted in Wikimedia titles. The list of
+ * blocklisted characters is linked below.
+ *
  * @see <a href="https://commons.wikimedia.org/wiki/MediaWiki:Titleblacklist"></a>wikimedia.org</a>
  */
 public class UploadMediaDetailInputFilter implements InputFilter {
+
     private final Pattern[] patterns;
 
     /**
@@ -17,7 +19,8 @@ public class UploadMediaDetailInputFilter implements InputFilter {
      */
     public UploadMediaDetailInputFilter() {
         patterns = new Pattern[]{
-            Pattern.compile("[\\x{00A0}\\x{1680}\\x{180E}\\x{2000}-\\x{200B}\\x{2028}\\x{2029}\\x{202F}\\x{205F}]"),
+            Pattern.compile(
+                "[\\x{00A0}\\x{1680}\\x{180E}\\x{2000}-\\x{200B}\\x{2028}\\x{2029}\\x{202F}\\x{205F}]"),
             Pattern.compile("[\\x{202A}-\\x{202E}]"),
             Pattern.compile("\\p{Cc}"),
             Pattern.compile("\\x{3A}"), // Added for colon(:)
@@ -30,11 +33,12 @@ public class UploadMediaDetailInputFilter implements InputFilter {
 
     /**
      * Checks if the source text contains any blocklisted characters.
+     *
      * @param source input text
      * @return contains a blocklisted character
      */
     private Boolean checkBlocklisted(final CharSequence source) {
-        for (final Pattern pattern: patterns) {
+        for (final Pattern pattern : patterns) {
             if (pattern.matcher(source).find()) {
                 return true;
             }
@@ -45,11 +49,12 @@ public class UploadMediaDetailInputFilter implements InputFilter {
 
     /**
      * Removes any blocklisted characters from the source text.
+     *
      * @param source input text
      * @return a cleaned character sequence
      */
     private CharSequence removeBlocklisted(CharSequence source) {
-        for (final Pattern pattern: patterns) {
+        for (final Pattern pattern : patterns) {
             source = pattern.matcher(source).replaceAll("");
         }
 
@@ -58,6 +63,7 @@ public class UploadMediaDetailInputFilter implements InputFilter {
 
     /**
      * Filters out any blocklisted characters.
+     *
      * @param source {@inheritDoc}
      * @param start {@inheritDoc}
      * @param end {@inheritDoc}

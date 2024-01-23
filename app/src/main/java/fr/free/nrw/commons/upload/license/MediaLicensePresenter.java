@@ -17,10 +17,10 @@ import timber.log.Timber;
 public class MediaLicensePresenter implements MediaLicenseContract.UserActionListener {
 
     private static final MediaLicenseContract.View DUMMY = (MediaLicenseContract.View) Proxy
-            .newProxyInstance(
-                    MediaLicenseContract.View.class.getClassLoader(),
-                    new Class[]{MediaLicenseContract.View.class},
-                    (proxy, method, methodArgs) -> null);
+        .newProxyInstance(
+            MediaLicenseContract.View.class.getClassLoader(),
+            new Class[]{MediaLicenseContract.View.class},
+            (proxy, method, methodArgs) -> null);
 
     private final UploadRepository repository;
     private final JsonKvStore defaultKVStore;
@@ -28,7 +28,7 @@ public class MediaLicensePresenter implements MediaLicenseContract.UserActionLis
 
     @Inject
     public MediaLicensePresenter(UploadRepository uploadRepository,
-                @Named("default_preferences") JsonKvStore defaultKVStore) {
+        @Named("default_preferences") JsonKvStore defaultKVStore) {
         this.repository = uploadRepository;
         this.defaultKVStore = defaultKVStore;
     }
@@ -52,7 +52,7 @@ public class MediaLicensePresenter implements MediaLicenseContract.UserActionLis
         view.setLicenses(licenses);
 
         String selectedLicense = defaultKVStore.getString(Prefs.DEFAULT_LICENSE,
-                Prefs.Licenses.CC_BY_SA_4);//CC_BY_SA_4 is the default one used by the commons web app
+            Prefs.Licenses.CC_BY_SA_4);//CC_BY_SA_4 is the default one used by the commons web app
         try {//I have to make sure that the stored default license was not one of the deprecated one's
             Utils.licenseNameFor(selectedLicense);
         } catch (IllegalStateException exception) {

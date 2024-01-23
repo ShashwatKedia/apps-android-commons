@@ -44,6 +44,7 @@ import timber.log.Timber;
  */
 
 public class NotificationActivity extends BaseActivity {
+
     @BindView(R.id.listView)
     RecyclerView recyclerView;
     @BindView(R.id.progressBar)
@@ -78,7 +79,7 @@ public class NotificationActivity extends BaseActivity {
         setContentView(R.layout.activity_notification);
         ButterKnife.bind(this);
         mNotificationWorkerFragment = (NotificationWorkerFragment) getFragmentManager()
-                .findFragmentByTag(TAG_NOTIFICATION_WORKER_FRAGMENT);
+            .findFragmentByTag(TAG_NOTIFICATION_WORKER_FRAGMENT);
         initListView();
         setPageTitle();
         setSupportActionBar(toolbar);
@@ -92,10 +93,8 @@ public class NotificationActivity extends BaseActivity {
     }
 
     /**
-     * If this is unread section of the notifications, removeNotification method
-     *  Marks the notification as read,
-     *  Removes the notification from unread,
-     *  Displays the Snackbar.
+     * If this is unread section of the notifications, removeNotification method Marks the
+     * notification as read, Removes the notification from unread, Displays the Snackbar.
      *
      * Otherwise returns (read section).
      *
@@ -108,42 +107,44 @@ public class NotificationActivity extends BaseActivity {
         }
         Disposable disposable = Observable.defer((Callable<ObservableSource<Boolean>>)
                 () -> controller.markAsRead(notification))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(result -> {
-                    if (result) {
-                        notificationList.remove(notification);
-                        setItems(notificationList);
-                        adapter.notifyDataSetChanged();
-                        Snackbar snackbar = Snackbar
-                                .make(relativeLayout, getString(R.string.notification_mark_read), Snackbar.LENGTH_LONG);
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(result -> {
+                if (result) {
+                    notificationList.remove(notification);
+                    setItems(notificationList);
+                    adapter.notifyDataSetChanged();
+                    Snackbar snackbar = Snackbar
+                        .make(relativeLayout, getString(R.string.notification_mark_read),
+                            Snackbar.LENGTH_LONG);
 
-                        snackbar.show();
-                        if (notificationList.size() == 0) {
-                            setEmptyView();
-                            relativeLayout.setVisibility(View.GONE);
-                            no_notification.setVisibility(View.VISIBLE);
-                        }
-                    } else {
-                        adapter.notifyDataSetChanged();
-                        setItems(notificationList);
-                        Toast.makeText(NotificationActivity.this, getString(R.string.some_error), Toast.LENGTH_SHORT).show();
+                    snackbar.show();
+                    if (notificationList.size() == 0) {
+                        setEmptyView();
+                        relativeLayout.setVisibility(View.GONE);
+                        no_notification.setVisibility(View.VISIBLE);
                     }
-                }, throwable -> {
+                } else {
+                    adapter.notifyDataSetChanged();
+                    setItems(notificationList);
+                    Toast.makeText(NotificationActivity.this, getString(R.string.some_error),
+                        Toast.LENGTH_SHORT).show();
+                }
+            }, throwable -> {
 
-                    Timber.e(throwable, "Error occurred while loading notifications");
-                    throwable.printStackTrace();
-                    ViewUtil.showShortSnackbar(relativeLayout, R.string.error_notifications);
-                    progressBar.setVisibility(View.GONE);
-                });
+                Timber.e(throwable, "Error occurred while loading notifications");
+                throwable.printStackTrace();
+                ViewUtil.showShortSnackbar(relativeLayout, R.string.error_notifications);
+                progressBar.setVisibility(View.GONE);
+            });
         compositeDisposable.add(disposable);
     }
 
 
-
     private void initListView() {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        DividerItemDecoration itemDecor = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
+        DividerItemDecoration itemDecor = new DividerItemDecoration(recyclerView.getContext(),
+            DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(itemDecor);
         if (isRead) {
             refresh(true);
@@ -163,7 +164,7 @@ public class NotificationActivity extends BaseActivity {
         if (!NetworkUtils.isInternetConnectionEstablished(this)) {
             progressBar.setVisibility(View.GONE);
             Snackbar.make(relativeLayout, R.string.no_internet, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(R.string.retry, view -> refresh(archived)).show();
+                .setAction(R.string.retry, view -> refresh(archived)).show();
         } else {
             addNotifications(archived);
         }
@@ -178,25 +179,25 @@ public class NotificationActivity extends BaseActivity {
         if (mNotificationWorkerFragment == null) {
             progressBar.setVisibility(View.VISIBLE);
             compositeDisposable.add(controller.getNotifications(archived)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(notificationList -> {
-                        Collections.reverse(notificationList);
-                        Timber.d("Number of notifications is %d", notificationList.size());
-                        this.notificationList = notificationList;
-                        if (notificationList.size()==0){
-                            setEmptyView();
-                            relativeLayout.setVisibility(View.GONE);
-                            no_notification.setVisibility(View.VISIBLE);
-                        } else {
-                            setItems(notificationList);
-                        }
-                        progressBar.setVisibility(View.GONE);
-                    }, throwable -> {
-                        Timber.e(throwable, "Error occurred while loading notifications");
-                        ViewUtil.showShortSnackbar(relativeLayout, R.string.error_notifications);
-                        progressBar.setVisibility(View.GONE);
-                    }));
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(notificationList -> {
+                    Collections.reverse(notificationList);
+                    Timber.d("Number of notifications is %d", notificationList.size());
+                    this.notificationList = notificationList;
+                    if (notificationList.size() == 0) {
+                        setEmptyView();
+                        relativeLayout.setVisibility(View.GONE);
+                        no_notification.setVisibility(View.VISIBLE);
+                    } else {
+                        setItems(notificationList);
+                    }
+                    progressBar.setVisibility(View.GONE);
+                }, throwable -> {
+                    Timber.e(throwable, "Error occurred while loading notifications");
+                    ViewUtil.showShortSnackbar(relativeLayout, R.string.error_notifications);
+                    progressBar.setVisibility(View.GONE);
+                }));
         } else {
             notificationList = mNotificationWorkerFragment.getNotificationList();
             setItems(notificationList);
@@ -219,7 +220,7 @@ public class NotificationActivity extends BaseActivity {
             case R.id.archived:
                 if (item.getTitle().equals(getString(R.string.menu_option_read))) {
                     NotificationActivity.startYourself(NotificationActivity.this, "read");
-                }else if (item.getTitle().equals(getString(R.string.menu_option_unread))) {
+                } else if (item.getTitle().equals(getString(R.string.menu_option_unread))) {
                     onBackPressed();
                 }
                 return true;
@@ -270,7 +271,7 @@ public class NotificationActivity extends BaseActivity {
     private void setEmptyView() {
         if (isRead) {
             noNotificationText.setText(R.string.no_read_notification);
-        }else {
+        } else {
             noNotificationText.setText(R.string.no_notification);
         }
     }
@@ -279,7 +280,7 @@ public class NotificationActivity extends BaseActivity {
         if (isRead) {
             notificationMenuItem.setTitle(R.string.menu_option_unread);
 
-        }else {
+        } else {
             notificationMenuItem.setTitle(R.string.menu_option_read);
 
         }

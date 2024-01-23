@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MediaDataExtractorUtil {
+
     /**
      * Extracts a list of categories from | separated category string
      *

@@ -39,7 +39,9 @@ public class SimilarImageDialogFragment extends DialogFragment {
 
     public SimilarImageDialogFragment() {
     }
+
     public interface Callback {
+
         void onPositiveResponse();
 
         void onNegativeResponse();
@@ -50,27 +52,30 @@ public class SimilarImageDialogFragment extends DialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_similar_image_dialog, container, false);
-        ButterKnife.bind(this,view);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+        @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_similar_image_dialog, container, false);
+        ButterKnife.bind(this, view);
 
         originalImage.setHierarchy(GenericDraweeHierarchyBuilder
-                .newInstance(getResources())
-                .setPlaceholderImage(VectorDrawableCompat.create(getResources(),
-                        R.drawable.ic_image_black_24dp,getContext().getTheme()))
-                .setFailureImage(VectorDrawableCompat.create(getResources(),
-                        R.drawable.ic_error_outline_black_24dp, getContext().getTheme()))
-                .build());
+            .newInstance(getResources())
+            .setPlaceholderImage(VectorDrawableCompat.create(getResources(),
+                R.drawable.ic_image_black_24dp, getContext().getTheme()))
+            .setFailureImage(VectorDrawableCompat.create(getResources(),
+                R.drawable.ic_error_outline_black_24dp, getContext().getTheme()))
+            .build());
         possibleImage.setHierarchy(GenericDraweeHierarchyBuilder
-                .newInstance(getResources())
-                .setPlaceholderImage(VectorDrawableCompat.create(getResources(),
-                        R.drawable.ic_image_black_24dp,getContext().getTheme()))
-                .setFailureImage(VectorDrawableCompat.create(getResources(),
-                        R.drawable.ic_error_outline_black_24dp, getContext().getTheme()))
-                .build());
+            .newInstance(getResources())
+            .setPlaceholderImage(VectorDrawableCompat.create(getResources(),
+                R.drawable.ic_image_black_24dp, getContext().getTheme()))
+            .setFailureImage(VectorDrawableCompat.create(getResources(),
+                R.drawable.ic_error_outline_black_24dp, getContext().getTheme()))
+            .build());
 
-        originalImage.setImageURI(Uri.fromFile(new File(getArguments().getString("originalImagePath"))));
-        possibleImage.setImageURI(Uri.fromFile(new File(getArguments().getString("possibleImagePath"))));
+        originalImage.setImageURI(
+            Uri.fromFile(new File(getArguments().getString("originalImagePath"))));
+        possibleImage.setImageURI(
+            Uri.fromFile(new File(getArguments().getString("possibleImagePath"))));
 
         return view;
     }

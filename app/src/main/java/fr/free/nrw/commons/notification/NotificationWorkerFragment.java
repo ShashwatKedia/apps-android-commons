@@ -13,6 +13,7 @@ import java.util.List;
  */
 
 public class NotificationWorkerFragment extends Fragment {
+
     private List<Notification> notificationList;
 
     @Override
@@ -21,11 +22,11 @@ public class NotificationWorkerFragment extends Fragment {
         setRetainInstance(true);
     }
 
-    public void setNotificationList(List<Notification> notificationList){
+    public void setNotificationList(List<Notification> notificationList) {
         this.notificationList = notificationList;
     }
 
-    public List<Notification> getNotificationList(){
+    public List<Notification> getNotificationList() {
         return notificationList;
     }
 }

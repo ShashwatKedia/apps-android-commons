@@ -34,56 +34,56 @@ public class ReviewHelper {
     }
 
     /**
-     * Fetches recent changes from MediaWiki API
-     * Calls the API to get the latest 50 changes
-     * When more results are available, the query gets continued beyond this range
+     * Fetches recent changes from MediaWiki API Calls the API to get the latest 50 changes When
+     * more results are available, the query gets continued beyond this range
      *
      * @return
      */
     private Observable<MwQueryPage> getRecentChanges() {
         return reviewInterface.getRecentChanges()
-                .map(mwQueryResponse -> mwQueryResponse.query().pages())
-                .map(recentChanges -> {
-                    Collections.shuffle(recentChanges);
-                    return recentChanges;
-                })
-                .flatMapIterable(changes -> changes)
-                .filter(recentChange -> isChangeReviewable(recentChange));
+            .map(mwQueryResponse -> mwQueryResponse.query().pages())
+            .map(recentChanges -> {
+                Collections.shuffle(recentChanges);
+                return recentChanges;
+            })
+            .flatMapIterable(changes -> changes)
+            .filter(recentChange -> isChangeReviewable(recentChange));
     }
 
     /**
-     * Gets a random file change for review.
-     * - Picks a random file from those changes
-     * - Checks if the file is nominated for deletion
-     * - Retries upto 5 times for getting a file which is not nominated for deletion
+     * Gets a random file change for review. - Picks a random file from those changes - Checks if
+     * the file is nominated for deletion - Retries upto 5 times for getting a file which is not
+     * nominated for deletion
      *
      * @return Random file change
      */
     public Single<Media> getRandomMedia() {
         return getRecentChanges()
-                .flatMapSingle(change -> getRandomMediaFromRecentChange(change))
-                .filter(media -> !StringUtils.isBlank(media.getFilename())
-                   && !getReviewStatus(media.getPageId())    // Check if the image has already been shown to the user
-                )
-                .firstOrError();
+            .flatMapSingle(change -> getRandomMediaFromRecentChange(change))
+            .filter(media -> !StringUtils.isBlank(media.getFilename())
+                    && !getReviewStatus(media.getPageId())
+                // Check if the image has already been shown to the user
+            )
+            .firstOrError();
     }
 
     /**
-     * Returns a proper Media object if the file is not already nominated for deletion
-     * Else it returns an empty Media object
+     * Returns a proper Media object if the file is not already nominated for deletion Else it
+     * returns an empty Media object
      *
      * @param recentChange
      * @return
      */
     private Single<Media> getRandomMediaFromRecentChange(MwQueryPage recentChange) {
         return Single.just(recentChange)
-                .flatMap(change -> mediaClient.checkPageExistsUsingTitle("Commons:Deletion_requests/" + change.title()))
-                .flatMap(isDeleted -> {
-                    if (isDeleted) {
-                        return Single.error(new Exception(recentChange.title() + " is deleted"));
-                    }
-                    return mediaClient.getMedia(recentChange.title());
-                });
+            .flatMap(change -> mediaClient.checkPageExistsUsingTitle(
+                "Commons:Deletion_requests/" + change.title()))
+            .flatMap(isDeleted -> {
+                if (isDeleted) {
+                    return Single.error(new Exception(recentChange.title() + " is deleted"));
+                }
+                return mediaClient.getMedia(recentChange.title());
+            });
 
     }
 
@@ -94,13 +94,13 @@ public class ReviewHelper {
      * @return
      */
     @VisibleForTesting
-    Boolean getReviewStatus(String image){
-        if(dao == null){
+    Boolean getReviewStatus(String image) {
+        if (dao == null) {
             return false;
         }
-        return Observable.fromCallable(()-> dao.isReviewedAlready(image))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread()).blockingSingle();
+        return Observable.fromCallable(() -> dao.isReviewedAlready(image))
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread()).blockingSingle();
     }
 
     /**
@@ -111,26 +111,24 @@ public class ReviewHelper {
      */
     Observable<MwQueryPage.Revision> getFirstRevisionOfFile(String filename) {
         return reviewInterface.getFirstRevisionOfFile(filename)
-                .map(response -> response.query().firstPage().revisions().get(0));
+            .map(response -> response.query().firstPage().revisions().get(0));
     }
 
     /**
-     * Checks Whether Given File is used in any Wiki page or not
-     * by calling api for given file
+     * Checks Whether Given File is used in any Wiki page or not by calling api for given file
      *
      * @param filename
      * @return
      */
-     Observable<Boolean> checkFileUsage(final String filename) {
-         return reviewInterface.getGlobalUsageInfo(filename)
-             .map(mwQueryResponse -> mwQueryResponse.query().firstPage()
-                 .checkWhetherFileIsUsedInWikis());
-     }
+    Observable<Boolean> checkFileUsage(final String filename) {
+        return reviewInterface.getGlobalUsageInfo(filename)
+            .map(mwQueryResponse -> mwQueryResponse.query().firstPage()
+                .checkWhetherFileIsUsedInWikis());
+    }
 
     /**
-     * Checks if the change is reviewable or not.
-     * - checks the type and revisionId of the change
-     * - checks supported image extensions
+     * Checks if the change is reviewable or not. - checks the type and revisionId of the change -
+     * checks supported image extensions
      *
      * @param recentChange
      * @return
@@ -155,8 +153,8 @@ public class ReviewHelper {
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(() -> {
-                // Inserted successfully
-                Timber.i("Image inserted successfully.");
+                    // Inserted successfully
+                    Timber.i("Image inserted successfully.");
                 },
                 throwable -> {
                     Timber.e("Image not inserted into the reviewed images database");

@@ -11,6 +11,7 @@ import java.util.List;
  * This adapter will be used to display fragments in a ViewPager
  */
 public class ViewPagerAdapter extends FragmentPagerAdapter {
+
     private List<Fragment> fragmentList = new ArrayList<>();
     private List<String> fragmentTitleList = new ArrayList<>();
 
@@ -20,6 +21,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     /**
      * This method returns the fragment of the viewpager at a particular position
+     *
      * @param position
      */
     @Override
@@ -29,6 +31,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     /**
      * This method returns the total number of fragments in the viewpager.
+     *
      * @return size
      */
     @Override
@@ -38,6 +41,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     /**
      * This method sets the fragment and title list in the viewpager
+     *
      * @param fragmentList List of all fragments to be displayed in the viewpager
      * @param fragmentTitleList List of all titles of the fragments
      */
@@ -48,6 +52,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     /**
      * This method returns the title of the page at a particular position
+     *
      * @param position
      */
     @Override

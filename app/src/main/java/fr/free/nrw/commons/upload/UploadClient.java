@@ -186,11 +186,11 @@ public class UploadClient {
                 .createFormData("chunk", URLEncoder.encode(filename, "utf-8"), countingRequestBody);
 
             return uploadInterface.uploadFileToStash(toRequestBody(filename),
-                toRequestBody(String.valueOf(fileSize)),
-                toRequestBody(String.valueOf(offset)),
-                toRequestBody(fileKey),
-                toRequestBody(csrfTokenClient.getTokenBlocking()),
-                filePart)
+                    toRequestBody(String.valueOf(fileSize)),
+                    toRequestBody(String.valueOf(offset)),
+                    toRequestBody(fileKey),
+                    toRequestBody(csrfTokenClient.getTokenBlocking()),
+                    filePart)
                 .map(UploadResponse::getUpload);
         } catch (final Throwable throwable) {
             Timber.e(throwable, "Failed to upload chunk to stash");

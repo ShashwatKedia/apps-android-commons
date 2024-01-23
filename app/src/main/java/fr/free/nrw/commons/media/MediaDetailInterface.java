@@ -20,12 +20,13 @@ public interface MediaDetailInterface {
      * @param filename name of the file to be used for fetching captions
      */
     @GET("w/api.php?action=wbgetentities&props=labels&format=json&languagefallback=1&sites=commonswiki")
-    Observable<Entities> fetchEntitiesByFileName(@Query("languages") String language, @Query("titles") String filename);
+    Observable<Entities> fetchEntitiesByFileName(@Query("languages") String language,
+        @Query("titles") String filename);
 
     /**
      * Gets labels for Depictions using Entity Id from MediaWikiAPI
-     *  @param entityId  EntityId (Ex: Q81566) of the depict entity
      *
+     * @param entityId EntityId (Ex: Q81566) of the depict entity
      */
     @GET("/w/api.php?format=json&action=wbgetentities&props=labels&languagefallback=1")
     Single<Entities> getEntity(@Query("ids") String entityId);
@@ -36,10 +37,12 @@ public interface MediaDetailInterface {
      * @param wikibaseIdentifier pageId for the media
      */
     @GET("/w/api.php?action=wbgetentities&props=labels&format=json&languagefallback=1&sites=commonswiki")
-    Observable<Entities> getEntityForImage(@Query("languages") String language, @Query("ids") String wikibaseIdentifier);
+    Observable<Entities> getEntityForImage(@Query("languages") String language,
+        @Query("ids") String wikibaseIdentifier);
 
     /**
      * Fetches current wikitext
+     *
      * @param title file name
      * @return Single<MwQueryResponse>
      */

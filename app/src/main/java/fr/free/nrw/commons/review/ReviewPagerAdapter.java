@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 public class ReviewPagerAdapter extends FragmentStatePagerAdapter {
+
     private ReviewImageFragment[] reviewImageFragments;
 
     /**
@@ -22,10 +23,10 @@ public class ReviewPagerAdapter extends FragmentStatePagerAdapter {
     ReviewPagerAdapter(FragmentManager fm) {
         super(fm);
         reviewImageFragments = new ReviewImageFragment[]{
-                new ReviewImageFragment(),
-                new ReviewImageFragment(),
-                new ReviewImageFragment(),
-                new ReviewImageFragment()
+            new ReviewImageFragment(),
+            new ReviewImageFragment(),
+            new ReviewImageFragment(),
+            new ReviewImageFragment()
         };
     }
 

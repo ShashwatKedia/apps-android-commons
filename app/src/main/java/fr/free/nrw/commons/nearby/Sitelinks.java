@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
  * Handles the links to Wikipedia, Commons, and Wikidata that are displayed for a Place
  */
 public class Sitelinks implements Parcelable {
+
     private final String wikipediaLink;
     private final String commonsLink;
     private final String wikidataLink;
@@ -50,6 +51,7 @@ public class Sitelinks implements Parcelable {
 
     /**
      * Gets the Wikipedia link for a Place
+     *
      * @return Wikipedia link
      */
     public Uri getWikipediaLink() {
@@ -58,6 +60,7 @@ public class Sitelinks implements Parcelable {
 
     /**
      * Gets the Commons link for a Place
+     *
      * @return Commons link
      */
     public Uri getCommonsLink() {
@@ -66,6 +69,7 @@ public class Sitelinks implements Parcelable {
 
     /**
      * Gets the Wikidata link for a Place
+     *
      * @return Wikidata link
      */
     public Uri getWikidataLink() {
@@ -74,6 +78,7 @@ public class Sitelinks implements Parcelable {
 
     /**
      * Sanitises and parses the links before using them
+     *
      * @param stringUrl unsanitised link
      * @return sanitised and parsed link
      */
@@ -85,10 +90,10 @@ public class Sitelinks implements Parcelable {
     @Override
     public String toString() {
         return "Sitelinks{" +
-                "wikipediaLink='" + wikipediaLink + '\'' +
-                ", commonsLink='" + commonsLink + '\'' +
-                ", wikidataLink='" + wikidataLink + '\'' +
-                '}';
+            "wikipediaLink='" + wikipediaLink + '\'' +
+            ", commonsLink='" + commonsLink + '\'' +
+            ", wikidataLink='" + wikidataLink + '\'' +
+            '}';
     }
 
     private Sitelinks(Sitelinks.Builder builder) {
@@ -101,6 +106,7 @@ public class Sitelinks implements Parcelable {
      * Builds a list of Sitelinks for a Place
      */
     public static class Builder {
+
         private String wikidataLink;
         private String commonsLink;
         private String wikipediaLink;

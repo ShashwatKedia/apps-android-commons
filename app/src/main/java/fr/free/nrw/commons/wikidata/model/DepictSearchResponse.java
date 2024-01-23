@@ -6,6 +6,7 @@ import java.util.List;
  * Model class for API response obtained from search for depictions
  */
 public class DepictSearchResponse {
+
     private final List<DepictSearchItem> search;
 
     /**

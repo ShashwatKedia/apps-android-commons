@@ -46,7 +46,8 @@ import javax.inject.Inject;
 import kotlin.Unit;
 import timber.log.Timber;
 
-public class UploadCategoriesFragment extends UploadBaseFragment implements CategoriesContract.View {
+public class UploadCategoriesFragment extends UploadBaseFragment implements
+    CategoriesContract.View {
 
     @BindView(R.id.tv_title)
     TextView tvTitle;
@@ -88,7 +89,7 @@ public class UploadCategoriesFragment extends UploadBaseFragment implements Cate
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+        @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.upload_categories_fragment, container, false);
     }
 
@@ -121,7 +122,10 @@ public class UploadCategoriesFragment extends UploadBaseFragment implements Cate
         tooltip.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                DialogUtil.showAlertDialog(getActivity(), getString(R.string.categories_activity_title), getString(R.string.categories_tooltip), getString(android.R.string.ok), null, true);
+                DialogUtil.showAlertDialog(getActivity(),
+                    getString(R.string.categories_activity_title),
+                    getString(R.string.categories_tooltip), getString(android.R.string.ok), null,
+                    true);
             }
         });
         if (media == null) {
@@ -135,16 +139,16 @@ public class UploadCategoriesFragment extends UploadBaseFragment implements Cate
 
     private void addTextChangeListenerToEtSearch() {
         subscribe = RxTextView.textChanges(etSearch)
-                .doOnEach(v -> tilContainerEtSearch.setError(null))
-                .takeUntil(RxView.detaches(etSearch))
-                .debounce(500, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(filter -> searchForCategory(filter.toString()), Timber::e);
+            .doOnEach(v -> tilContainerEtSearch.setError(null))
+            .takeUntil(RxView.detaches(etSearch))
+            .debounce(500, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(filter -> searchForCategory(filter.toString()), Timber::e);
     }
 
     /**
-     * Removes  the tv subtitle If the activity is the instance of [UploadActivity] and
-     * if multiple files aren't selected.
+     * Removes  the tv subtitle If the activity is the instance of [UploadActivity] and if multiple
+     * files aren't selected.
      */
     private void setTvSubTitle() {
         final Activity activity = getActivity();
@@ -361,7 +365,7 @@ public class UploadCategoriesFragment extends UploadBaseFragment implements Cate
             });
 
             Objects.requireNonNull(
-                ((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar())
+                    ((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar())
                 .hide();
 
             if (getParentFragment().getParentFragment().getParentFragment()
@@ -381,7 +385,7 @@ public class UploadCategoriesFragment extends UploadBaseFragment implements Cate
         super.onStop();
         if (media != null) {
             Objects.requireNonNull(
-                ((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar())
+                    ((AppCompatActivity) Objects.requireNonNull(getActivity())).getSupportActionBar())
                 .show();
         }
     }

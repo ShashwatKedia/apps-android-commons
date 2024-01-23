@@ -77,7 +77,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import timber.log.Timber;
 
-public class UploadActivity extends BaseActivity implements UploadContract.View, UploadBaseFragment.Callback {
+public class UploadActivity extends BaseActivity implements UploadContract.View,
+    UploadBaseFragment.Callback {
 
     @Inject
     ContributionController contributionController;
@@ -142,23 +143,23 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
     public static final String IN_APP_CAMERA_UPLOAD = "in_app_camera_upload";
 
     /**
-     * Stores all nearby places found and related users response for
-     * each place while uploading media
+     * Stores all nearby places found and related users response for each place while uploading
+     * media
      */
-    public static HashMap<Place,Boolean> nearbyPopupAnswers;
+    public static HashMap<Place, Boolean> nearbyPopupAnswers;
 
     /**
-     * A private boolean variable to control whether a permissions dialog should be shown
-     * when necessary. Initially, it is set to `true`, indicating that the permissions dialog
-     * should be displayed if permissions are missing and it is first time calling
-     * `checkStoragePermissions` method.
-     *
-     * This variable is used in the `checkStoragePermissions` method to determine whether to
-     * show a permissions dialog to the user if the required permissions are not granted.
-     *
-     * If `showPermissionsDialog` is set to `true` and the necessary permissions are missing,
-     * a permissions dialog will be displayed to request the required permissions. If set
-     * to `false`, the dialog won't be shown.
+     * A private boolean variable to control whether a permissions dialog should be shown when
+     * necessary. Initially, it is set to `true`, indicating that the permissions dialog should be
+     * displayed if permissions are missing and it is first time calling `checkStoragePermissions`
+     * method.
+     * <p>
+     * This variable is used in the `checkStoragePermissions` method to determine whether to show a
+     * permissions dialog to the user if the required permissions are not granted.
+     * <p>
+     * If `showPermissionsDialog` is set to `true` and the necessary permissions are missing, a
+     * permissions dialog will be displayed to request the required permissions. If set to `false`,
+     * the dialog won't be shown.
      *
      * @see UploadActivity#checkStoragePermissions()
      */
@@ -178,11 +179,12 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
         //getting the current dpi of the device and if it is less than 320dp i.e. overlapping
         //threshold, thumbnails automatically minimizes
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        float dpi = (metrics.widthPixels)/(metrics.density);
-        if (dpi<=321) {
+        float dpi = (metrics.widthPixels) / (metrics.density);
+        if (dpi <= 321) {
             onRlContainerTitleClicked();
         }
-        if (PermissionUtils.hasPermission(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION})) {
+        if (PermissionUtils.hasPermission(this,
+            new String[]{Manifest.permission.ACCESS_FINE_LOCATION})) {
             locationManager.registerLocationManager();
         }
         locationManager.requestLocationUpdatesFromProvider(LocationManager.GPS_PROVIDER);
@@ -283,15 +285,15 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
         } else {
             // Permissions are missing
             cvContainerTopCard.setVisibility(View.INVISIBLE);
-            if(showPermissionsDialog){
+            if (showPermissionsDialog) {
                 checkPermissionsAndPerformAction(this,
                     () -> {
                         cvContainerTopCard.setVisibility(View.VISIBLE);
                         this.receiveSharedItems();
-                    },() -> {
+                    }, () -> {
                         this.showPermissionsDialog = true;
                         this.checkStoragePermissions();
-                        },
+                    },
                     R.string.storage_permission_title,
                     R.string.write_storage_permission_rationale_for_image_share,
                     PERMISSIONS_STORAGE);
@@ -302,7 +304,7 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
          but if user Denies any permission showPermissionsDialog will be to true
          and permissions dialog will be shown again.
          */
-        this.showPermissionsDialog = hasAllPermissions ;
+        this.showPermissionsDialog = hasAllPermissions;
     }
 
     @Override
@@ -343,7 +345,7 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
 
     @Override
     public boolean isWLMUpload() {
-        return place!=null && place.isMonument();
+        return place != null && place.isMonument();
     }
 
     @Override
@@ -372,7 +374,8 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
     @Override
     public void updateTopCardTitle() {
         tvTopCardTitle.setText(getResources()
-            .getQuantityString(R.plurals.upload_count_title, uploadableFiles.size(), uploadableFiles.size()));
+            .getQuantityString(R.plurals.upload_count_title, uploadableFiles.size(),
+                uploadableFiles.size()));
     }
 
     @Override
@@ -437,7 +440,7 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
     }
 
     private void receiveSharedItems() {
-        thumbnailsAdapter.context=this;
+        thumbnailsAdapter.context = this;
         Intent intent = getIntent();
         String action = intent.getAction();
         if (Intent.ACTION_SEND.equals(action) || Intent.ACTION_SEND_MULTIPLE.equals(action)) {
@@ -457,7 +460,8 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
                 llContainerTopCard.setVisibility(View.GONE);
             }
             tvTopCardTitle.setText(getResources()
-                .getQuantityString(R.plurals.upload_count_title, uploadableFiles.size(), uploadableFiles.size()));
+                .getQuantityString(R.plurals.upload_count_title, uploadableFiles.size(),
+                    uploadableFiles.size()));
 
             fragments = new ArrayList<>();
             /* Suggest users to turn battery optimisation off when uploading more than a few files.
@@ -491,7 +495,8 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
                                 Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
                             startActivity(batteryOptimisationSettingsIntent);
                         },
-                        () -> {}
+                        () -> {
+                        }
                     );
                     defaultKvStore.putBoolean("hasAlreadyLaunchedBigMultiupload", true);
                 }
@@ -571,7 +576,7 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
 
                     @Override
                     public boolean isWLMUpload() {
-                        return place!=null && place.isMonument();
+                        return place != null && place.isMonument();
                     }
                 });
                 fragments.add(uploadMediaDetailFragment);
@@ -604,8 +609,8 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
     }
 
     /**
-     * Users may uncheck Location tag from the Manage EXIF tags setting any time.
-     * So, their location must not be shared in this case.
+     * Users may uncheck Location tag from the Manage EXIF tags setting any time. So, their location
+     * must not be shared in this case.
      *
      * @return
      */
@@ -618,8 +623,8 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
     }
 
     /**
-     * Calculate the difference between current location and
-     * location recorded before capturing the image
+     * Calculate the difference between current location and location recorded before capturing the
+     * image
      *
      * @param currLocation
      * @param prevLocation
@@ -667,8 +672,8 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
     }
 
     /**
-     * Handle null URI from the received intent.
-     * Current implementation will simply show a toast and finish the upload activity.
+     * Handle null URI from the received intent. Current implementation will simply show a toast and
+     * finish the upload activity.
      */
     private void handleNullMedia() {
         ViewUtil.showLongToast(this, R.string.error_processing_image);
@@ -692,7 +697,7 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
             vpUpload.setCurrentItem(index + 1, false);
             fragments.get(index + 1).onBecameVisible();
             ((LinearLayoutManager) rvThumbnails.getLayoutManager())
-                .scrollToPositionWithOffset((index > 0) ? index-1 : 0, 0);
+                .scrollToPositionWithOffset((index > 0) ? index - 1 : 0, 0);
         } else {
             presenter.handleSubmit();
         }
@@ -704,7 +709,7 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
             vpUpload.setCurrentItem(index - 1, true);
             fragments.get(index - 1).onBecameVisible();
             ((LinearLayoutManager) rvThumbnails.getLayoutManager())
-                .scrollToPositionWithOffset((index > 3) ? index-2 : 0, 0);
+                .scrollToPositionWithOffset((index > 3) ? index - 2 : 0, 0);
         }
     }
 
@@ -713,6 +718,7 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
      */
 
     private class UploadImageAdapter extends FragmentStatePagerAdapter {
+
         List<UploadBaseFragment> fragments;
 
         public UploadImageAdapter(FragmentManager fragmentManager) {
@@ -774,8 +780,8 @@ public class UploadActivity extends BaseActivity implements UploadContract.View,
     /**
      * Set the value of the showPermissionDialog variable.
      *
-     * @param showPermissionsDialog {@code true} to indicate to show
-     * Permissions Dialog if permissions are missing, {@code false} otherwise.
+     * @param showPermissionsDialog {@code true} to indicate to show Permissions Dialog if
+     *                              permissions are missing, {@code false} otherwise.
      */
     public void setShowPermissionsDialog(final boolean showPermissionsDialog) {
         this.showPermissionsDialog = showPermissionsDialog;

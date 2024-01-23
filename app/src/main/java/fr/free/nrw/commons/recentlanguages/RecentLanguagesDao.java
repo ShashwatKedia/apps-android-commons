@@ -29,6 +29,7 @@ public class RecentLanguagesDao {
 
     /**
      * Find all persisted recently used languages on database
+     *
      * @return list of recently used languages
      */
     public List<Language> getRecentLanguages() {
@@ -40,7 +41,7 @@ public class RecentLanguagesDao {
             null,
             new String[]{},
             null)) {
-            if(cursor != null && cursor.moveToLast()) {
+            if (cursor != null && cursor.moveToLast()) {
                 do {
                     languages.add(fromCursor(cursor));
                 } while (cursor.moveToPrevious());
@@ -55,6 +56,7 @@ public class RecentLanguagesDao {
 
     /**
      * Add a Language to database
+     *
      * @param language : Language to add
      */
     public void addRecentLanguage(final Language language) {
@@ -70,6 +72,7 @@ public class RecentLanguagesDao {
 
     /**
      * Delete a language from database
+     *
      * @param languageCode : code of the Language to delete
      */
     public void deleteRecentLanguage(final String languageCode) {
@@ -85,6 +88,7 @@ public class RecentLanguagesDao {
 
     /**
      * Find a language from database based on its name
+     *
      * @param languageCode : code of the Language to find
      * @return boolean : is language in database ?
      */
@@ -113,6 +117,7 @@ public class RecentLanguagesDao {
 
     /**
      * It creates an Recent Language object from data stored in the SQLite DB by using cursor
+     *
      * @param cursor cursor
      * @return Language object
      */
@@ -126,6 +131,7 @@ public class RecentLanguagesDao {
 
     /**
      * Takes data from Language and create a content value object
+     *
      * @param recentLanguage recently used language
      * @return ContentValues
      */
@@ -137,10 +143,11 @@ public class RecentLanguagesDao {
     }
 
     /**
-     * This class contains the database table architecture for recently used languages,
-     * It also contains queries and logic necessary to the create, update, delete this table.
+     * This class contains the database table architecture for recently used languages, It also
+     * contains queries and logic necessary to the create, update, delete this table.
      */
     public static final class Table {
+
         public static final String TABLE_NAME = "recent_languages";
         static final String COLUMN_NAME = "language_name";
         static final String COLUMN_CODE = "language_code";
@@ -160,6 +167,7 @@ public class RecentLanguagesDao {
 
         /**
          * This method creates a LanguagesTable in SQLiteDatabase
+         *
          * @param db SQLiteDatabase
          */
         public static void onCreate(final SQLiteDatabase db) {
@@ -168,6 +176,7 @@ public class RecentLanguagesDao {
 
         /**
          * This method deletes LanguagesTable from SQLiteDatabase
+         *
          * @param db SQLiteDatabase
          */
         public static void onDelete(final SQLiteDatabase db) {
@@ -177,6 +186,7 @@ public class RecentLanguagesDao {
 
         /**
          * This method is called on migrating from a older version to a newer version
+         *
          * @param db SQLiteDatabase
          * @param from Version from which we are migrating
          * @param to Version to which we are migrating

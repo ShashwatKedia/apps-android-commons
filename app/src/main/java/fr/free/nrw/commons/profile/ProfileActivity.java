@@ -38,8 +38,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * This activity will set two tabs, achievements and
- * each tab will have their own fragments
+ * This activity will set two tabs, achievements and each tab will have their own fragments
  */
 public class ProfileActivity extends BaseActivity {
 
@@ -61,17 +60,18 @@ public class ProfileActivity extends BaseActivity {
     private AchievementsFragment achievementsFragment;
     private LeaderboardFragment leaderboardFragment;
 
-    public static final String KEY_USERNAME ="username";
-    public static final String KEY_SHOULD_SHOW_CONTRIBUTIONS ="shouldShowContributions";
+    public static final String KEY_USERNAME = "username";
+    public static final String KEY_SHOULD_SHOW_CONTRIBUTIONS = "shouldShowContributions";
 
     String userName;
-    private boolean  shouldShowContributions;
+    private boolean shouldShowContributions;
 
     ContributionsFragment contributionsFragment;
 
-    public void setScroll(boolean canScroll){
+    public void setScroll(boolean canScroll) {
         viewPager.setCanScroll(canScroll);
     }
+
     @Override
     protected void onRestoreInstanceState(final Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
@@ -106,6 +106,7 @@ public class ProfileActivity extends BaseActivity {
 
     /**
      * Navigate up event
+     *
      * @return boolean
      */
     @Override
@@ -169,6 +170,7 @@ public class ProfileActivity extends BaseActivity {
 
     /**
      * To inflate menu
+     *
      * @param menu Menu
      * @return boolean
      */
@@ -181,6 +183,7 @@ public class ProfileActivity extends BaseActivity {
 
     /**
      * To receive the id of selected item and handle further logic for that selected item
+     *
      * @param item MenuItem
      * @return boolean
      */
@@ -198,6 +201,7 @@ public class ProfileActivity extends BaseActivity {
 
     /**
      * It displays the alertDialog with Image of screenshot
+     *
      * @param screenshot screenshot of the present screen
      */
     public void showAlert(final Bitmap screenshot) {
@@ -213,13 +217,15 @@ public class ProfileActivity extends BaseActivity {
             getString(R.string.about_translate_proceed),
             getString(R.string.cancel),
             () -> shareScreen(screenshot),
-            () -> {},
+            () -> {
+            },
             view,
             true);
     }
 
     /**
      * To take bitmap and store it temporary storage and share it
+     *
      * @param bitmap bitmap of screenshot
      */
     void shareScreen(final Bitmap bitmap) {
@@ -255,10 +261,12 @@ public class ProfileActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         // Checking if MediaDetailPagerFragment is visible, If visible then show ContributionListFragment else close the ProfileActivity
-        if(contributionsFragment != null && contributionsFragment.getMediaDetailPagerFragment() != null && contributionsFragment.getMediaDetailPagerFragment().isVisible()) {
+        if (contributionsFragment != null
+            && contributionsFragment.getMediaDetailPagerFragment() != null
+            && contributionsFragment.getMediaDetailPagerFragment().isVisible()) {
             contributionsFragment.backButtonClicked();
             tabLayout.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             super.onBackPressed();
         }
     }

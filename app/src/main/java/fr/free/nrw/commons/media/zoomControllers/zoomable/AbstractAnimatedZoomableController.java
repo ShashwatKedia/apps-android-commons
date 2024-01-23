@@ -32,17 +32,20 @@ public abstract class AbstractAnimatedZoomableController extends DefaultZoomable
         super.reset();
     }
 
-    /** Returns true if the zoomable transform is identity matrix, and the controller is idle. */
+    /**
+     * Returns true if the zoomable transform is identity matrix, and the controller is idle.
+     */
     @Override
     public boolean isIdentity() {
         return !isAnimating() && super.isIdentity();
     }
 
     /**
-     * Zooms to the desired scale and positions the image so that the given image point corresponds to
-     * the given view point.
+     * Zooms to the desired scale and positions the image so that the given image point corresponds
+     * to the given view point.
      *
-     * <p>If this method is called while an animation or gesture is already in progress, the current
+     * <p>If this method is called while an animation or gesture is already in progress, the
+     * current
      * animation or gesture will be stopped first.
      *
      * @param scale desired scale, will be limited to {min, max} scale factor
@@ -55,10 +58,10 @@ public abstract class AbstractAnimatedZoomableController extends DefaultZoomable
     }
 
     /**
-     * Zooms to the desired scale and positions the image so that the given image point corresponds to
-     * the given view point.
+     * Zooms to the desired scale and positions the image so that the given image point corresponds
+     * to the given view point.
      *
-     * <p>If this method is called while an animation or gesture is already in progress, the current
+     * If this method is called while an animation or gesture is already in progress, the current
      * animation or gesture will be stopped first.
      *
      * @param scale desired scale, will be limited to {min, max} scale factor
@@ -69,12 +72,12 @@ public abstract class AbstractAnimatedZoomableController extends DefaultZoomable
      * @param onAnimationComplete code to run when the animation completes. Ignored if durationMs=0
      */
     public void zoomToPoint(
-            float scale,
-            PointF imagePoint,
-            PointF viewPoint,
-            @LimitFlag int limitFlags,
-            long durationMs,
-            @Nullable Runnable onAnimationComplete) {
+        float scale,
+        PointF imagePoint,
+        PointF viewPoint,
+        @LimitFlag int limitFlags,
+        long durationMs,
+        @Nullable Runnable onAnimationComplete) {
         FLog.v(getLogTag(), "zoomToPoint: duration %d ms", durationMs);
         calculateZoomToPointTransform(mNewTransform, scale, imagePoint, viewPoint, limitFlags);
         setTransform(mNewTransform, durationMs, onAnimationComplete);
@@ -83,7 +86,7 @@ public abstract class AbstractAnimatedZoomableController extends DefaultZoomable
     /**
      * Sets a new zoomable transformation and animates to it if desired.
      *
-     * <p>If this method is called while an animation or gesture is already in progress, the current
+     * If this method is called while an animation or gesture is already in progress, the current
      * animation or gesture will be stopped first.
      *
      * @param newTransform new transform to make active
@@ -91,7 +94,7 @@ public abstract class AbstractAnimatedZoomableController extends DefaultZoomable
      * @param onAnimationComplete code to run when the animation completes. Ignored if durationMs=0
      */
     public void setTransform(
-            Matrix newTransform, long durationMs, @Nullable Runnable onAnimationComplete) {
+        Matrix newTransform, long durationMs, @Nullable Runnable onAnimationComplete) {
         FLog.v(getLogTag(), "setTransform: duration %d ms", durationMs);
         if (durationMs <= 0) {
             setTransformImmediate(newTransform);
@@ -152,7 +155,7 @@ public abstract class AbstractAnimatedZoomableController extends DefaultZoomable
     }
 
     public abstract void setTransformAnimated(
-            final Matrix newTransform, long durationMs, @Nullable final Runnable onAnimationComplete);
+        final Matrix newTransform, long durationMs, @Nullable final Runnable onAnimationComplete);
 
     protected abstract void stopAnimation();
 

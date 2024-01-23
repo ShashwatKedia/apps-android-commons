@@ -10,7 +10,9 @@ import android.view.MotionEvent;
  */
 public interface ZoomableController {
 
-    /** Listener interface. */
+    /**
+     * Listener interface.
+     */
     interface Listener {
 
         /**
@@ -43,8 +45,8 @@ public interface ZoomableController {
     void setEnabled(boolean enabled);
 
     /**
-     * Gets whether the controller is enabled. This should return the last value passed to {@link
-     * #setEnabled}.
+     * Gets whether the controller is enabled. This should return the last value passed to
+     * {@link #setEnabled}.
      *
      * @return whether the controller is enabled.
      */
@@ -65,7 +67,9 @@ public interface ZoomableController {
      */
     float getScaleFactor();
 
-    /** Returns true if the zoomable transform is identity matrix, and the controller is idle. */
+    /**
+     * Returns true if the zoomable transform is identity matrix, and the controller is idle.
+     */
     boolean isIdentity();
 
     /**
@@ -76,7 +80,9 @@ public interface ZoomableController {
      */
     boolean wasTransformCorrected();
 
-    /** See {@link androidx.core.view.ScrollingView}. */
+    /**
+     * See {@link androidx.core.view.ScrollingView}.
+     */
     int computeHorizontalScrollRange();
 
     int computeHorizontalScrollOffset();

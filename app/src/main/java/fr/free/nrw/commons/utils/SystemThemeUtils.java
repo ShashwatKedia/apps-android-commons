@@ -19,7 +19,8 @@ public class SystemThemeUtils {
     public static final String THEME_MODE_LIGHT = "2";
 
     @Inject
-    public SystemThemeUtils(Context context, @Named("default_preferences") JsonKvStore applicationKvStore) {
+    public SystemThemeUtils(Context context,
+        @Named("default_preferences") JsonKvStore applicationKvStore) {
         this.context = context;
         this.applicationKvStore = applicationKvStore;
     }
@@ -37,13 +38,14 @@ public class SystemThemeUtils {
     // Returns the default system wide theme
     public String getSystemDefaultTheme() {
         return (context.getResources().getConfiguration().uiMode &
-                Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES ? THEME_MODE_DARK : THEME_MODE_LIGHT;
+            Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES ? THEME_MODE_DARK
+            : THEME_MODE_LIGHT;
     }
 
     // Returns true if the device is in night mode or false otherwise
     public boolean isDeviceInNightMode() {
         return getSystemDefaultThemeBool(
-                applicationKvStore.getString(Prefs.KEY_THEME_VALUE, getSystemDefaultTheme()));
+            applicationKvStore.getString(Prefs.KEY_THEME_VALUE, getSystemDefaultTheme()));
     }
 
 }
